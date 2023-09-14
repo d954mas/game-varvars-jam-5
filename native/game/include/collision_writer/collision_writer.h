@@ -2,10 +2,11 @@
 #define collision_writer_h
 
 #include "voxels/chunks.h"
+#include <dmsdk/sdk.h>
 
 namespace VoxelGame {
 
-void CollisionChunksSave(const char* folder, Chunks* chunks);
+void CollisionChunksGet(lua_State *L, Chunks* chunks);
 
 }
 

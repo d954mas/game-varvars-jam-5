@@ -134,7 +134,7 @@ function Entities:create_player(position)
 		yaw = 0,
 		pitch = 0,
 		config = {
-			position = vmath.vector3(0, 10, 10),
+			position = vmath.vector3(0, 15, 15),
 			position_v = vmath.rotate(vmath.quat_rotation_x(math.rad(-60)), vmath.vector3(0, 0, 1)) * 14,
 			yaw = { speed = 0.0, value = 45 },
 			pitch = { speed = 0, min = -45, max = -45 },

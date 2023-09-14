@@ -311,13 +311,12 @@ static int SaveWavefrontObjLua(lua_State *L) {
     return 0;
 }
 
-static int SaveCollisionChunksLua(lua_State *L) {
-    DM_LUA_STACK_CHECK(L, 0);
-    VoxelGameUtils::check_arg_count(L, 1);
+static int GetCollisionChunksLua(lua_State *L) {
+    DM_LUA_STACK_CHECK(L, 1);
+    VoxelGameUtils::check_arg_count(L, 0);
 
-    const char* path =  luaL_checkstring(L, 1);
-    CollisionChunksSave(path, world.chunks);
-    return 0;
+    CollisionChunksGet(L, world.chunks);
+    return 1;
 }
 
 namespace VoxelGame {
@@ -623,7 +622,7 @@ static const luaL_reg Module_methods[] = {
 	{"get_world_level_data", GetWorldLevelDataLua},
 	{"load_world_level_data", LoadWorldLevelDataLua},
 	{"save_wavefront_obj", SaveWavefrontObjLua},
-	{"save_collision_chunks", SaveCollisionChunksLua},
+	{"get_collision_chunks", GetCollisionChunksLua},
 	{"generate_new_level_data",GenerateNewLevelDataLua},
 
     { "frustum_set", Frustum_Set },

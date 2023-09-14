@@ -175,7 +175,7 @@ function Storage:_init_storage()
 			draw_shadows = not html5 or not COMMON.is_mobile()
 		},
 		game = {
-
+			level = 1
 		},
 		version = Storage.VERSION
 	}

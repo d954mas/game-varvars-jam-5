@@ -40,7 +40,7 @@ function GameWorld:reset_state()
 			pos_2 = vmath.vector3(0, 0, 0),
 		}
 	}
-	
+
 	self.lights:reset()
 end
 
@@ -59,7 +59,7 @@ end
 
 --update when game scene not on top
 function GameWorld:update_always(dt)
-	
+
 end
 
 function GameWorld:final()
@@ -168,10 +168,9 @@ function GameWorld:player_action()
 	local player = self.level_creator.player
 	if (player.current_interact_aabb) then
 		local area = player.current_interact_aabb
-		local object = area.interact_target	
+		local object = area.interact_target
 	end
 end
-
 
 function GameWorld:player_set_current_interact_aabb(e)
 	local player = self.world.game.level_creator.player
@@ -186,8 +185,6 @@ function GameWorld:player_set_current_interact_aabb(e)
 	end
 
 end
-
-
 
 function GameWorld:player_teleport_cor(position, angle)
 	local player = self.world.game.level_creator.player
@@ -211,7 +208,7 @@ function GameWorld:load_location(location_id)
 
 	self.ecs_game.ecs:clear()
 	if (self.state.voxels_collisions) then
-		for k, v in pairs(self.state.voxels_collisions) do
+		for k, v in ipairs(self.state.voxels_collisions) do
 			go.delete(v)
 		end
 		self.state.voxels_collisions = nil
@@ -228,14 +225,28 @@ function GameWorld:load_location(location_id)
 	self.state.location_id = location_id
 
 	self:load_level(location_def.level)
-	local url_collisions = "/factory/location#" .. location_def.level .. "_collisions"
-
-	self.state.voxels_collisions = collectionfactory.create(url_collisions)
 
 	if (location_id == DEFS.LOCATIONS.BY_ID.HUB.id) then
-	--	game.generate_new_level_data(-123, -123, 124, 124)
-	--	game.chunks_fill_zone(-1000, 60, -1000, 1000, 64, 1000, 2)
-	--	game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
+		game.generate_new_level_data(-31, -31, 32, 32)
+		game.chunks_fill_zone(-1000, 54, -1000, 1000, 64, 1000, 2)
+		game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
+		local chunks_collisions = game.get_collision_chunks()
+		local factory_url = msg.url("game_scene:/factory#chunk_collision")
+
+		self.state.voxels_collisions = {}
+		for _, chunk in ipairs(chunks_collisions) do
+			for _, box in ipairs(chunk) do
+				--skip boxes that not hit y==65
+				if(box.position.y + box.size.y>=64.9999)then
+					local go = factory.create(factory_url, box.position + box.size / 2, nil, nil,
+							box.size)
+					--local go = {}
+					table.insert(self.state.voxels_collisions,go)
+				end
+			end
+		end
+		print("collision objects:" .. #self.state.voxels_collisions)
+
 		--game.chunks_fill_hollow()
 		--game.chunks_clip_size(-123,-123+31,93, 62)
 	end
@@ -250,7 +261,7 @@ function GameWorld:load_location(location_id)
 	end
 
 	for _, e in ipairs(location_def.spawn_points) do
-		
+
 	end
 
 	self.ecs_game:refresh()
@@ -260,16 +271,12 @@ function GameWorld:load_location(location_id)
 
 end
 
-
-
 function GameWorld:player_update_parameters()
 	if not self.level_creator then return end
 	local balance = self.world.balance.config
 
 	local player = self.level_creator.player
 end
-
-
 
 return GameWorld
 
