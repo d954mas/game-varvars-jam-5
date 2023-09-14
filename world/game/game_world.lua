@@ -27,6 +27,7 @@ function GameWorld:reset_state()
 	self.actions.drop_empty = false
 	self.state = {
 		time = 0,
+		level = 1,
 		mouse_lock = true,
 		block_input = false,
 		building_blocks = {
@@ -77,6 +78,9 @@ function GameWorld:on_input(action_id, action)
 	end
 	if (action_id == COMMON.HASHES.INPUT.P and action.pressed) then
 		print(self.level_creator.player.position)
+	end
+	if (action_id == COMMON.HASHES.INPUT.N and action.pressed) then
+		self.world.game:load_level(self.world.game.state.level+1)
 	end
 end
 
@@ -138,17 +142,16 @@ function GameWorld:load_level(level)
 		self.level_creator = nil
 	end
 
+	self.state.level = level
 
 	DEBUG_INFO.game_reset()
 	self.ecs_game:add_systems()
 	self.level_creator = LevelCreator(self.world)
 	self.level_creator:create_level(level)
 
-	self.level_creator:create_player(vmath.vector3(0,65,0))
+	self.level_creator:create_player(vmath.vector3(0, 65, 0))
 	self:player_update_parameters()
 	self:camera_set_first_person(false)
-
-
 
 	self.ecs_game:refresh()
 	--update camera or all enemies will be added to world. Need to add only if visible

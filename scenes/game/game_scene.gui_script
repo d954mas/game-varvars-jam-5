@@ -26,6 +26,7 @@ function Script:bind_vh()
 		top_right = gui.get_node("top_right"),
 		left = gui.get_node("left"),
 		bottom = gui.get_node("bottom"),
+		lbl_level = gui.get_node("lbl_level"),
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -150,6 +151,7 @@ function Script:update(dt)
 		self.views.pos_1:update(dt)
 		self.views.pos_2:update(dt)
 	end
+	gui.set_text(self.vh.lbl_level,"LEVEL:" .. WORLD.game.state.level)
 end
 
 function Script:on_input(action_id, action)

@@ -12,7 +12,7 @@ local TAG = "Storage"
 local Storage = COMMON.class("Storage")
 
 Storage.FILE_PATH = "d954mas_varvar5"
-Storage.VERSION = 30
+Storage.VERSION = 31
 Storage.AUTOSAVE = 90 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod
 Storage.LOCAL = CONSTANTS.VERSION_IS_DEV and CONSTANTS.PLATFORM_IS_PC
@@ -200,7 +200,7 @@ function Storage:_migration()
 	if (self.data.version < Storage.VERSION) then
 		COMMON.i(string.format("migrate from:%s to %s", self.data.version, Storage.VERSION), TAG)
 
-		if (self.data.version < 30) then
+		if (self.data.version < 31) then
 			self:_init_storage()
 		end
 

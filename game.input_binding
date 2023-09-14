@@ -70,6 +70,10 @@ key_trigger {
   input: KEY_P
   action: "key_p"
 }
+key_trigger {
+  input: KEY_N
+  action: "key_n"
+}
 mouse_trigger {
   input: MOUSE_BUTTON_1
   action: "touch"
