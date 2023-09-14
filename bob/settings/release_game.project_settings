@@ -1,0 +1,12 @@
+[project]
+title = Varvar5
+
+[android]
+package = com.d954mas.game.varvar5
+
+[game]
+version = release
+target = other
+
+[native_extension]
+app_manifest = /app_manifest_release.appmanifest

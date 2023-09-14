@@ -1,0 +1,134 @@
+[project]
+title = Varvar5
+version = 1.0.0
+custom_resources = assets/custom
+bundle_exclude_resources = 
+bundle_resources = assets/bundle
+publisher = d954mas
+developer = d954mas
+dependencies = 
+
+[bootstrap]
+main_collection = /init.collectionc
+render = /render/my.renderc
+
+[input]
+game_binding = /game.input_bindingc
+use_accelerometer = 0
+gamepads = /game.gamepadsc
+
+[display]
+width = 960
+height = 540
+high_dpi = 1
+fullscreen = 0
+display_profiles = /builtins/render/default.display_profilesc
+dynamic_orientation = 0
+
+[physics]
+type = 3D
+debug = 0
+use_fixed_timestep = 1
+gravity_y = -30.0
+max_collision_object_count = 256
+max_fixed_timesteps = 1
+
+[script]
+shared_state = 1
+
+[library]
+include_dirs = 
+
+[native_extension]
+app_manifest = /app_manifest_debug.appmanifest
+
+[android]
+gcm_sender_id = 
+push_field_text = 
+manifest = /builtins/manifests/android/AndroidManifest.xml
+package = com.d954mas.game.varvar5
+proguard = 
+minimum_sdk_version = 19
+immersive_mode = 1
+version_code = 18
+
+[graphics]
+texture_profiles = /render/my.texture_profiles
+default_texture_min_filter = linear
+default_texture_mag_filter = linear
+verify_graphics_calls = 0
+max_draw_calls = 10000
+max_debug_vertices = 1000
+
+[resource]
+max_resources = 1024
+
+[profiler]
+track_cpu = 1
+
+[windows]
+iap_provider = 
+
+[html5]
+archive_location_prefix = archive
+htmlfile = /platform/web/engine_template.html
+show_fullscreen_button = 1
+show_made_with_defold = 0
+scale_mode = no_scale
+cssfile = /platform/web/dark_theme.css
+heap_size = 64
+splash_image = 
+wasm_streaming = 1
+
+[label]
+max_count = 32
+
+[tilemap]
+max_count = 0
+max_tile_count = 0
+
+[ios]
+bundle_identifier = com.d954mas.game.mineuniverse
+
+[game]
+version = dev
+target = editor
+
+[localization]
+default = en
+use_system = true
+
+[shader]
+output_spirv = 1
+
+[mesh]
+max_count = 128
+
+[collection]
+max_instances = 2048
+
+[sprite]
+max_count = 1024
+
+[gui]
+max_particlefx_count = 0
+max_particle_count = 0
+max_count = 16
+
+[model]
+max_count = 256
+
+[particle_fx]
+max_count = 0
+max_emitter_count = 0
+max_particle_count = 0
+
+[collectionfactory]
+max_count = 32
+
+[factory]
+max_count = 16
+
+[sound]
+max_sound_instances = 128
+

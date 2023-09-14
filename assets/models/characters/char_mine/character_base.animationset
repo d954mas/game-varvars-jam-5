@@ -1,0 +1,7 @@
+animations {
+  animation: "/assets/models/characters/char_mine/Standing Idle 02 Looking.dae"
+}
+animations {
+  animation: "/assets/models/characters/char_mine/Standing Run Forward.dae"
+}
+skeleton: "/assets/models/characters/char_mine/char_mine.dae"

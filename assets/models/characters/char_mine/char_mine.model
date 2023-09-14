@@ -1,0 +1,8 @@
+mesh: "/assets/models/characters/char_mine/char_mine.dae"
+material: "/assets/materials/player.material"
+textures: "/assets/models/characters/char_mine/char_mine_Tex.png"
+textures: "/assets/textures/rgb/shadow.png"
+skeleton: "/assets/models/characters/char_mine/char_mine.dae"
+animations: "/assets/models/characters/char_mine/character_base.animationset"
+default_animation: "Standing Run Forward"
+name: "unnamed"

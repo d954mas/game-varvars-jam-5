@@ -1,0 +1,5 @@
+[performance]
+non_editable_directories#0 = /assets/levels
+non_editable_directories#1 = /assets/levels/test_level/collisions
+non_editable_directories#2 = /assets/configs
+

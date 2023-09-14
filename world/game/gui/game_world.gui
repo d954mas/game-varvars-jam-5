@@ -1,0 +1,96 @@
+script: "/world/game/gui/game_world.gui_script"
+fonts {
+  name: "gui_world"
+  font: "/assets/fonts/game_font.font"
+}
+fonts {
+  name: "game_font_numbers"
+  font: "/assets/fonts/game_font_numbers.font"
+}
+textures {
+  name: "gui"
+  texture: "/assets/images/gui/gui.atlas"
+}
+background_color {
+  x: 0.0
+  y: 0.0
+  z: 0.0
+  w: 0.0
+}
+nodes {
+  position {
+    x: 0.0
+    y: 4.0
+    z: 10.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 0.05
+    y: 0.05
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "gui/empty"
+  id: "root"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  layer: "below"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_AUTO
+  custom_type: 0
+  enabled: false
+  visible: false
+  material: ""
+}
+layers {
+  name: "below"
+}
+layers {
+  name: "game"
+}
+layers {
+  name: "text"
+}
+layers {
+  name: "pie"
+}
+material: "/assets/materials/gui_world.material"
+adjust_reference: ADJUST_REFERENCE_DISABLED
+max_nodes: 2048
+materials {
+  name: "font-df_world"
+  material: "/assets/materials/font-df_world.material"
+}

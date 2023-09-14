@@ -1,0 +1,17 @@
+script: "/render/my.render_script"
+materials {
+  name: "shadow"
+  material: "/assets/materials/shadow/shadow.material"
+}
+materials {
+  name: "shadow_chunk"
+  material: "/assets/materials/shadow/shadow_chunk.material"
+}
+materials {
+  name: "player_invisible"
+  material: "/assets/materials/player_invisible.material"
+}
+materials {
+  name: "chunk_no_shadow"
+  material: "/assets/materials/chunk/chunk_no_shadow.material"
+}

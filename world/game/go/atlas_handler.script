@@ -1,0 +1,2 @@
+go.property("atlas", resource.atlas("/assets/images/game/blocks.atlas"))
+go.property("shadow_texture", resource.texture("/assets/textures/rgb/shadow.png"))

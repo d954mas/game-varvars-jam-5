@@ -1,0 +1,23 @@
+local ENUMS = {}
+
+ENUMS.ANIMATIONS = {
+	IDLE = "IDLE",
+	RUN = "RUN",
+	DIE = "DIE",
+}
+
+ENUMS.RESOURCE_ADD_PLACEMENT = {
+	GAME = "GAME",
+	OTHER = "OTHER",
+}
+
+ENUMS.CHUNK_SIDE = {
+	TOP = 0,
+	BOTTOM = 1,
+	RIGHT = 2,
+	LEFT = 3,
+	FRONT = 4,
+	BACK = 5,
+}
+
+return ENUMS

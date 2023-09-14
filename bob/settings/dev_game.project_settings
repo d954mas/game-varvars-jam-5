@@ -1,0 +1,10 @@
+[project]
+title = Varvar5 Dev
+
+[android]
+package = com.d954mas.game.varvar5.dev
+
+
+[game]
+version = dev
+target = other

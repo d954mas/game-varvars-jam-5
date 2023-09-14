@@ -1,0 +1,187 @@
+local COMMON = require "libs.common"
+local GUI = require "libs_project.gui.gui"
+local WORLD = require "world.world"
+local POINTER = require "libs.pointer_lock"
+local VirtualPad = require "libs_project.gui.virtual_pad"
+local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+local VoxelPosView = require "libs_project.gui.voxel_pos_view"
+
+
+---@class GameSceneGuiScript:GuiScriptBase
+local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
+
+function Script:init()
+	BaseGuiScript.init(self, { context_name = COMMON.CONTEXT.NAMES.GAME_GUI })
+	self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.WINDOW_RESIZED):go_distinct(self.scheduler):subscribe(function()
+		self:on_resize()
+	end))
+	self:on_resize()
+
+end
+
+function Script:bind_vh()
+	self.vh = {
+		crosshair = gui.get_node("crosshair"),
+		checkbox_editor = gui.get_node("checkbox_editor"),
+		top_right = gui.get_node("top_right"),
+		left = gui.get_node("left"),
+		bottom = gui.get_node("bottom"),
+	}
+	self.views = {
+		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
+		checkbox_first_person = GUI.CheckboxWithLabel("checkbox_first_person"),
+		checkbox_ghost_mode = GUI.CheckboxWithLabel("checkbox_ghost_mode"),
+		virtual_pad = VirtualPad("virtual_pad"),
+		btn_ghost_up = GUI.ButtonScale("btn_ghost_up"),
+		btn_ghost_down = GUI.ButtonScale("btn_ghost_down"),
+		btn_settings = GUI.ButtonScale("btn_settings"),
+		pos_1 = VoxelPosView("rect_pos_1", WORLD.game.state.voxel_editor.pos_1),
+		pos_2 = VoxelPosView("rect_pos_2", WORLD.game.state.voxel_editor.pos_2),
+		btn_rect_reset = GUI.ButtonScale("btn_rect_reset"),
+		btn_rect_fill = GUI.ButtonScale("btn_rect_fill"),
+		btn_rect_clear = GUI.ButtonScale("btn_rect_clear"),
+		btn_rect_m1 = GUI.ButtonScale("btn_rect_m1"),
+		btn_rect_m2 = GUI.ButtonScale("btn_rect_m2"),
+	}
+end
+
+function Script:init_gui()
+	BaseGuiScript.init_gui(self)
+	gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.GAME)
+	gui.set_enabled(self.vh.crosshair, WORLD.game.level_creator.player.camera.first_persons)
+	gui.set_enabled(self.vh.checkbox_editor, COMMON.CONSTANTS.TARGET_IS_EDITOR)
+	gui.set_enabled(self.views.pos_1.vh.root, COMMON.CONSTANTS.TARGET_IS_EDITOR)
+	gui.set_enabled(self.views.pos_2.vh.root, COMMON.CONSTANTS.TARGET_IS_EDITOR)
+
+
+	self.views.btn_settings.input_on_pressed = true
+	self.views.btn_settings:set_input_listener(function()
+		WORLD.sounds:play_sound(WORLD.sounds.sounds.btn_1)
+		WORLD.sm:show(WORLD.sm.MODALS.SETTINGS)
+	end)
+	--	self.views.virtual_pad.borders[3] = 440
+	--DISABLE FOR EDITOR. SO i can build location
+	self.views.virtual_pad:set_enabled(not COMMON.CONSTANTS.TARGET_IS_EDITOR)
+
+	local checkbox_mouse_lock = self.views.checkbox_mouse_lock
+	checkbox_mouse_lock:set_checked(WORLD.game.state.mouse_lock)
+	checkbox_mouse_lock:set_input_listener(function()
+		WORLD.game.state.mouse_lock = checkbox_mouse_lock.checked
+		if (WORLD.game.state.mouse_lock) then
+			POINTER.lock_cursor() end
+		if (not WORLD.game.state.mouse_lock) then
+			POINTER.unlock_cursor()
+		end
+	end)
+
+	local checkbox_first_person = self.views.checkbox_first_person
+	checkbox_first_person:set_checked(WORLD.game.level_creator.player.camera.first_person)
+	checkbox_first_person:set_input_listener(function()
+		WORLD.game:camera_set_first_person(checkbox_first_person.checked)
+	end)
+
+	local checkbox_ghost_mode = self.views.checkbox_ghost_mode
+	checkbox_ghost_mode:set_checked(WORLD.game.level_creator.player.ghost_mode)
+	checkbox_ghost_mode:set_input_listener(function()
+		WORLD.game.level_creator.player.ghost_mode = checkbox_ghost_mode.checked
+		self:update_ghost_mode()
+	end)
+
+	self.views.btn_rect_reset:set_input_listener(function()
+		local p1 = WORLD.game.state.voxel_editor.pos_1
+		local p2 = WORLD.game.state.voxel_editor.pos_2
+		p1.x, p1.y, p1.z = 0, 0, 0
+		p2.x, p2.y, p2.z = 0, 0, 0
+	end)
+	self.views.btn_rect_fill:set_input_listener(function()
+		local p1 = WORLD.game.state.voxel_editor.pos_1
+		local p2 = WORLD.game.state.voxel_editor.pos_2
+		game.chunks_fill_zone(math.min(p1.x, p2.x), math.min(p1.y, p2.y), math.min(p1.z, p2.z),
+				math.max(p1.x, p2.x), math.max(p1.y, p2.y), math.max(p1.z, p2.z), WORLD.game.state.building_blocks.voxel)
+	end)
+	self.views.btn_rect_clear:set_input_listener(function()
+		local p1 = WORLD.game.state.voxel_editor.pos_1
+		local p2 = WORLD.game.state.voxel_editor.pos_2
+		game.chunks_fill_zone(math.min(p1.x, p2.x), math.min(p1.y, p2.y), math.min(p1.z, p2.z),
+				math.max(p1.x, p2.x), math.max(p1.y, p2.y), math.max(p1.z, p2.z), 0)
+	end)
+	self.views.btn_rect_m1:set_input_listener(function()
+		local p1 = WORLD.game.state.voxel_editor.pos_1
+		local p2 = WORLD.game.state.voxel_editor.pos_2
+		local persistence = 2;
+		local frequency = 0.075;
+		local amplitude = math.abs(p1.y - p2.y) * 1.25 + 1;
+		local octaves = 1;
+		local randomseed = socket.gettime() + math.random() * 10000000
+		game.chunks_fill_zone_mountain(math.min(p1.x, p2.x), math.min(p1.y, p2.y), math.min(p1.z, p2.z),
+				math.max(p1.x, p2.x), math.max(p1.y, p2.y), math.max(p1.z, p2.z), WORLD.game.state.building_blocks.voxel,
+				persistence, frequency, amplitude, octaves, randomseed)
+
+	end)
+
+	self.views.btn_rect_m2:set_input_listener(function()
+		local p1 = WORLD.game.state.voxel_editor.pos_1
+		local p2 = WORLD.game.state.voxel_editor.pos_2
+		local persistence = 5;
+		local frequency = 0.1;
+		local amplitude = math.abs(p1.y - p2.y) * 1.3 + 1;
+		local octaves = 1;
+		local randomseed = socket.gettime() + math.random() * 10000000
+		game.chunks_fill_zone_mountain(math.min(p1.x, p2.x), math.min(p1.y, p2.y), math.min(p1.z, p2.z),
+				math.max(p1.x, p2.x), math.max(p1.y, p2.y), math.max(p1.z, p2.z), WORLD.game.state.building_blocks.voxel,
+				persistence, frequency, amplitude, octaves, randomseed)
+
+	end)
+
+	self:update_ghost_mode()
+end
+
+
+function Script:update_ghost_mode()
+	local enabled = WORLD.game.level_creator.player.ghost_mode-- and COMMON.is_mobile()
+	self.views.btn_ghost_up:set_enabled(enabled)
+	self.views.btn_ghost_down:set_enabled(enabled)
+end
+
+function Script:update(dt)
+	BaseGuiScript.update(self, dt)
+	self.views.virtual_pad:update(dt)
+	if (COMMON.CONSTANTS.TARGET_IS_EDITOR) then
+		self.views.pos_1:update(dt)
+		self.views.pos_2:update(dt)
+	end
+end
+
+function Script:on_input(action_id, action)
+	if (self.views.checkbox_mouse_lock:on_input(action_id, action)) then return true end
+	if (self.views.checkbox_first_person:on_input(action_id, action)) then return true end
+	if (self.views.checkbox_ghost_mode:on_input(action_id, action)) then return true end
+	if (self.views.virtual_pad:on_input(action_id, action)) then return true end
+	if (self.views.btn_ghost_down:on_input(action_id, action)) then return true end
+	if (self.views.btn_ghost_up:on_input(action_id, action)) then return true end
+	if (self.views.btn_settings:on_input(action_id, action)) then return true end
+	if (COMMON.CONSTANTS.TARGET_IS_EDITOR) then
+		if (self.views.pos_1:on_input(action_id, action)) then return true end
+		if (self.views.pos_2:on_input(action_id, action)) then return true end
+		if (self.views.btn_rect_reset:on_input(action_id, action)) then return true end
+		if (self.views.btn_rect_clear:on_input(action_id, action)) then return true end
+		if (self.views.btn_rect_fill:on_input(action_id, action)) then return true end
+		if (self.views.btn_rect_m1:on_input(action_id, action)) then return true end
+		if (self.views.btn_rect_m2:on_input(action_id, action)) then return true end
+	end
+end
+
+function Script:on_resize()
+	gui.set_adjust_mode(self.vh.top_right, COMMON.RENDER.gui_scale.mode)
+	gui.set_scale(self.vh.top_right, COMMON.RENDER.gui_scale.scale)
+	gui.set_adjust_mode(self.vh.left, COMMON.RENDER.gui_scale.mode)
+	gui.set_scale(self.vh.left, COMMON.RENDER.gui_scale.scale)
+	gui.set_adjust_mode(self.vh.bottom, COMMON.RENDER.gui_scale.mode)
+	gui.set_scale(self.vh.bottom, COMMON.RENDER.gui_scale.scale)
+end
+
+function Script:final()
+	BaseGuiScript.final(self)
+end
+
+COMMON.N28S.register_scripts({ Script() })

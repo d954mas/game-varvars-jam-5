@@ -1,0 +1,60 @@
+name: "interact_zone"
+scale_along_z: 0
+embedded_instances {
+  id: "root"
+  data: "embedded_components {\n"
+  "  id: \"sprite\"\n"
+  "  type: \"sprite\"\n"
+  "  data: \"tile_set: \\\"/assets/images/gui/gui.atlas\\\"\\n"
+  "default_animation: \\\"interact_zone\\\"\\n"
+  "material: \\\"/assets/materials/interact_zone_green.material\\\"\\n"
+  "blend_mode: BLEND_MODE_ALPHA\\n"
+  "slice9 {\\n"
+  "  x: 23.0\\n"
+  "  y: 23.0\\n"
+  "  z: 23.0\\n"
+  "  w: 23.0\\n"
+  "}\\n"
+  "size {\\n"
+  "  x: 320.0\\n"
+  "  y: 220.0\\n"
+  "  z: 0.0\\n"
+  "  w: 0.0\\n"
+  "}\\n"
+  "size_mode: SIZE_MODE_MANUAL\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: -4.3297803E-17\n"
+  "    y: 0.70710677\n"
+  "    z: 0.70710677\n"
+  "    w: 4.3297803E-17\n"
+  "  }\n"
+  "  scale {\n"
+  "    x: 0.01\n"
+  "    y: 0.01\n"
+  "    z: 0.01\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}

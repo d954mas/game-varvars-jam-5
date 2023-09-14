@@ -1,0 +1,261 @@
+local COMMON = require "libs.common"
+local CONSTANTS = require "libs.constants"
+local WORLD = require "world.world"
+local TAG = "Render"
+
+---@class Render
+local Render = COMMON.new_n28s()
+--region init
+function Render:init()
+	COMMON.RENDER = self
+	self.clear_color = COMMON.LUME.color_parse_hexRGBA("#87CEEB")
+	--самый первый размер это размер игры. Иначе камеры плохо отрабатывыют в html  билде
+	self.screen_size = {
+		w = CONSTANTS.PLATFORM_IS_WEB and render.get_width() or render.get_window_width(),
+		h = CONSTANTS.PLATFORM_IS_WEB and render.get_height() or render.get_window_height(),
+		aspect = 1
+	}
+	self.gui_scale = {
+		mode = gui.ADJUST_FIT,
+		scale = vmath.vector3(1),
+		scale2 = vmath.vector3(1)
+	}
+	if (self.screen_size.w == 0) then self.screen_size.w = 1 end
+	if (self.screen_size.h == 0) then self.screen_size.h = 1 end
+	self.screen_size.aspect = self.screen_size.w / self.screen_size.h
+	self.config_size = {
+		w = render.get_width();
+		h = render.get_height()
+	}
+
+	self.camera_view = vmath.matrix4()
+	self.camera_perspective = vmath.matrix4()
+	self.camera_frustum = vmath.matrix4()
+	self.camera_frustum_objects = vmath.matrix4()
+
+	self:init_predicates()
+	self:register_messages()
+	self:init_draw_opts()
+	self.clear = { [render.BUFFER_COLOR_BIT] = self.clear_color, [render.BUFFER_DEPTH_BIT] = 1, [render.BUFFER_STENCIL_BIT] = 0 }
+	self:window_size_changed()
+	game.camera_set_z_far(150)
+end
+
+function Render:init_draw_opts()
+	self.draw_opts = {
+		constants = render.constant_buffer(),
+		frustum = nil,
+	}
+	self.chunk_opts = {
+		constants = render.constant_buffer(),
+		frustum = nil,
+	}
+	self.draw_opts_no_frustum = {
+		constants = self.draw_opts.constants
+	}
+	self.chunk_opts.constants.chunks_uv = {}
+	self.draw_opts.constants.water_move = vmath.vector4()
+
+	WORLD.game.lights:add_constants(self.chunk_opts.constants)
+	WORLD.game.lights:add_constants(self.draw_opts.constants)
+	WORLD.game.lights:set_render(self)
+end
+
+function Render:init_predicates()
+	self.predicates = {
+		model = render.predicate({ "model" }),
+		player = render.predicate({ "player" }),
+		enemy = render.predicate({ "enemy" }),
+		weapon = render.predicate({ "weapon" }),
+		chunk = render.predicate({ "chunk" }),
+		water = render.predicate({ "water" }),
+		gui = render.predicate({ "gui" }),
+		gui_world = render.predicate({ "gui_world" }),
+		label_game = render.predicate({ "label_game" }),
+		selection_cube = render.predicate({ "selection_cube" }),
+		portal = render.predicate({ "portal" }),
+		vfx_sprite = render.predicate({ "vfx_sprite" }),
+		debug_physics = render.predicate({ "debug_physics" }),
+	}
+
+end
+
+function Render:register_messages()
+	self.msg_receiver = COMMON.MSG()
+	self.msg_receiver:add("window_resized", function(...)
+		local prev_w = self.screen_size.w
+		local prev_h = self.screen_size.h
+		self.screen_size.w = render.get_window_width()
+		self.screen_size.h = render.get_window_height()
+		if (self.screen_size.w == 0) then self.screen_size.w = 1 end
+		if (self.screen_size.h == 0) then self.screen_size.h = 1 end
+		self.screen_size.aspect = self.screen_size.w / self.screen_size.h
+		if (prev_w ~= self.screen_size.w or prev_h ~= self.screen_size.h) then
+			COMMON.i("screen size changed. from " .. "w:" .. prev_w .. " h:" .. prev_h
+					.. " to w:" .. self.screen_size.w .. " h:" .. self.screen_size.h, TAG)
+			self:window_size_changed()
+			COMMON.EVENT_BUS:event(COMMON.EVENTS.WINDOW_RESIZED, { width = self.screen_size.w, height = self.screen_size.h,
+																   prev_width = prev_w, prev_height = prev_h })
+		end
+	end)
+end
+--endregion
+
+
+function Render:window_size_changed()
+	self.gui_proj = vmath.matrix4_orthographic(0, self.screen_size.w, 0, self.screen_size.h, -1000, 1000)
+	self.empty_view = vmath.matrix4()
+	game.set_screen_size(self.screen_size.w, self.screen_size.h)
+
+	local gui_scale = 1
+	local gui_scale_2 = 1
+
+	if COMMON.RENDER.screen_size.aspect < 0.65625  then
+		local scale_target = (16 / 9) / (0.65625)
+		local scale_current = (16 / 9) / (COMMON.RENDER.screen_size.aspect)
+		gui_scale = scale_target / scale_current
+	end
+	if COMMON.RENDER.screen_size.aspect < 3/4  then
+		local scale_target = (16 / 9) / (3/4)
+		local scale_current = (16 / 9) / (COMMON.RENDER.screen_size.aspect)
+		gui_scale_2 = scale_target / scale_current
+	end
+
+	self.gui_scale.mode = COMMON.RENDER.screen_size.aspect>=16/9 and gui.ADJUST_FIT or gui.ADJUST_ZOOM
+	self.gui_scale.scale.x, self.gui_scale.scale.y, self.gui_scale.scale.z = gui_scale, gui_scale, gui_scale
+	self.gui_scale.scale2.x, self.gui_scale.scale2.y, self.gui_scale.scale2.z = gui_scale_2, gui_scale_2, gui_scale_2
+end
+
+function Render:update(dt)
+	game.camera_set_z_far(WORLD.balance.config.far_z_small)
+	game.camera_get_view(self.camera_view)
+	game.camera_get_perspective(self.camera_perspective)
+	xmath.matrix_mul(self.camera_frustum_objects, self.camera_perspective, self.camera_view)
+
+	game.camera_set_z_far(WORLD.balance.config.far_z_base)
+	game.camera_get_perspective(self.camera_perspective)
+	xmath.matrix_mul(self.camera_frustum, self.camera_perspective, self.camera_view)
+
+	if (WORLD.game.level_creator) then
+		local camera = WORLD.game.level_creator.player.camera
+		WORLD.game.lights:set_camera(camera.position)
+	end
+
+	WORLD.game.lights:render_shadows()
+
+
+
+	local window_width = self.screen_size.w
+	local window_height = self.screen_size.h
+
+	render.set_viewport(0, 0, window_width, window_height)
+	render.set_depth_mask(true)
+	render.set_stencil_mask(0xff)
+	render.clear(self.clear)
+
+	render.set_view(self.camera_view)
+	render.set_projection(self.camera_perspective)
+
+	--render.set_depth_mask(true)
+	render.enable_state(render.STATE_DEPTH_TEST)
+	render.enable_state(render.STATE_CULL_FACE)
+	render.disable_state(render.STATE_STENCIL_TEST)
+	render.disable_state(render.STATE_BLEND)
+	render.set_blend_func(render.BLEND_ONE, render.BLEND_ONE_MINUS_SRC_ALPHA)
+
+	self.draw_opts.frustum = self.camera_frustum_objects
+	self.chunk_opts.frustum = self.camera_frustum
+	--if (not WORLD.storage.debug:draw_chunk_vertices_is()) then
+	if (WORLD.game.lights.shadow.rt) then
+		render.enable_texture(1, WORLD.game.lights.shadow.rt, render.BUFFER_COLOR_BIT) -- created in light_and_shadows.init
+	elseif (SHADOW_TEXTURE_HANDLE) then
+		render.enable_texture(1, SHADOW_TEXTURE_HANDLE, render.BUFFER_COLOR_BIT) -- created in light_and_shadows.init
+	end
+	render.draw(self.predicates.water, self.draw_opts_no_frustum)
+	--self.chunk_opts.frustum = nil
+	if (not WORLD.game.lights.shadow.rt) then
+		render.enable_material("chunk_no_shadow")
+	end
+	render.draw(self.predicates.chunk, self.chunk_opts)
+
+	if (not WORLD.game.lights.shadow.rt) then
+		render.disable_material()
+	end
+	render.draw(self.predicates.model, self.draw_opts)
+
+	render.set_depth_func(render.COMPARE_FUNC_GREATER)
+	render.enable_material("player_invisible")
+	render.set_depth_mask(false)
+	render.draw(self.predicates.player, self.draw_opts_no_frustum)
+	render.disable_material()
+	render.set_depth_mask(true)
+	render.set_depth_func(render.COMPARE_FUNC_LESS)
+
+	render.draw(self.predicates.enemy, self.draw_opts)
+	render.draw(self.predicates.weapon, self.draw_opts)
+	render.draw(self.predicates.player, self.draw_opts_no_frustum)
+
+	--self.draw_opts.frustum = nil
+	if (WORLD.game.lights.shadow.rt or SHADOW_TEXTURE_HANDLE) then
+		render.disable_texture(1)
+	end
+
+
+
+	-- The sky is rendered last as a workaround for the lack of front-to-back sorting.
+	-- https://github.com/defold/defold/issues/5168
+	--render.set_depth_mask(false)
+	--render.draw(self.predicates.sky, self.draw_opts)
+
+	render.enable_state(render.STATE_BLEND)
+	render.disable_state(render.STATE_CULL_FACE)
+	--#IF DEBUG
+	render.draw(self.predicates.selection_cube)
+	--#ENDIF
+	render.draw(self.predicates.portal, self.draw_opts)
+
+	--#IF DEBUG
+	if (WORLD.storage.debug:draw_frustum_box_is()) then
+		render.draw(self.predicates.debug_physics)
+	end
+	--#ENDIF
+
+	render.set_depth_mask(false)
+	render.draw(self.predicates.vfx_sprite, self.draw_opts)
+	render.draw(self.predicates.label_game, self.draw_opts)
+	render.draw(self.predicates.gui_world, self.draw_opts)
+--	render.set_depth_mask(true)
+	--	render.set_depth_mask(true)
+
+
+	if (not COMMON.CONSTANTS.PLATFORM_IS_WEB) then
+		render.draw_debug3d()
+	end
+
+	-- Render GUI. It takes the whole screen at this moment.
+	render.set_viewport(0, 0, window_width, window_height)
+
+--	render.set_depth_mask(false)
+	render.disable_state(render.STATE_DEPTH_TEST)
+	--render.enable_state(render.STATE_BLEND)
+	--render.disable_state(render.STATE_CULL_FACE)
+	render.set_view(self.empty_view)
+	render.set_projection(self.gui_proj)
+
+	render.enable_state(render.STATE_STENCIL_TEST)
+	render.draw(self.predicates.gui)
+--	render.draw(self.predicates.text)
+	render.disable_state(render.STATE_STENCIL_TEST)
+
+	--	render.set_view(self.empty_view)
+	--	render.set_projection(vmath.matrix4_orthographic(-1.5, 1.5, -1.5, 1.5, -1, 1))
+	--render.enable_texture(0, WORLD.game.lights.shadow.rt, render.BUFFER_COLOR_BIT) -- created in light_and_shadows.init
+	--render.draw(self.predicates.quad_shadowmap)
+	--render.disable_texture(0)
+end
+
+function Render:on_message(message_id, message)
+	self.msg_receiver:on_message(self, message_id, message)
+end
+
+COMMON.N28S.register(Render())

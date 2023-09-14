@@ -1,0 +1,136 @@
+local COMMON = require "libs.common"
+local WORLD = require "world.world"
+local DEFS = require "world.balance.def.defs"
+local ACTIONS = require "libs.actions.actions"
+local TWEEN = require "libs.tween"
+local FlyObject = require "libs_project.gui.fly_object"
+local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+
+
+---@class TopPanelGuiScript:GuiScriptBase
+local Script = COMMON.class("TopPanelGuiScript", BaseGuiScript)
+
+function Script:init()
+	BaseGuiScript.init(self, { context_name = COMMON.CONTEXT.NAMES.TOP_PANEL, input = false })
+	self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.WINDOW_RESIZED):go_distinct(self.scheduler):subscribe(function()
+		self:on_resize()
+	end))
+	self:on_resize()
+end
+
+function Script:bind_vh()
+	self.vh = {
+		top = gui.get_node("top"),
+		top_right = gui.get_node("top_right"),
+		left = gui.get_node("left"),
+		fly_object_icon = gui.get_node("fly_object/icon"),
+		fly_object = gui.get_node("fly_object/root"),
+	}
+	self.views = {
+
+	}
+end
+
+function Script:init_gui()
+	BaseGuiScript.init_gui(self)
+	gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.TOP_PANEL)
+	gui.set_enabled(self.vh.fly_object, false)
+	self.fly_objects = {}
+end
+
+function Script:update(dt)
+	BaseGuiScript.update(self, dt)
+	for i = #self.fly_objects, 1, -1 do
+		local fly_object = self.fly_objects[i]
+		fly_object:update(dt)
+		if (not fly_object:is_animated()) then
+			table.remove(self.fly_objects, i)
+		end
+	end
+end
+
+function Script:final()
+	BaseGuiScript.final(self)
+end
+
+
+function Script:notification_animate(root)
+	--	WORLD.sounds:play_sound(WORLD.sounds.sounds.ui_task_completed_popup)
+	gui.set_color(root, COMMON.CONSTANTS.COLORS.EMPTY)
+	gui.set_enabled(root, true)
+	local action = ACTIONS.Sequence()
+	WORLD.sounds:play_sound(WORLD.sounds.sounds.forge_done)
+	action:add_action(ACTIONS.TweenGui { object = root, property = "color", v4 = true,
+										 from = COMMON.CONSTANTS.COLORS.EMPTY, to = COMMON.CONSTANTS.COLORS.WHITE, time = 0.35,
+										 easing = TWEEN.easing.inQuad })
+	action:add_action(function()
+		COMMON.coroutine_wait(1.5)
+	end)
+	action:add_action(ACTIONS.TweenGui { object = root, property = "color", v4 = true,
+										 from = COMMON.CONSTANTS.COLORS.WHITE, to = COMMON.CONSTANTS.COLORS.EMPTY, time = 1,
+										 easing = TWEEN.easing.inQuad })
+	action:add_action(function()
+		gui.delete_node(root)
+	end)
+	self.notifications:add_action(action)
+
+end
+
+function Script:create_fly_object()
+	local nodes = gui.clone_tree(self.vh.fly_object)
+	local fly_object = FlyObject({ root = nodes["fly_object/root"], icon = nodes["fly_object/icon"] })
+	table.insert(self.fly_objects, fly_object)
+	return fly_object
+end
+
+function Script:fly_resource(resource, amount, from, to)
+	--[[if (money < 10) then
+	elseif (money < 100) then
+		split = 2 + math.random(1, 2)
+	elseif (money < 300) then
+		split = 5 + math.random(1, 5)
+	elseif (money < 1000) then
+		split = 10 + math.random(1, 5)
+	end--]]
+	local split = math.min(amount, 25)
+	local values = {}
+	local split_value = math.floor(amount / split)
+
+	for i = 1, split - 1 do
+		table.insert(values, split_value)
+	end
+	table.insert(values, amount - split_value * (split - 1))
+	local delay = 0
+	for _, value in ipairs(values) do
+		local fly_object = self:create_fly_object()
+		gui.play_flipbook(fly_object.vh.icon, DEFS.RESOURCES[resource].icon)
+		local from_v = vmath.vector3(from)
+		local screen_scale_x = COMMON.RENDER.screen_size.w/960
+		local screen_scale_y =  COMMON.RENDER.screen_size.h / 540
+		local dx = 50
+		from_v.x = from_v.x + (-dx / 2 + math.random() * dx)
+		from_v.y = from_v.y + (-dx / 2 + math.random() * dx)
+		fly_object:fly({
+			from = from_v, to = to, delay = delay, appear = true,
+			speed_x = (850 + math.random() * 60) * screen_scale_x,
+			speed_y = (450 + math.random() * 50) * screen_scale_y,
+			cb = function()
+			end
+		})
+		delay = delay + math.random() * 0.05
+	end
+end
+
+function Script:on_resize()
+	gui.set_adjust_mode(self.vh.top, COMMON.RENDER.gui_scale.mode)
+	gui.set_adjust_mode(self.vh.top_right, COMMON.RENDER.gui_scale.mode)
+	gui.set_adjust_mode(self.vh.fly_object_icon, COMMON.RENDER.gui_scale.mode)
+	gui.set_adjust_mode(self.vh.left, COMMON.RENDER.gui_scale.mode)
+
+	gui.set_scale(self.vh.fly_object_icon, COMMON.RENDER.gui_scale.scale*0.25)
+	gui.set_scale(self.vh.top_right, COMMON.RENDER.gui_scale.scale)
+	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale)
+	gui.set_scale(self.vh.left, COMMON.RENDER.gui_scale.scale)
+end
+
+COMMON.N28S.register_scripts({ Script() })
