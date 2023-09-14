@@ -18,14 +18,14 @@ function Creator:create_level(level)
 	---@class LevelConfig
 	self.level_config = {
 		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
-		spawn_point = vmath.vector3(-10, 65, 0),
+		spawn_point = vmath.vector3(-4 + math.random(0,8), 65, -4 + math.random(0,8)),
 		cells = {}
 	}
 
 	for z = self.level_config.size.z1 - 1, self.level_config.size.z2 + 1 do
 		self.level_config.cells[z] = {}
 		for x = self.level_config.size.x1 - 1, self.level_config.size.x2 + 1 do
-			self.level_config.cells[z][x] = { tile = 0 }--empty
+			self.level_config.cells[z][x] = { tile = 0 }
 		end
 	end
 
@@ -46,8 +46,7 @@ function Creator:_level_cellular()
 					end
 				end
 			end
-			if cell.tile == 0 and filled_near>=5 then cell.tile = 2 end
-			if cell.tile ~= 0 and filled_near<4 then cell.tile = 0 end
+			if cell.tile == 0 and filled_near>=4 then cell.tile = 2 end
 		end
 	end
 end
@@ -56,15 +55,38 @@ function Creator:create_level_objects()
 	local lc = self.level_config
 	local size = lc.size
 
-	--random placement for tiles
-	for z = lc.size.z1, lc.size.z2 do
-		for x = lc.size.x1, lc.size.x2 do
-			lc.cells[z][x].tile = math.random() > 0.5 and 2 or 0
-		end
-	end
+	local step_x = lc.spawn_point.x
+	local step_z = lc.spawn_point.z
+	local total_cells = (size.x2 - size.x1 + 1) * (size.z2 - size.z1 + 1)
 
-	--cellular automate
-	self:_level_cellular()
+	local target_cells = math.floor(total_cells * 0.55)
+	local empty_cells = 0
+	local step = 0
+	local dir_table = { 1,2,3,4 }--L,T,R,B
+	while (step < 200000 and empty_cells < target_cells) do
+
+		local dir = COMMON.LUME.randomchoice_remove(dir_table)
+		local dx, dy = 0, 0
+		if (dir == 1) then dx = -1
+		elseif (dir == 2) then dy = 1
+		elseif (dir == 3) then dx = 1
+		elseif (dir == 4) then dy = -1 end
+
+		local nx, ny = step_x + dx, step_z + dy
+		if (nx >= size.x1 and nx <= size.x2 and ny >= size.z1 and ny <= size.z2) then
+			step_x = nx
+			step_z = ny
+			if lc.cells[step_z][step_x].tile==0 then
+				lc.cells[step_z][step_x].tile = 2
+				empty_cells = empty_cells +1
+			end
+			step = step + 1
+			dir_table = { 1,2,3,4 }--L,T,R,B
+		end
+
+	end
+	print("step:" .. step .. " fill_cells:" .. empty_cells)
+
 	self:_level_cellular()
 	self:_level_cellular()
 
@@ -77,7 +99,7 @@ function Creator:create_level_objects()
 	for z = lc.size.z1, lc.size.z2 do
 		for x = lc.size.x1, lc.size.x2 do
 			local cell = lc.cells[z][x]
-			game.chunks_fill_zone(x, 64-30, z, x, 64, z, cell.tile)
+			game.chunks_fill_zone(x, 64 - 30, z, x, 64, z, cell.tile)
 		end
 	end
 
