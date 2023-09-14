@@ -15,15 +15,72 @@ function Creator:initialize(world)
 end
 
 function Creator:create_level(level)
-	local size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 }
+	---@class LevelConfig
+	self.level_config = {
+		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
+		spawn_point = vmath.vector3(-10, 65, 0),
+		cells = {}
+	}
+
+	for z = self.level_config.size.z1 - 1, self.level_config.size.z2 + 1 do
+		self.level_config.cells[z] = {}
+		for x = self.level_config.size.x1 - 1, self.level_config.size.x2 + 1 do
+			self.level_config.cells[z][x] = { tile = 0 }--empty
+		end
+	end
+
+	self:create_level_objects()
+end
+
+function Creator:_level_cellular()
+	local lc = self.level_config
+	for z = lc.size.z1, lc.size.z2 do
+		for x = lc.size.x1, lc.size.x2 do
+			local cell = lc.cells[z][x]
+			local filled_near = 0
+			for dz = -1, 1 do
+				for dx = -1, 1 do
+					if dx ~= 0 or dz ~= 0 then
+						local neighbour = lc.cells[z + dz][x + dx]
+						if neighbour.tile ~= 0 then filled_near = filled_near + 1 end
+					end
+				end
+			end
+			if cell.tile == 0 and filled_near>=5 then cell.tile = 2 end
+			if cell.tile ~= 0 and filled_near<4 then cell.tile = 0 end
+		end
+	end
+end
+
+function Creator:create_level_objects()
+	local lc = self.level_config
+	local size = lc.size
+
+	--random placement for tiles
+	for z = lc.size.z1, lc.size.z2 do
+		for x = lc.size.x1, lc.size.x2 do
+			lc.cells[z][x].tile = math.random() > 0.5 and 2 or 0
+		end
+	end
+
+	--cellular automate
+	self:_level_cellular()
+	self:_level_cellular()
+	self:_level_cellular()
+
 
 	game.generate_new_level_data(size.x1, size.z1, size.z2, size.x2)
-	game.chunks_fill_zone(-1000, 64 - 30, -1000, 1000, 64, 1000, 2)
-	game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
-	game.chunks_fill_zone(-15, -15, -1000, 4, 255, 4, 0)
-	for i=1,10 do
-		game.chunks_fill_zone(math.random(size.x1,size.x2), 65, math.random(size.x1,size.x2), math.random(size.z1,size.z2), 65+math.random(1,5), math.random(size.z1,size.z2), 2)
+	--game.chunks_fill_zone(-1000, 64 - 30, -1000, 1000, 64, 1000, 2)
+	--game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
+
+	--fill ground
+	for z = lc.size.z1, lc.size.z2 do
+		for x = lc.size.x1, lc.size.x2 do
+			local cell = lc.cells[z][x]
+			game.chunks_fill_zone(x, 64-30, z, x, 64, z, cell.tile)
+		end
 	end
+
 	local chunks_collisions = game.get_collision_chunks()
 	local factory_url = msg.url("game_scene:/factory#chunk_collision")
 
@@ -38,8 +95,8 @@ function Creator:create_level(level)
 	print("collision objects:" .. #self.collisions)
 end
 
-function Creator:create_player(position)
-	self.player = self.entities:create_player(position)
+function Creator:create_player()
+	self.player = self.entities:create_player(self.level_config.spawn_point)
 	self.ecs:add_entity(self.player)
 end
 

@@ -12,7 +12,7 @@ static const dmhash_t HASH_CHUNK_DATA_1 = dmHashString64("data1");
 static const dmhash_t HASH_CHUNK_DATA_2 = dmHashString64("data2");
 static const dmhash_t HASH_CHUNK_DATA_3 = dmHashString64("data3");
 
-#define MAX_PLANES 7500
+#define MAX_PLANES 25000
 
 namespace VoxelGame {
 
