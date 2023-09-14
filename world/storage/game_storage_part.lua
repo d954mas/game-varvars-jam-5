@@ -12,5 +12,8 @@ function Storage:initialize(...)
 	self.game = self.storage.data.game
 end
 
+function Storage:get_level()
+	return self.game.level
+end
 
 return Storage

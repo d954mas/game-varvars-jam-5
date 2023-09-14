@@ -45,7 +45,7 @@ function GameWorld:reset_state()
 end
 
 function GameWorld:game_loaded()
-	self:load_location(DEFS.LOCATIONS.BY_ID.HUB.id)
+	self:load_level(self.world.storage.game:get_level())
 end
 
 function GameWorld:update(dt)
@@ -67,41 +67,6 @@ function GameWorld:final()
 	self.ecs_game:clear()
 end
 
-function GameWorld:load_level(level)
-	local result = nil
-	if (COMMON.CONSTANTS.PLATFORM_IS_PC) then
-		local path = "./assets/levels/" .. level .. "/level.bin"
-		print("load voxels:" .. path)
-		local status, file = pcall(io.open, path, "rb")
-		if (not status) then
-			COMMON.w("can't open file:" .. tostring(file), TAG)
-		else
-			if (file) then
-				local contents, read_err = file:read("*all")
-				if (not contents) then
-					COMMON.w("can't read file:\n" .. read_err, TAG)
-				else
-					result = contents
-				end
-				file:close()
-			else
-				COMMON.i("no file", TAG)
-			end
-		end
-	else
-		local path = "/assets/custom/" .. level .. "/level.bin"
-		result = sys.load_resource(path)
-	end
-
-	if (result) then
-		game.load_world_level_data(result)
-	else
-		COMMON.i("can't load level:" .. level, TAG)
-	end
-
-
-end
-
 function GameWorld:on_input(action_id, action)
 	if (COMMON.CONSTANTS.TARGET_IS_EDITOR) then
 		self.ecs_game:add_entity(self.ecs_game.entities:create_input(action_id, action))
@@ -112,41 +77,6 @@ function GameWorld:on_input(action_id, action)
 	end
 	if (action_id == COMMON.HASHES.INPUT.P and action.pressed) then
 		print(self.level_creator.player.position)
-	end
-	if (COMMON.CONSTANTS.TARGET_IS_EDITOR) then
-		if (action_id == COMMON.HASHES.INPUT.F5 and action.pressed) then
-			local location_def = assert(DEFS.LOCATIONS.BY_ID[self.state.location_id])
-			local path = "./assets/levels/" .. location_def.level .. "/"
-			if (COMMON.CONSTANTS.TARGET_IS_EDITOR) then
-				local time = socket.gettime()
-				local data = game.get_world_level_data()
-
-				local file = io.open(path .. "level.bin", "wb")
-				file:write(data)
-				file:close()
-				print("Level save:" .. (socket.gettime() - time))
-
-				--time = socket.gettime()
-				--game.save_wavefront_obj(path)
-				--print("Level save wavefront:" .. (socket.gettime()-time))
-
-				--delete current collisions
-				local exist = true
-				local idx = 1
-				while (exist) do
-					local file_name = path .. "collisions/chunk_" .. idx .. ".go"
-					exist = os.remove(file_name)
-					idx = idx + 1
-				end
-
-				time = socket.gettime()
-				game.save_collision_chunks(path)
-				print("Level save collisions:" .. (socket.gettime() - time))
-			end
-		elseif (action_id == COMMON.HASHES.INPUT.F8 and action.pressed and not self.state.load_world) then
-			--local path = "./assets/levels/test_level/level.bin"
-			--self:load_level(path)
-		end
 	end
 end
 
@@ -200,69 +130,25 @@ function GameWorld:player_teleport_cor(position, angle)
 	coroutine.yield()
 end
 
-function GameWorld:load_location(location_id)
-	local location_def = assert(DEFS.LOCATIONS.BY_ID[location_id])
-	print("LOAD LOCATION:" .. location_id)
-
-	local ctx = COMMON.CONTEXT:set_context_top_game()
-
+function GameWorld:load_level(level)
 	self.ecs_game.ecs:clear()
-	if (self.state.voxels_collisions) then
-		for k, v in ipairs(self.state.voxels_collisions) do
-			go.delete(v)
-		end
-		self.state.voxels_collisions = nil
+
+	if (self.level_creator) then
+		self.level_creator:final()
+		self.level_creator = nil
 	end
+
 
 	DEBUG_INFO.game_reset()
 	self.ecs_game:add_systems()
 	self.level_creator = LevelCreator(self.world)
+	self.level_creator:create_level(level)
 
-	self.level_creator:create_player(location_def.player_spawn)
+	self.level_creator:create_player(vmath.vector3(0,65,0))
 	self:player_update_parameters()
 	self:camera_set_first_person(false)
 
-	self.state.location_id = location_id
 
-	self:load_level(location_def.level)
-
-	if (location_id == DEFS.LOCATIONS.BY_ID.HUB.id) then
-		game.generate_new_level_data(-31, -31, 32, 32)
-		game.chunks_fill_zone(-1000, 54, -1000, 1000, 64, 1000, 2)
-		game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
-		local chunks_collisions = game.get_collision_chunks()
-		local factory_url = msg.url("game_scene:/factory#chunk_collision")
-
-		self.state.voxels_collisions = {}
-		for _, chunk in ipairs(chunks_collisions) do
-			for _, box in ipairs(chunk) do
-				--skip boxes that not hit y==65
-				if(box.position.y + box.size.y>=64.9999)then
-					local go = factory.create(factory_url, box.position + box.size / 2, nil, nil,
-							box.size)
-					--local go = {}
-					table.insert(self.state.voxels_collisions,go)
-				end
-			end
-		end
-		print("collision objects:" .. #self.state.voxels_collisions)
-
-		--game.chunks_fill_hollow()
-		--game.chunks_clip_size(-123,-123+31,93, 62)
-	end
-
-	ctx:remove()
-	for _, e in ipairs(location_def.entities) do
-		if false then
-		else
-			pprint(e)
-			error("unknown entity")
-		end
-	end
-
-	for _, e in ipairs(location_def.spawn_points) do
-
-	end
 
 	self.ecs_game:refresh()
 	--update camera or all enemies will be added to world. Need to add only if visible

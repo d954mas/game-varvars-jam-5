@@ -152,7 +152,7 @@ void World::generateNewWorld(lua_State *L,int minX, int minZ, int maxX, int maxZ
     dmLogInfo("generate world:[%d %d] [%d %d]",minX,minZ,maxX,maxZ);
     chunkRenderer->clear(L);
     chunks->setWorldSize(minX,minZ,maxX,maxZ);
-    chunks->createVoxels();
+   // chunks->createVoxels();
 
     for(int i=0; i< chunks->volume;i++){
         chunkRenderer->addChunk(&chunks->chunks[i]);
