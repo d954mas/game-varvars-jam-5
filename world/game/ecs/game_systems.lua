@@ -35,6 +35,7 @@ M.ActionsUpdateSystem = require "world.game.ecs.systems.actions_update_system"
 M.AutoDestroySystem = require "world.game.ecs.systems.auto_destroy_system"
 M.InputSystem = require "world.game.ecs.systems.input_system"
 M.LockMouseSystem = require "world.game.ecs.systems.lock_mouse_system"
+M.LevelCompletedSystem = require "world.game.ecs.systems.level_completed_system"
 
 M.PhysicsUpdateVariablesSystem = require "world.game.ecs.systems.physics_update_variables"
 M.PhysicsUpdateLinearVelocitySystem = require "world.game.ecs.systems.physics_update_linear_velocity"

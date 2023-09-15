@@ -72,6 +72,7 @@ function EcsWorld:add_systems()
 	end
 	--#ENDIF
 
+	self.ecs:addSystem(SYSTEMS.LevelCompletedSystem())
 	self.ecs:addSystem(SYSTEMS.AutoDestroySystem())
 end
 

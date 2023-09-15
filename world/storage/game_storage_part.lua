@@ -16,4 +16,8 @@ function Storage:get_level()
 	return self.game.level
 end
 
+function Storage:level_completed()
+	self.game.level = self.game.level + 1
+end
+
 return Storage
