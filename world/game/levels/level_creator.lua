@@ -16,14 +16,16 @@ end
 
 function Creator:create_level(level)
 	--generate geometry
-	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_DATA,level)
+	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_DATA, level)
 
 	---@class LevelConfig
 	self.level_config = {
 		level = assert(level),
 		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
-		spawn_point = vmath.vector3(0,65,0),
-		cells = {}
+		spawn_point = vmath.vector3(0, 65, 0),
+		cats = rnd.range(20, 50),
+		cells = {},
+		spawn_cells = {},
 	}
 
 	for z = self.level_config.size.z1 - 1, self.level_config.size.z2 + 1 do
@@ -33,17 +35,14 @@ function Creator:create_level(level)
 		end
 	end
 
-	self:create_level_objects()
-
-	self.level_config.spawn_point.x = self.level_config.spawn_point.x+0.5
-	self.level_config.spawn_point.z = self.level_config.spawn_point.z-0.5
+	self:create_level_geometry()
+	self:init_pathfinding()
+	self.level_config.spawn_point.x = self.level_config.spawn_point.x + 0.5
+	self.level_config.spawn_point.z = self.level_config.spawn_point.z - 0.5
 	self:create_player()
-	for i = 1, 10 do
-		local cat = self.entities:create_cat(self.level_config.spawn_point +
-				vmath.vector3(COMMON.LUME.random(-5, 5), 0, COMMON.LUME.random(-5, 5)),
-				DEFS.CATS.CAT_1.id)
-		self.ecs:add_entity(cat)
-	end
+	self:create_cats()
+
+
 end
 
 function Creator:_level_cellular()
@@ -65,7 +64,7 @@ function Creator:_level_cellular()
 	end
 end
 
-function Creator:create_level_objects()
+function Creator:create_level_geometry()
 	local lc = self.level_config
 	local size = lc.size
 
@@ -74,7 +73,7 @@ function Creator:create_level_objects()
 	local total_cells = (size.x2 - size.x1 + 1) * (size.z2 - size.z1 + 1)
 
 	--generate geometry
-	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_GEOMETRY,self.level_config.level)
+	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_GEOMETRY, self.level_config.level)
 
 	local target_cells = math.floor(total_cells * 0.55)
 	local empty_cells = 0
@@ -119,8 +118,6 @@ function Creator:create_level_objects()
 		end
 	end
 
-	game.pathfinding_init_map()
-
 	local chunks_collisions = game.get_collision_chunks()
 	local factory_url = msg.url("game_scene:/factory#chunk_collision")
 	local factory_border_url = msg.url("game_scene:/factory#chunk_border_collision")
@@ -163,7 +160,7 @@ function Creator:create_level_objects()
 						if neighbour.tile ~= 0 then filled_near = filled_near + 1 end
 					end
 				end
-				if filled_near>0 then
+				if filled_near > 0 then
 					areas[z][x] = true
 				end
 			end
@@ -196,6 +193,35 @@ end
 function Creator:create_player()
 	self.player = self.entities:create_player(self.level_config.spawn_point)
 	self.ecs:add_entity(self.player)
+end
+
+function Creator:init_pathfinding()
+	game.pathfinding_init_map()
+	local lc = self.level_config
+	lc.spawn_cells = {}
+	for z = lc.size.z1, lc.size.z2 do
+		for x = lc.size.x1, lc.size.x2 do
+			if not game.pathfinding_is_blocked(x, z) then
+				table.insert(lc.spawn_cells, { z = z, x = x, cell = lc.cells[z][x] })
+			end
+		end
+	end
+	pprint(lc.spawn_cells)
+end
+
+function Creator:create_cats()
+	local lc = self.level_config
+	local free_cells = COMMON.LUME.clone_shallow(lc.spawn_cells)
+	lc.cats = math.min(lc.cats,math.floor(#free_cells*0.66))
+
+	for i = 1, lc.cats do
+		local cell = COMMON.LUME.randomchoice_remove(free_cells)
+		local x = cell.x + 0.5 + COMMON.LUME.random(-0.33, 0.33)
+		local y = 65
+		local z = cell.z - 0.5 + COMMON.LUME.random(-0.33, 0.33)
+		local cat = self.entities:create_cat(vmath.vector3(x, y, z), DEFS.CATS.CAT_1.id)
+		self.ecs:add_entity(cat)
+	end
 end
 
 ---@param config EntityGame
