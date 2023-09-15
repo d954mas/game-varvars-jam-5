@@ -178,6 +178,7 @@ function GameWorld:cat_collected(cat)
 	self.state.cats_collected = self.state.cats_collected + 1
 	ctx.data.views.cats_progress:set_value(self.state.cats_collected)
 	ctx:remove()
+
 end
 
 return GameWorld

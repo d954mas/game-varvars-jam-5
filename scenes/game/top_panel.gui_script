@@ -3,9 +3,11 @@ local WORLD = require "world.world"
 local DEFS = require "world.balance.def.defs"
 local ACTIONS = require "libs.actions.actions"
 local TWEEN = require "libs.tween"
+
 local FlyObject = require "libs_project.gui.fly_object"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
+local TEMP_V = vmath.vector4(1)
 
 ---@class TopPanelGuiScript:GuiScriptBase
 local Script = COMMON.class("TopPanelGuiScript", BaseGuiScript)
@@ -25,6 +27,11 @@ function Script:bind_vh()
 		left = gui.get_node("left"),
 		fly_object_icon = gui.get_node("fly_object/icon"),
 		fly_object = gui.get_node("fly_object/root"),
+
+		fly_object_cat_icon = gui.get_node("fly_object_cat/icon"),
+		fly_object_cat = gui.get_node("fly_object_cat/root"),
+
+		btn_book_target = gui.get_node("btn_book_target"),
 	}
 	self.views = {
 
@@ -35,6 +42,7 @@ function Script:init_gui()
 	BaseGuiScript.init_gui(self)
 	gui.set_render_order(COMMON.CONSTANTS.GUI_ORDER.TOP_PANEL)
 	gui.set_enabled(self.vh.fly_object, false)
+	gui.set_enabled(self.vh.fly_object_cat, false)
 	self.fly_objects = {}
 end
 
@@ -52,7 +60,6 @@ end
 function Script:final()
 	BaseGuiScript.final(self)
 end
-
 
 function Script:notification_animate(root)
 	--	WORLD.sounds:play_sound(WORLD.sounds.sounds.ui_task_completed_popup)
@@ -83,6 +90,42 @@ function Script:create_fly_object()
 	return fly_object
 end
 
+function Script:create_fly_object_cat()
+	local nodes = gui.clone_tree(self.vh.fly_object_cat)
+	local fly_object = FlyObject({ root = nodes["fly_object_cat/root"], icon = nodes["fly_object_cat/icon"] })
+	table.insert(self.fly_objects, fly_object)
+	return fly_object
+end
+
+---@param cat EntityGame
+function Script:fly_cat(cat)
+	local fly_object = self:create_fly_object_cat()
+	local pivot = cat.cat_go.config.origin_position
+
+	gui.play_flipbook(fly_object.vh.icon, DEFS.CATS[cat.cat_data.id].sprite)
+	gui.set_position(fly_object.vh.icon, pivot*0.33)
+
+	local ambient = WORLD.game.lights.ambient_color
+	TEMP_V.x, TEMP_V.y, TEMP_V.z = ambient.x*ambient.w, ambient.y*ambient.w, ambient.z*ambient.w
+	gui.set_color(fly_object.vh.icon, TEMP_V)
+
+	local screen_x, screen_y = COMMON.RENDER:world_to_screen(cat.position, COMMON.RENDER.camera_perspective, COMMON.RENDER.camera_view)
+
+	local to = gui.get_screen_position(self.vh.btn_book_target)
+	local from_v = vmath.vector3(screen_x, screen_y, 0)
+
+	local screen_scale_x = COMMON.RENDER.screen_size.w / 960
+	local screen_scale_y = COMMON.RENDER.screen_size.h / 540
+
+	fly_object:fly({
+		from = from_v, to = to, delay = 0, appear = false,
+		speed_x = (850 + math.random() * 60) * screen_scale_x,
+		speed_y = (450 + math.random() * 50) * screen_scale_y,
+		cb = function()
+		end
+	})
+end
+
 function Script:fly_resource(resource, amount, from, to)
 	--[[if (money < 10) then
 	elseif (money < 100) then
@@ -105,8 +148,8 @@ function Script:fly_resource(resource, amount, from, to)
 		local fly_object = self:create_fly_object()
 		gui.play_flipbook(fly_object.vh.icon, DEFS.RESOURCES[resource].icon)
 		local from_v = vmath.vector3(from)
-		local screen_scale_x = COMMON.RENDER.screen_size.w/960
-		local screen_scale_y =  COMMON.RENDER.screen_size.h / 540
+		local screen_scale_x = COMMON.RENDER.screen_size.w / 960
+		local screen_scale_y = COMMON.RENDER.screen_size.h / 540
 		local dx = 50
 		from_v.x = from_v.x + (-dx / 2 + math.random() * dx)
 		from_v.y = from_v.y + (-dx / 2 + math.random() * dx)
@@ -125,9 +168,11 @@ function Script:on_resize()
 	gui.set_adjust_mode(self.vh.top, COMMON.RENDER.gui_scale.mode)
 	gui.set_adjust_mode(self.vh.top_right, COMMON.RENDER.gui_scale.mode)
 	gui.set_adjust_mode(self.vh.fly_object_icon, COMMON.RENDER.gui_scale.mode)
+	gui.set_adjust_mode(self.vh.fly_object_cat_icon, COMMON.RENDER.gui_scale.mode)
 	gui.set_adjust_mode(self.vh.left, COMMON.RENDER.gui_scale.mode)
 
-	gui.set_scale(self.vh.fly_object_icon, COMMON.RENDER.gui_scale.scale*0.25)
+	gui.set_scale(self.vh.fly_object_icon, COMMON.RENDER.gui_scale.scale * 0.25)
+	gui.set_scale(self.vh.fly_object_cat_icon, COMMON.RENDER.gui_scale.scale*0.33)
 	gui.set_scale(self.vh.top_right, COMMON.RENDER.gui_scale.scale)
 	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale)
 	gui.set_scale(self.vh.left, COMMON.RENDER.gui_scale.scale)

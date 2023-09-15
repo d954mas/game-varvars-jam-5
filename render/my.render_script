@@ -266,4 +266,43 @@ function Render:on_message(message_id, message)
 	self.msg_receiver:on_message(self, message_id, message)
 end
 
+-- Vectors used in calculations for public transform functions
+local nv = vmath.vector4(0, 0, -1, 1)
+local fv = vmath.vector4(0, 0, 1, 1)
+local pv = vmath.vector4(0, 0, 0, 1)
+
+---@param render Render
+function Render:world_to_screen(pos, proj, view)
+	local m = proj * view
+	pv.x, pv.y, pv.z, pv.w = pos.x, pos.y, pos.z, 1
+
+	pv = m * pv
+	pv = pv * (1 / pv.w)
+	pv.x = (pv.x / 2 + 0.5) * self.screen_size.w + 0
+	pv.y = (pv.y / 2 + 0.5) * self.screen_size.h + 0
+
+	return pv.x, pv.y, 0
+end
+
+function Render:screen_to_gui(pos, proj, view)
+	local m = proj * view
+	pv.x, pv.y, pv.z, pv.w = pos.x, pos.y, pos.z, 1
+
+	pv = m * pv
+	pv = pv * (1 / pv.w)
+	pv.x = (pv.x / 2 + 0.5) * self.screen_size.w + 0
+	pv.y = (pv.y / 2 + 0.5) * self.screen_size.h + 0
+
+	return pv.x, pv.y, 0
+end
+
+function Render:screen_to_gui(x, y)
+	local sx, sy = self.screen_size.w / self.config_size.w, self.screen_size.h / self.config_size.h
+
+		x = x / sx
+		y = y / sy
+
+	return x, y
+end
+
 COMMON.N28S.register(Render())
