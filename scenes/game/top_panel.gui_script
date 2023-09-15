@@ -106,7 +106,9 @@ function Script:fly_cat(cat)
 	gui.set_position(fly_object.vh.icon, pivot*0.33)
 
 	local ambient = WORLD.game.lights.ambient_color
+	local sunlight = WORLD.game.lights.sunlight_color
 	TEMP_V.x, TEMP_V.y, TEMP_V.z = ambient.x*ambient.w, ambient.y*ambient.w, ambient.z*ambient.w
+	TEMP_V.x, TEMP_V.y, TEMP_V.z = TEMP_V.x+sunlight.x*sunlight.w*0.5, TEMP_V.y+sunlight.y*sunlight.w*0.5, TEMP_V.z+sunlight.z*sunlight.w*0.5
 	gui.set_color(fly_object.vh.icon, TEMP_V)
 
 	local screen_x, screen_y = COMMON.RENDER:world_to_screen(cat.position, COMMON.RENDER.camera_perspective, COMMON.RENDER.camera_view)

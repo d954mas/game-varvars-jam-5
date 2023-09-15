@@ -253,7 +253,9 @@ function Entities:create_cat(position, id)
 	e.cat_go.collision = COMMON.LUME.url_component_from_url(e.cat_go.root, "collision")
 	e.cat_go.sprite.sprite = COMMON.LUME.url_component_from_url(e.cat_go.sprite.origin, "sprite")
 
-	local origin_pos = def.origin_position
+	sprite.play_flipbook(e.cat_go.sprite.sprite,def.sprite)
+
+	local origin_pos = def.origin
 
 	if not origin_pos then
 		local size = go.get(e.cat_go.sprite.sprite, "size")

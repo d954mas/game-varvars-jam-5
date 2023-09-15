@@ -2,7 +2,7 @@ uniform lowp sampler2D DIFFUSE_TEXTURE;
 
 
 
-#include "/assets/materials/shadow/shadow_fp.glsl"
+#include "/assets/materials/shadow/no_shadow_fp.glsl"
 #include "/assets/materials/light_fp.glsl"
 
 
@@ -49,7 +49,7 @@ void main() {
     vec3 shadow_color = shadow_color.xyz*shadow_color.w*(sunlight_color.w) * shadow;
 
     vec3 diff_light = vec3(0);
-    diff_light += max(direct_light(sunlight_color.rgb, sun_position.xyz, var_world_position.xyz, var_world_normal, shadow_color)*sunlight_color.w,0.0);
+    diff_light += max(sunlight_color.rgb*sunlight_color.w*0.5,0.0);
     diff_light += vec3(illuminance_color.xyz);
     // diff_light = clamp(diff_light, 0.0, ambient_color.w);
 
