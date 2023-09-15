@@ -84,6 +84,10 @@ function lume.randomchoice_remove(t)
 	return table_remove(t, math_random(#t))
 end
 
+function lume.pcg_randomchoice_remove(t)
+	return table_remove(t, rnd.range(1, #t))
+end
+
 function lume.weightedchoice_nil(t)
 	local sum = 0
 	for _, v in pairs(t) do
@@ -289,15 +293,15 @@ function lume.get_cost_string(value)
 		--pass
 		return value
 	elseif (value < 100000) then
-		return string.format("%.2fk",lume.floor(value / 1000, 0.01))
+		return string.format("%.2fk", lume.floor(value / 1000, 0.01))
 	elseif (value < 1000000) then
-		return string.format("%.1fk",lume.floor(value / 1000, 0.1))
+		return string.format("%.1fk", lume.floor(value / 1000, 0.1))
 	elseif (value < 100000000) then
-		return string.format("%.2fm",lume.floor(value / 1000000, 0.01))
+		return string.format("%.2fm", lume.floor(value / 1000000, 0.01))
 	elseif (value < 1000000000) then
-		return string.format("%.1fm",lume.floor(value / 1000000, 0.1))
+		return string.format("%.1fm", lume.floor(value / 1000000, 0.1))
 	else
-		return string.format("%.1fb",lume.floor(value / 1000000000, 0.1))
+		return string.format("%.1fb", lume.floor(value / 1000000000, 0.1))
 	end
 
 end

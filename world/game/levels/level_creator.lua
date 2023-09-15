@@ -15,10 +15,14 @@ function Creator:initialize(world)
 end
 
 function Creator:create_level(level)
+	--generate geometry
+	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_DATA,level)
+
 	---@class LevelConfig
 	self.level_config = {
+		level = assert(level),
 		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
-		spawn_point = vmath.vector3(-4 + math.random(0, 8), 65, -4 + math.random(0, 8)),
+		spawn_point = vmath.vector3(0,65,0),
 		cells = {}
 	}
 
@@ -31,6 +35,8 @@ function Creator:create_level(level)
 
 	self:create_level_objects()
 
+	self.level_config.spawn_point.x = self.level_config.spawn_point.x+0.5
+	self.level_config.spawn_point.z = self.level_config.spawn_point.z-0.5
 	self:create_player()
 	for i = 1, 10 do
 		local cat = self.entities:create_cat(self.level_config.spawn_point +
@@ -67,13 +73,16 @@ function Creator:create_level_objects()
 	local step_z = lc.spawn_point.z
 	local total_cells = (size.x2 - size.x1 + 1) * (size.z2 - size.z1 + 1)
 
+	--generate geometry
+	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_GEOMETRY,self.level_config.level)
+
 	local target_cells = math.floor(total_cells * 0.55)
 	local empty_cells = 0
 	local step = 0
 	local dir_table = { 1, 2, 3, 4 }--L,T,R,B
 	while (step < 200000 and empty_cells < target_cells) do
 
-		local dir = COMMON.LUME.randomchoice_remove(dir_table)
+		local dir = COMMON.LUME.pcg_randomchoice_remove(dir_table)
 		local dx, dy = 0, 0
 		if (dir == 1) then dx = -1
 		elseif (dir == 2) then dy = 1
