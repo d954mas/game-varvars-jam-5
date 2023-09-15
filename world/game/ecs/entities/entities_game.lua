@@ -81,6 +81,10 @@ function Entities:on_entity_removed(e)
 		go.delete(e.player_go.root, true)
 		e.player_go = nil
 	end
+	if (e.cat_go) then
+		go.delete(e.cat_go.root, true)
+		e.cat_go = nil
+	end
 
 end
 
