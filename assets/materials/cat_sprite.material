@@ -1,6 +1,6 @@
 name: "model"
 tags: "cat_sprite"
-tags: "shadow"
+tags: "shadow_sprite"
 vertex_program: "/assets/materials/model.vp"
 fragment_program: "/assets/materials/sprite_3d.fp"
 vertex_space: VERTEX_SPACE_WORLD

@@ -59,6 +59,7 @@ function Lights:initialize(world)
 
 		pred = nil,
 		chunk_pred = nil,
+		sprite_pred = nil,
 		light_projection = nil,
 		light_projection_v = nil,
 		bias_matrix = vmath.matrix4(),
@@ -95,6 +96,7 @@ function Lights:set_render(render_obj)
 	-- all objects that have to cast shadows
 	self.shadow.pred = render.predicate({ "shadow" })
 	self.shadow.chunk_pred = render.predicate({ "shadow_chunk" })
+	self.shadow.sprite_pred = render.predicate({ "shadow_sprite" })
 
 	self.shadow.light_projection = vmath.matrix4_orthographic(self.shadow.PROJECTION_X1, self.shadow.PROJECTION_X2,
 			self.shadow.PROJECTION_Y1, self.shadow.PROJECTION_Y2, -50, 150)
@@ -246,6 +248,9 @@ function Lights:render_shadows()
 	render.disable_material()
 	render.enable_material("shadow")
 	render.draw(self.shadow.pred, self.shadow.draw_shadow_opts)
+	render.disable_state(render.STATE_CULL_FACE)
+	render.draw(self.shadow.sprite_pred, self.shadow.draw_shadow_opts)
+	render.enable_state(render.STATE_CULL_FACE)
 	render.disable_material()
 	render.set_render_target(render.RENDER_TARGET_DEFAULT)
 end
