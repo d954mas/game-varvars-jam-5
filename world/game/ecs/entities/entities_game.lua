@@ -193,7 +193,7 @@ function Entities:create_player(position)
 	e.physics_object = game.physics_object_create(e.player_go.root, e.player_go.collision, e.position, e.physics_linear_velocity)
 
 	e.parameters = {
-
+		cat_collect_radius = 1
 	}
 
 	e.current_interact_aabb = nil

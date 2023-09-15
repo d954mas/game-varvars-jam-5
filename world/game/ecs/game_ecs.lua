@@ -38,6 +38,7 @@ function EcsWorld:add_systems()
 
 	--self.ecs:addSystem(SYSTEMS.GroundCheckSystem())
 	self.ecs:addSystem(SYSTEMS.PlayerMoveSystem())
+	self.ecs:addSystem(SYSTEMS.PlayerCatCollectSystem())
 
 	self.ecs:addSystem(SYSTEMS.PlayerCheckInteractiveAreaSystem())
 	self.ecs:addSystem(SYSTEMS.PlayerStepSoundSystem())
@@ -53,13 +54,12 @@ function EcsWorld:add_systems()
 	self.ecs:addSystem(SYSTEMS.WaterMoveSystem())
 	self.ecs:addSystem(SYSTEMS.UpdateFrustumBoxSystem())
 
-
 	self.ecs:addSystem(SYSTEMS.DrawChunksSystem())
 	self.ecs:addSystem(SYSTEMS.DrawPlayerSystem())
 	self.ecs:addSystem(SYSTEMS.DrawCatSystem())
 
 	--#IF DEBUG
-	if(COMMON.CONSTANTS.VERSION_IS_DEV)then
+	if (COMMON.CONSTANTS.VERSION_IS_DEV) then
 		self.ecs:addSystem(SYSTEMS.DrawFrustumBoxSystem())
 	end
 	--#ENDIF
