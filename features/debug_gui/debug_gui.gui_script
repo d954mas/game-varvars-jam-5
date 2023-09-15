@@ -37,6 +37,8 @@ function Script:bind_vh()
 					checkbox_draw_frustum_box = GUI.CheckboxWithLabel("panel_game/checkbox_draw_frustum_box"),
 					checkbox_draw_physics = GUI.CheckboxWithLabel("panel_game/checkbox_draw_physics"),
 					checkbox_draw_interact_aabb = GUI.CheckboxWithLabel("panel_game/checkbox_draw_interact_aabb"),
+					checkbox_draw_path_cells = GUI.CheckboxWithLabel("panel_game/checkbox_draw_path_cells"),
+					checkbox_draw_path = GUI.CheckboxWithLabel("panel_game/checkbox_draw_path"),
 				},
 				config = { show_ecs = false }
 			}
@@ -115,6 +117,18 @@ function Script:init_gui()
 	checkbox_draw_interact_aabb:set_checked(WORLD.storage.debug:draw_interact_aabb_is())
 	checkbox_draw_interact_aabb:set_input_listener(function()
 		WORLD.storage.debug:draw_interact_aabb_set(checkbox_draw_interact_aabb.checked)
+	end)
+
+	local checkbox_draw_path_cells = self.views.panels.game.childs.checkbox_draw_path_cells
+	checkbox_draw_path_cells:set_checked(WORLD.storage.debug:draw_path_cells_is())
+	checkbox_draw_path_cells:set_input_listener(function()
+		WORLD.storage.debug:draw_path_cells_set(checkbox_draw_path_cells.checked)
+	end)
+
+	local checkbox_draw_path = self.views.panels.game.childs.checkbox_draw_path
+	checkbox_draw_path:set_checked(WORLD.storage.debug:draw_path_is())
+	checkbox_draw_path:set_input_listener(function()
+		WORLD.storage.debug:draw_path_set(checkbox_draw_path.checked)
 	end)
 
 	self.views.panels.game.childs.btn_reset:set_input_listener(function()

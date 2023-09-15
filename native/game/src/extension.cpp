@@ -528,6 +528,13 @@ static int PathfindingFindPath(lua_State *L) {
 	return 1;
 }
 
+static int PathfindingInitMap(lua_State *L) {
+    DM_LUA_STACK_CHECK(L, 0);
+	VoxelGameUtils::check_arg_count(L, 0);
+    world.map.setChunks(world.chunks);
+	return 0;
+}
+
 static int SmoothDumpV3(lua_State *L) {
     DM_LUA_STACK_CHECK(L, 0);
 	VoxelGameUtils::check_arg_count(L, 7);
@@ -649,6 +656,7 @@ static const luaL_reg Module_methods[] = {
     { "pathfinding_is_blocked", PathfindingIsBlockedData},
     { "pathfinding_set_blocked", PathfindingSetBlockedData},
     { "pathfinding_find_path", PathfindingFindPath},
+    { "pathfinding_init_map", PathfindingInitMap},
 
     { "smooth_dump_v3", SmoothDumpV3},
 

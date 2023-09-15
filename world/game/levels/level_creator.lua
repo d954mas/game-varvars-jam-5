@@ -119,6 +119,8 @@ function Creator:create_level_objects()
 		end
 	end
 
+	game.pathfinding_init_map()
+
 	local chunks_collisions = game.get_collision_chunks()
 	local factory_url = msg.url("game_scene:/factory#chunk_collision")
 	local factory_border_url = msg.url("game_scene:/factory#chunk_border_collision")

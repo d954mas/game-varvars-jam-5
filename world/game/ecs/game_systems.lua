@@ -65,6 +65,8 @@ M.DrawSelectionAreaBlockSystem = require "world.game.ecs.systems.draw_selection_
 M.PlayerFlySystem = require "world.game.ecs.systems.player_fly_system"
 M.DrawFrustumBoxSystem = require "world.game.ecs.systems.draw_frustum_box_system"
 M.DrawInteractAABBDebugSystem = require "world.game.ecs.systems.draw_interact_aabb_debug_system"
+M.DrawDebugPathCellSystem = require "world.game.ecs.systems.draw_debug_path_cell_system"
+M.DrawDebugPathSystem = require "world.game.ecs.systems.draw_debug_path_system"
 --#ENDIF
 
 

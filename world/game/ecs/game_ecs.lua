@@ -70,6 +70,8 @@ function EcsWorld:add_systems()
 	--#IF DEBUG
 	if (COMMON.CONSTANTS.PLATFORM_IS_PC) then
 		self.ecs:addSystem(SYSTEMS.DrawInteractAABBDebugSystem())
+		self.ecs:addSystem(SYSTEMS.DrawDebugPathCellSystem())
+		self.ecs:addSystem(SYSTEMS.DrawDebugPathSystem())
 	end
 	--#ENDIF
 

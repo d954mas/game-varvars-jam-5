@@ -65,4 +65,21 @@ function Debug:draw_physics_set(enable)
 	end
 end
 
+function Debug:draw_path_cells_is() return self.debug.draw_path_cells end
+function Debug:draw_path_cells_set(enable)
+	if (self.debug.draw_path_cells ~= enable) then
+		self.debug.draw_path_cells = enable
+		self:save_and_changed()
+	end
+end
+
+
+function Debug:draw_path_is() return self.debug.draw_path end
+function Debug:draw_path_set(enable)
+	if (self.debug.draw_path ~= enable) then
+		self.debug.draw_path = enable
+		self:save_and_changed()
+	end
+end
+
 return Debug
