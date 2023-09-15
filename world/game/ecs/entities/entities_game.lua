@@ -40,6 +40,9 @@ function Entities:initialize(world)
 	self.world = world
 	---@type EntityGame[]
 	self.pool_input = {}
+
+	---@type EntityGame[]
+	self.cats = {}
 end
 
 
@@ -86,12 +89,19 @@ function Entities:on_entity_removed(e)
 		e.cat_go = nil
 	end
 
+	if e.cat then
+		COMMON.LUME.removei(self.cats, e)
+	end
+
 end
 
 ---@param e EntityGame
 function Entities:on_entity_added(e)
 	DEBUG_INFO.game_entities = DEBUG_INFO.game_entities + 1
 	e._in_world = true
+	if e.cat then
+		table.insert(self.cats, e)
+	end
 end
 --endregion
 

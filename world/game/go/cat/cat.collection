@@ -14,6 +14,7 @@ embedded_instances {
   "group: \\\"enemy\\\"\\n"
   "mask: \\\"obstacle\\\"\\n"
   "mask: \\\"player\\\"\\n"
+  "mask: \\\"enemy\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_CAPSULE\\n"

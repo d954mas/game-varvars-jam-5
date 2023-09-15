@@ -32,6 +32,8 @@ use_fixed_timestep = 1
 gravity_y = -30.0
 max_collision_object_count = 4096
 max_fixed_timesteps = 1
+max_collisions = 256
+max_contacts = 256
 
 [script]
 shared_state = 1

@@ -39,6 +39,7 @@ function Creator:create_level(level)
 	self:init_pathfinding()
 	self.level_config.spawn_point.x = self.level_config.spawn_point.x + 0.5
 	self.level_config.spawn_point.z = self.level_config.spawn_point.z - 0.5
+
 	self:create_player()
 	self:create_cats()
 
@@ -206,7 +207,6 @@ function Creator:init_pathfinding()
 			end
 		end
 	end
-	pprint(lc.spawn_cells)
 end
 
 function Creator:create_cats()
@@ -215,13 +215,22 @@ function Creator:create_cats()
 	lc.cats = math.min(lc.cats,math.floor(#free_cells*0.66))
 
 	for i = 1, lc.cats do
-		local cell = COMMON.LUME.randomchoice_remove(free_cells)
-		local x = cell.x + 0.5 + COMMON.LUME.random(-0.33, 0.33)
-		local y = 65
-		local z = cell.z - 0.5 + COMMON.LUME.random(-0.33, 0.33)
+		local cell
+		--do not spawn near player
+		while(#free_cells>0)do
+			cell = COMMON.LUME.randomchoice_remove(free_cells)
+			local dx = cell.x+0.5-lc.spawn_point.x
+			local dz = cell.z+0.5-lc.spawn_point.z
+			if math.abs(dx)>=2 or math.abs(dz)>=2 then break end
+		end
+
+		local x = cell.x +0.5
+		local y = 65.1
+		local z = cell.z +0.5
 		local cat = self.entities:create_cat(vmath.vector3(x, y, z), DEFS.CATS.CAT_1.id)
 		self.ecs:add_entity(cat)
 	end
+	lc.cats = #self.entities.cats
 end
 
 ---@param config EntityGame
