@@ -228,7 +228,7 @@ function Creator:create_cats()
 		local x = cell.x +0.5
 		local y = 65.1
 		local z = cell.z +0.5
-		local cats = {DEFS.CATS.CAT_1,DEFS.CATS.CAT_2,DEFS.CATS.CAT_3, DEFS.CATS.CAT_4, DEFS.CATS.CAT_5}
+		local cats = COMMON.LUME.clone_shallow(DEFS.CATS.LIST)
 		local cat = self.entities:create_cat(vmath.vector3(x, y, z), COMMON.LUME.randomchoice(cats).id)
 		self.ecs:add_entity(cat)
 		cats_created = cats_created + 1

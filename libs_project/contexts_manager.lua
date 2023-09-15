@@ -9,15 +9,8 @@ Manager.NAMES = {
 	GAME = "GAME",
 	GAME_GUI = "GAME_GUI",
 	TOP_PANEL = "TOP_PANEL",
-	CHOOSE_LOCATION_GUI = "CHOOSE_LOCATION_GUI",
 	SETTINGS_GUI = "SETTINGS_GUI",
-	UPGRADES_GUI = "UPGRADES_GUI",
-	BLACKSMITH_GUI = "BLACKSMITH_GUI",
-	PORTAL_NOT_WORKED_GUI = "PORTAL_NOT_WORKED_GUI",
-	BUILD_GUI = "BUILD_GUI",
-	DESTROY_GUI = "DESTROY_GUI",
-	GAME_WORLD_GUI = "GAME_WORLD_GUI",
-	BUILDING_BLOCKS = "BUILDING_BLOCKS",
+	BOOK_GUI = "BOOK_GUI",
 }
 
 ---@class ContextStackWrapperMain:ContextStackWrapper
@@ -68,12 +61,12 @@ function Manager:set_context_top_settings_gui()
 	return self:set_context_top_by_name(self.NAMES.SETTINGS_GUI)
 end
 
----@class ContextStackWrapperUpgradesGui:ContextStackWrapper
------@field data UpgradesSceneGuiScript
+---@class ContextStackWrapperBookGui:ContextStackWrapper
+-----@field data BookSceneGuiScript
 
----@return ContextStackWrapperUpgradesGui
-function Manager:set_context_top_upgrades_gui()
-	return self:set_context_top_by_name(self.NAMES.UPGRADES_GUI)
+---@return ContextStackWrapperBookGui
+function Manager:set_context_top_book_gui()
+	return self:set_context_top_by_name(self.NAMES.BOOK_GUI)
 end
 
 ---@class ContextStackWrapperTopPanelGui:ContextStackWrapper

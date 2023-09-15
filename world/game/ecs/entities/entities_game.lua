@@ -202,7 +202,7 @@ end
 
 ---@return EntityGame
 function Entities:create_cat(position, id)
-	local def = assert(DEFS.CATS[id], "no cat with id:" .. id)
+	local def = assert(DEFS.CATS.CATS[id], "no cat with id:" .. id)
 	---@type EntityGame
 	local e = {}
 	e.cat = true

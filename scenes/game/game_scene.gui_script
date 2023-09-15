@@ -61,10 +61,10 @@ function Script:init_gui()
 		WORLD.sm:show(WORLD.sm.MODALS.SETTINGS)
 	end)
 
-	self.views.btn_ghost_down.input_on_pressed = true
-	self.views.btn_ghost_down:set_input_listener(function()
+	self.views.btn_book.input_on_pressed = true
+	self.views.btn_book:set_input_listener(function()
 		WORLD.sounds:play_sound(WORLD.sounds.sounds.btn_1)
-		--WORLD.sm:show(WORLD.sm.MODALS.SETTINGS)
+		WORLD.sm:show(WORLD.sm.MODALS.BOOK)
 	end)
 
 	--	self.views.virtual_pad.borders[3] = 440

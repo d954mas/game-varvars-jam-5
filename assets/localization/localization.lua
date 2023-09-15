@@ -9,7 +9,7 @@ local FALLBACK = DEFAULT
 
 ---@class Localization
 local M = {
-
+	CATS_BOOK_title = { en = "CATS BOOK" },
 }
 
 function M:locale_exist(key)

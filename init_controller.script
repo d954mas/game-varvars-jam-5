@@ -19,6 +19,7 @@ local Features = require "libs.features"
 local SCENES = {
 	require "scenes.game.game_scene",
 	require "scenes.settings.settings_scene",
+	require "scenes.book.book_scene",
 }
 
 ---@class ScriptMain
@@ -33,6 +34,7 @@ function Script:scenes_register()
 
 	sm.MODALS = {
 		SETTINGS = "SettingsScene",
+		BOOK = "BookScene",
 	}
 
 	local reg_scenes = {}
