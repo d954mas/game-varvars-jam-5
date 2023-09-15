@@ -59,9 +59,6 @@ M.DrawCatSystem = require "world.game.ecs.systems.draw_cat_system"
 M.WaterMoveSystem = require "world.game.ecs.systems.water_move_system"
 
 --#IF DEBUG
-M.AddRemoveBlockSystem = require "world.game.ecs.systems.add_remove_block_system"
-M.SelectionBlockSystem = require "world.game.ecs.systems.selection_block_system"
-M.DrawSelectionAreaBlockSystem = require "world.game.ecs.systems.draw_selection_area_system"
 M.PlayerFlySystem = require "world.game.ecs.systems.player_fly_system"
 M.DrawFrustumBoxSystem = require "world.game.ecs.systems.draw_frustum_box_system"
 M.DrawInteractAABBDebugSystem = require "world.game.ecs.systems.draw_interact_aabb_debug_system"

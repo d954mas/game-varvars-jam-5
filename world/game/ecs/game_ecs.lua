@@ -44,9 +44,6 @@ function EcsWorld:add_systems()
 
 	--#IF DEBUG
 	if (COMMON.CONSTANTS.PLATFORM_IS_PC) then
-		self.ecs:addSystem(SYSTEMS.AddRemoveBlockSystem())
-		self.ecs:addSystem(SYSTEMS.SelectionBlockSystem())
-		self.ecs:addSystem(SYSTEMS.DrawSelectionAreaBlockSystem())
 		self.ecs:addSystem(SYSTEMS.PlayerFlySystem())
 	end
 	--#ENDIF

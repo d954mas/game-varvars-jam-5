@@ -36,10 +36,7 @@ function GameWorld:reset_state()
 		first_move = false,
 		voxels_collisions = nil,
 		location_id = nil,
-		voxel_editor = {
-			pos_1 = vmath.vector3(0, 0, 0),
-			pos_2 = vmath.vector3(0, 0, 0),
-		}
+		cats_collected = 0,
 	}
 
 	self.lights:reset()
@@ -80,7 +77,7 @@ function GameWorld:on_input(action_id, action)
 		print(self.level_creator.player.position)
 	end
 	if (action_id == COMMON.HASHES.INPUT.N and action.pressed) then
-		self.world.game:load_level(self.world.game.state.level+1)
+		self.world.game:load_level(self.world.game.state.level + 1)
 	end
 end
 
@@ -143,12 +140,20 @@ function GameWorld:load_level(level)
 	end
 
 	self.state.level = level
+	self.state.cats_collected = 0
 
 	DEBUG_INFO.game_reset()
 	self.ecs_game:add_systems()
 	self.level_creator = LevelCreator(self.world)
 	self.level_creator:create_level(level)
+	print(self.level_creator.level_config.cats)
 
+	--fixed gui was not already created
+	timer.delay(0, false, function()
+		local ctx = COMMON.CONTEXT:set_context_top_game_gui()
+		ctx.data:level_loaded()
+		ctx:remove()
+	end)
 
 	self:player_update_parameters()
 	self:camera_set_first_person(false)
@@ -165,6 +170,12 @@ function GameWorld:player_update_parameters()
 	local balance = self.world.balance.config
 
 	local player = self.level_creator.player
+end
+
+function GameWorld:cat_collected()
+	local ctx = COMMON.CONTEXT:set_context_top_game_gui()
+	ctx.data.views.cats_progress:set_value(self.state.cats_collected)
+	ctx:remove()
 end
 
 return GameWorld
