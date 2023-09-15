@@ -18,6 +18,7 @@ end
 
 function Storage:level_completed()
 	self.game.level = self.game.level + 1
+	self:save_and_changed()
 end
 
 return Storage

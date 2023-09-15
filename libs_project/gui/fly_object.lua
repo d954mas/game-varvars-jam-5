@@ -26,13 +26,10 @@ function FlyObject:fly(config)
 	local dx = target_gui_x - gui_pos_x
 	local dy = target_gui_y - gui_pos_y
 
-
-
 	local tween_table = { dx = 0, dy = 0 }
 
 	local dx_time = math.abs(dx / config.speed_x or 500)
 	local dy_time = math.abs(dy / config.speed_y or 500)
-
 
 	local time = math.max(dx_time, dy_time)
 	local tween_x = ACTIONS.TweenTable { delay = 0.1, object = tween_table, property = "dx", from = { dx = 0 },
@@ -76,6 +73,9 @@ function FlyObject:fly(config)
 	end
 
 	self.action:add_action(action_appear)
+	self.action:add_action(ACTIONS.TweenGui { object = self.vh.root, property = "scale", v3 = true,
+											  to = vmath.vector3(0.01), time = 0.15,
+											  easing = TWEEN.easing.outQuad })
 	self.action:add_action(function()
 		if (config.cb) then
 			config.cb()
