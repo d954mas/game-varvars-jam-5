@@ -112,8 +112,20 @@ function Creator:create_level_objects()
 
 	local chunks_collisions = game.get_collision_chunks()
 	local factory_url = msg.url("game_scene:/factory#chunk_collision")
+	local factory_border_url = msg.url("game_scene:/factory#chunk_border_collision")
 
 	self.collisions = {}
+
+	--create borders for level
+	--far
+	table.insert(self.collisions, factory.create(factory_border_url, vmath.vector3(0, 64, lc.size.z1 - 5)))
+	--near
+	table.insert(self.collisions, factory.create(factory_border_url, vmath.vector3(0, 64, lc.size.z2 + 5 + 1)))
+	--left
+	table.insert(self.collisions, factory.create(factory_border_url, vmath.vector3(lc.size.x1 - 5, 64, 0), vmath.quat_rotation_y(math.rad(90))))
+	--right
+	table.insert(self.collisions, factory.create(factory_border_url, vmath.vector3(lc.size.x2 + 5 + 1, 64, 0), vmath.quat_rotation_y(math.rad(90))))
+
 	for _, chunk in ipairs(chunks_collisions) do
 		for _, box in ipairs(chunk) do
 			local go = factory.create(factory_url, box.position + box.size / 2, nil, nil,
@@ -122,6 +134,52 @@ function Creator:create_level_objects()
 		end
 	end
 	print("collision objects:" .. #self.collisions)
+
+
+	--create_collision for empty areas
+	local areas = {}
+	for z = lc.size.z1, lc.size.z2 do
+		areas[z] = {}
+		for x = lc.size.x1, lc.size.x2 do
+			local cell = lc.cells[z][x]
+			--mark all empty cells
+
+			if cell.tile == 0 then
+				local filled_near = 0
+				for dz = -1, 1 do
+					for dx = -1, 1 do
+						local neighbour = lc.cells[z + dz][x + dx]
+						if neighbour.tile ~= 0 then filled_near = filled_near + 1 end
+					end
+				end
+				if filled_near>0 then
+					areas[z][x] = true
+				end
+			end
+
+		end
+	end
+
+	local boxes = {}
+	factory_url = msg.url("game_scene:/factory#chunk_line_collision")
+	for z = lc.size.z1, lc.size.z2 do
+		for x = lc.size.x1, lc.size.x2 do
+			if areas[z][x] then
+				table.insert(boxes, {
+					position = vmath.vector3(x, 64, z),
+					size = vmath.vector3(1, 1, 1)
+				})
+			end
+		end
+	end
+
+	for _, box in ipairs(boxes) do
+		local go = factory.create(factory_url, box.position + box.size / 2, nil, nil,
+				box.size)
+		table.insert(self.collisions, go)
+	end
+	print("collision all:" .. #self.collisions)
+
 end
 
 function Creator:create_player()
