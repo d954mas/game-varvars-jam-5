@@ -54,6 +54,7 @@ M.RemoveInvisibleObjectSystem = require "world.game.ecs.systems.remove_invisible
 
 M.DrawPlayerSystem = require "world.game.ecs.systems.draw_player_system"
 M.DrawChunksSystem = require "world.game.ecs.systems.draw_chunks_system"
+M.DrawCatSystem = require "world.game.ecs.systems.draw_cat_system"
 
 M.WaterMoveSystem = require "world.game.ecs.systems.water_move_system"
 

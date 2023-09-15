@@ -25,9 +25,11 @@ local TAG = "Entities"
 ---@field visible boolean
 
 local FACTORY_URL_PLAYER = msg.url("game_scene:/factory#player")
-local FACTORY_URL_ENEMY = msg.url("game_scene:/factory#enemy")
+local FACTORY_URL_CAT = msg.url("game_scene:/factory#cat")
 local PARTS = {
 	ROOT = COMMON.HASHES.hash("/root"),
+	SPRITE = COMMON.HASHES.hash("/sprite"),
+	SPRITE_ORIGIN = COMMON.HASHES.hash("/sprite_origin"),
 }
 
 ---@class ENTITIES
@@ -134,8 +136,8 @@ function Entities:create_player(position)
 		yaw = 0,
 		pitch = 0,
 		config = {
-			position = vmath.vector3(0, 15, 15),
-			position_v = vmath.rotate(vmath.quat_rotation_x(math.rad(-60)), vmath.vector3(0, 0, 1)) * 14,
+			position = vmath.vector3(0, 8, 8),
+			position_v = vmath.rotate(vmath.quat_rotation_x(math.rad(-60)), vmath.vector3(0, 0, 1)) * 8,
 			yaw = { speed = 0.0, value = 45 },
 			pitch = { speed = 0, min = -45, max = -45 },
 			pitch_portrait = { speed = 0, min = -55, max = -55 },
@@ -177,10 +179,89 @@ function Entities:create_player(position)
 	e.physics_object = game.physics_object_create(e.player_go.root, e.player_go.collision, e.position, e.physics_linear_velocity)
 
 	e.parameters = {
-		
+
 	}
 
 	e.current_interact_aabb = nil
+	return e
+end
+
+---@return EntityGame
+function Entities:create_cat(position, id)
+	local def = assert(DEFS.CATS[id], "no cat with id:" .. id)
+	---@type EntityGame
+	local e = {}
+	e.cat = true
+	e.cat_data = {
+		id = def.id
+	}
+	e.position = vmath.vector3(position)
+	e.movement = {
+		velocity = vmath.vector3(0, 0, 0),
+		input = vmath.vector3(0, 0, 0),
+		direction = vmath.vector3(0, 0, 0),
+		max_speed = def.speed or 5,
+		max_speed_air_limit = 1,
+		accel = 50 * 0.016,
+		deaccel = 15 * 0.016,
+		accel_air = 1.5 * 0.016,
+		deaccel_air = 3 * 0.016,
+		deaccel_stop = 0.5,
+		strafe_power = 1,
+		strafe_power_air = 1,
+
+		pressed_jump = false,
+
+		air_control_power = 0,
+		air_control_power_a = 0
+	}
+	e.visible = true
+
+	e.distance_to_player = math.huge
+	e.distance_to_player_vec = vmath.vector3(0, 0, 1)
+	e.distance_to_player_vec_normalized = vmath.vector3(0, 0, 1)
+	e.distance_to_player_object = game.distance_object_create(e, e.position, e.distance_to_player_vec, e.distance_to_player_vec_normalized)
+
+	local urls = collectionfactory.create(FACTORY_URL_CAT, e.position)
+	e.cat_go = {
+		root = msg.url(assert(urls[PARTS.ROOT])),
+		sprite = {
+			root = msg.url(assert(urls[PARTS.SPRITE])),
+			origin = msg.url(assert(urls[PARTS.SPRITE_ORIGIN])),
+			sprite = nil,
+		},
+		config = {
+			scale = vmath.vector3(1),
+			visible = true,
+		}
+	}
+	e.cat_go.collision = COMMON.LUME.url_component_from_url(e.cat_go.root, "collision")
+	e.cat_go.sprite.sprite = COMMON.LUME.url_component_from_url(e.cat_go.sprite.origin, "sprite")
+
+	local origin_pos = def.origin_position
+	if not origin_pos then
+		local size = go.get(e.cat_go.sprite.sprite, "size")
+		local scale = go.get(e.cat_go.sprite.sprite, "scale")
+		origin_pos = vmath.vector3(0, size.y / 2 * scale.y, 0)
+	end
+	go.set_position(origin_pos, e.cat_go.sprite.origin)
+
+	e.physics_linear_velocity = vmath.vector3()
+	e.physics_object = game.physics_object_create(e.cat_go.root, e.cat_go.collision, e.position, e.physics_linear_velocity)
+	e.path_to_target = {
+		cells = {},
+		start_cell = vmath.vector3(0, 0, 0),
+		target_cell = vmath.vector3(0, 0, 0),
+	}
+
+	e.ai = {
+		ai = def.ai or "base",
+		state = ENUMS.CAT_AI_STATE.IDLE,
+		ai_cor = nil,
+		---@type EntityGame
+		target = nil,
+	}
+
 	return e
 end
 

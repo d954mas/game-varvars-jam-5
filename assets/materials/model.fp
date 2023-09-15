@@ -21,14 +21,14 @@ void main() {
 
     //
     // Defold Editor
-   // if (sun_position.xyz == vec3(0)) {
+    if (sun_position.xyz == vec3(0)) {
    
-        //gl_FragColor = vec4(color.rgb * vec3(0.8), 1.0);
+        gl_FragColor = vec4(color.rgb * vec3(0.8), 1.0);
 
-        // If the first byte is zero, it's the editor,
+         //If the first byte is zero, it's the editor,
         // so just shade the sides according to the normal.
-      //  return;
-   // }
+        return;
+    }
 
     //COLOR
     vec3 illuminance_color = vec3(0);

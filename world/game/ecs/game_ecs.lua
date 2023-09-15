@@ -59,6 +59,7 @@ function EcsWorld:add_systems()
 
 	self.ecs:addSystem(SYSTEMS.DrawChunksSystem())
 	self.ecs:addSystem(SYSTEMS.DrawPlayerSystem())
+	self.ecs:addSystem(SYSTEMS.DrawCatSystem())
 
 	--#IF DEBUG
 	if(COMMON.CONSTANTS.VERSION_IS_DEV)then

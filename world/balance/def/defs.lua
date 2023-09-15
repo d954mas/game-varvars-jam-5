@@ -5,5 +5,6 @@ M.VOXELS = require "world.balance.def.voxels"
 M.LOCATIONS = require "world.balance.def.locations"
 M.HERO = require "world.balance.def.hero"
 M.ANIMATIONS = require "world.balance.def.animations"
+M.CATS = require "world.balance.def.cats"
 
 return M

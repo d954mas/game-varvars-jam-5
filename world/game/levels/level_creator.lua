@@ -18,7 +18,7 @@ function Creator:create_level(level)
 	---@class LevelConfig
 	self.level_config = {
 		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
-		spawn_point = vmath.vector3(-4 + math.random(0,8), 65, -4 + math.random(0,8)),
+		spawn_point = vmath.vector3(-4 + math.random(0, 8), 65, -4 + math.random(0, 8)),
 		cells = {}
 	}
 
@@ -30,6 +30,14 @@ function Creator:create_level(level)
 	end
 
 	self:create_level_objects()
+
+	self:create_player()
+	for i = 1, 10 do
+		local cat = self.entities:create_cat(self.level_config.spawn_point +
+				vmath.vector3(COMMON.LUME.random(-5, 5), 0, COMMON.LUME.random(-5, 5)),
+				DEFS.CATS.CAT_1.id)
+		self.ecs:add_entity(cat)
+	end
 end
 
 function Creator:_level_cellular()
@@ -46,7 +54,7 @@ function Creator:_level_cellular()
 					end
 				end
 			end
-			if cell.tile == 0 and filled_near>=4 then cell.tile = 2 end
+			if cell.tile == 0 and filled_near >= 4 then cell.tile = 2 end
 		end
 	end
 end
@@ -62,7 +70,7 @@ function Creator:create_level_objects()
 	local target_cells = math.floor(total_cells * 0.55)
 	local empty_cells = 0
 	local step = 0
-	local dir_table = { 1,2,3,4 }--L,T,R,B
+	local dir_table = { 1, 2, 3, 4 }--L,T,R,B
 	while (step < 200000 and empty_cells < target_cells) do
 
 		local dir = COMMON.LUME.randomchoice_remove(dir_table)
@@ -76,12 +84,12 @@ function Creator:create_level_objects()
 		if (nx >= size.x1 and nx <= size.x2 and ny >= size.z1 and ny <= size.z2) then
 			step_x = nx
 			step_z = ny
-			if lc.cells[step_z][step_x].tile==0 then
+			if lc.cells[step_z][step_x].tile == 0 then
 				lc.cells[step_z][step_x].tile = 2
-				empty_cells = empty_cells +1
+				empty_cells = empty_cells + 1
 			end
 			step = step + 1
-			dir_table = { 1,2,3,4 }--L,T,R,B
+			dir_table = { 1, 2, 3, 4 }--L,T,R,B
 		end
 
 	end
@@ -89,7 +97,6 @@ function Creator:create_level_objects()
 
 	self:_level_cellular()
 	self:_level_cellular()
-
 
 	game.generate_new_level_data(size.x1, size.z1, size.z2, size.x2)
 	--game.chunks_fill_zone(-1000, 64 - 30, -1000, 1000, 64, 1000, 2)

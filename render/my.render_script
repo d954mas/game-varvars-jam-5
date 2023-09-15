@@ -63,6 +63,7 @@ end
 
 function Render:init_predicates()
 	self.predicates = {
+		cat_sprite = render.predicate({ "cat_sprite" }),
 		model = render.predicate({ "model" }),
 		player = render.predicate({ "player" }),
 		enemy = render.predicate({ "enemy" }),
@@ -191,9 +192,16 @@ function Render:update(dt)
 	render.set_depth_mask(true)
 	render.set_depth_func(render.COMPARE_FUNC_LESS)
 
+	render.enable_state(render.STATE_BLEND)
+	render.disable_state(render.STATE_CULL_FACE)
+	render.draw(self.predicates.cat_sprite, self.draw_opts)
+	render.disable_state(render.STATE_BLEND)
+	render.enable_state(render.STATE_CULL_FACE)
+
 	render.draw(self.predicates.enemy, self.draw_opts)
 	render.draw(self.predicates.weapon, self.draw_opts)
 	render.draw(self.predicates.player, self.draw_opts_no_frustum)
+
 
 	--self.draw_opts.frustum = nil
 	if (WORLD.game.lights.shadow.rt or SHADOW_TEXTURE_HANDLE) then

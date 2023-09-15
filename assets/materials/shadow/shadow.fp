@@ -11,8 +11,8 @@ uniform lowp sampler2D tex0;
 
 void main()
 {
-    //vec4 color = texture2D(tex0, var_texcoord0.xy);
-   // if(color.a < 0.1) discard;
+    vec4 color = texture2D(tex0, var_texcoord0.xy);
+    if(color.a < 0.1) discard;
     // gl_FragColor = float_to_rgba(gl_FragCoord.z);
     gl_FragColor = vec4(gl_FragCoord.z);
 }

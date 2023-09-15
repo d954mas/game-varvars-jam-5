@@ -149,7 +149,7 @@ function GameWorld:load_level(level)
 	self.level_creator = LevelCreator(self.world)
 	self.level_creator:create_level(level)
 
-	self.level_creator:create_player()
+
 	self:player_update_parameters()
 	self:camera_set_first_person(false)
 
