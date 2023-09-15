@@ -1,0 +1,8 @@
+mesh: "/assets/models/characters/char_woman/char_woman.dae"
+material: "/assets/materials/player.material"
+textures: "/assets/models/characters/char_woman/char_woman.png"
+textures: "/assets/textures/rgb/shadow.png"
+skeleton: "/assets/models/characters/char_woman/char_woman.dae"
+animations: "/assets/models/characters/char_woman/character_base.animationset"
+default_animation: "Standing Run Forward"
+name: "unnamed"

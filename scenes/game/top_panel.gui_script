@@ -102,7 +102,7 @@ function Script:fly_cat(cat)
 	local fly_object = self:create_fly_object_cat()
 	local pivot = cat.cat_go.config.origin_position
 
-	gui.play_flipbook(fly_object.vh.icon, DEFS.CATS[cat.cat_data.id].sprite)
+	gui.play_flipbook(fly_object.vh.icon, DEFS.CATS.CATS[cat.cat_data.id].sprite)
 	gui.set_position(fly_object.vh.icon, pivot*0.33)
 
 	local ambient = WORLD.game.lights.ambient_color

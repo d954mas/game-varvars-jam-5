@@ -115,7 +115,7 @@ function Entities:create_player(position)
 	e.player = true
 	e.angle = 0
 	e.player_data = {
-		skin = DEFS.SKINS.SKINS_BY_ID.MINE.id
+		skin = DEFS.SKINS.SKINS_BY_ID.CHAR_WOMAN.id
 	}
 	e.ghost_mode = false
 	e.look_at_dir = vmath.vector3(0, 0, -1)
