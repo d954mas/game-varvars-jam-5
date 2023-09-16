@@ -67,10 +67,6 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/assets/images/game/interact_zone.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
   image: "/assets/images/gui/base/tumbler_bg.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
