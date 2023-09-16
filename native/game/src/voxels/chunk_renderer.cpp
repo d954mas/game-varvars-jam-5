@@ -12,7 +12,7 @@ static const dmhash_t HASH_CHUNK_DATA_1 = dmHashString64("data1");
 static const dmhash_t HASH_CHUNK_DATA_2 = dmHashString64("data2");
 static const dmhash_t HASH_CHUNK_DATA_3 = dmHashString64("data3");
 
-#define MAX_PLANES 25000
+#define MAX_PLANES 5000
 
 namespace VoxelGame {
 
@@ -279,7 +279,7 @@ void ChunkRenderer::drawChunk(lua_State *L, GoChunk &goChunk) {
     //actual bbox can't be bigger.When add not air voxel. Update bbox.
     int cx =aabb[0];
     int cxMax =aabb[3];
-    int cy =aabb[1];
+    int cy =fmax(aabb[1],60.0); //ignore voxel that under 60
     int cyMax =aabb[4];
     int cz =aabb[2];
     int czMax =aabb[5];
@@ -370,7 +370,7 @@ void ChunkRenderer::drawChunk(lua_State *L, GoChunk &goChunk) {
 
    // dmLogInfo("aabb %f/%f", aabb[1],aabb[4]);
 
-
+    dmLogInfo("planes:%d", planes)
 
    // ChunkCheckResize(chunk);
     if ( planes > 0) {
