@@ -2,6 +2,7 @@ local COMMON = require "libs.common"
 local WORLD = require "world.world"
 local DEFS = require "world.balance.def.defs"
 local GOOEY = require "gooey.gooey"
+local GUI = require "libs_project.gui.gui"
 local Button1 = require "libs_project.gui.button_1"
 
 local COLORS = COMMON.CONSTANTS.COLORS
@@ -30,15 +31,21 @@ end
 
 function CatItem:update_view()
 	gui.play_flipbook(self.vh.icon,self.def.sprite)
-	gui.set_text(self.vh.lbl_title,COMMON.LOCALIZATION["cat_" .. self.def.id .. "_name"]())
-	gui.set_text(self.vh.lbl_description,COMMON.LOCALIZATION["cat_" .. self.def.id .. "_description"]())
+	local name = COMMON.LOCALIZATION["cat_" .. self.def.id .. "_name"]()
+	local description = COMMON.LOCALIZATION["cat_" .. self.def.id .. "_description"]()
 	if(WORLD.storage.cats:is_collected(self.def.id))then
 		gui.reset_material(self.vh.icon)
 		gui.set_color(self.vh.icon,COLORS.CAT_SHOW)
 	else
 		gui.set_material(self.vh.icon,"gui_grayscale")
 		gui.set_color(self.vh.icon,COLORS.CAT_HIDDEN)
+		name = "????"
+		description = "???????\n???????\n???????"
 	end
+
+	GUI.autosize_text(self.vh.lbl_title,0.75,name)
+
+	gui.set_text(self.vh.lbl_description,description)
 end
 
 local View = COMMON.class("UpgradeItemView")
