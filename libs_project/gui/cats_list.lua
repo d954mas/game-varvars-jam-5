@@ -14,12 +14,13 @@ function CatItem:initialize(nodes)
 		root = assert(nodes.root),
 		icon = assert(nodes.icon),
 		lbl_title = assert(nodes.lbl_title),
-		lbl_description = assert(nodes.lbl_description)
+		lbl_description = assert(nodes.lbl_description),
+		notification = assert(nodes.notification)
 	}
 end
 
 function CatItem:set_enabled(enabled)
-	gui.set_enabled(self.vh.root,enabled)
+	gui.set_enabled(self.vh.root, enabled)
 end
 
 function CatItem:set_cat(id)
@@ -30,22 +31,26 @@ function CatItem:set_cat(id)
 end
 
 function CatItem:update_view()
-	gui.play_flipbook(self.vh.icon,self.def.sprite)
+	gui.play_flipbook(self.vh.icon, self.def.sprite)
 	local name = COMMON.LOCALIZATION["cat_" .. self.def.id .. "_name"]()
 	local description = COMMON.LOCALIZATION["cat_" .. self.def.id .. "_description"]()
-	if(WORLD.storage.cats:is_collected(self.def.id))then
+	if (WORLD.storage.cats:is_collected(self.def.id)) then
 		gui.reset_material(self.vh.icon)
-		gui.set_color(self.vh.icon,COLORS.CAT_SHOW)
+		gui.set_color(self.vh.icon, COLORS.CAT_SHOW)
 	else
-		gui.set_material(self.vh.icon,"gui_grayscale")
-		gui.set_color(self.vh.icon,COLORS.CAT_HIDDEN)
+		gui.set_material(self.vh.icon, "gui_grayscale")
+		gui.set_color(self.vh.icon, COLORS.CAT_HIDDEN)
 		name = "????"
 		description = "???????\n???????\n???????"
 	end
 
-	GUI.autosize_text(self.vh.lbl_title,0.75,name)
+	local need_notification = WORLD.storage.cats:is_collected(self.def.id) and
+			not WORLD.storage.cats:is_look_at_book(self.def.id)
+	gui.set_enabled(self.vh.notification, need_notification)
 
-	gui.set_text(self.vh.lbl_description,description)
+	GUI.autosize_text(self.vh.lbl_title, 0.75, name)
+
+	gui.set_text(self.vh.lbl_description, description)
 end
 
 local View = COMMON.class("UpgradeItemView")
@@ -67,6 +72,7 @@ function View:list_update_item(list, item)
 					icon = assert(item.nodes[hash(id .. "/icon")]),
 					lbl_title = assert(item.nodes[hash(id .. "/lbl_title")]),
 					lbl_description = assert(item.nodes[hash(id .. "/lbl_description")]),
+					notification = assert(item.nodes[hash(id .. "/icon_attention")]),
 				}
 				table.insert(cats, CatItem(vh))
 			end
@@ -79,8 +85,8 @@ function View:list_update_item(list, item)
 		local cat_2 = item.data.cat_2.def
 		item.my_views.cats[1]:set_enabled(cat_1)
 		item.my_views.cats[2]:set_enabled(cat_2)
-		if(cat_1)then item.my_views.cats[1]:set_cat(cat_1.id)end
-		if(cat_2)then item.my_views.cats[2]:set_cat(cat_2.id)end
+		if (cat_1) then item.my_views.cats[1]:set_cat(cat_1.id) end
+		if (cat_2) then item.my_views.cats[2]:set_cat(cat_2.id) end
 	end
 end
 

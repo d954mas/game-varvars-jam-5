@@ -99,4 +99,13 @@ function Script:on_storage_changed()
 	self.views.list:refresh()
 end
 
+function Script:final()
+	BaseGuiScript.final(self)
+	for k, v in ipairs(DEFS.CATS.LIST) do
+		if WORLD.storage.cats:is_collected(v.id) then
+			WORLD.storage.cats:look_at_book(v.id)
+		end
+	end
+end
+
 COMMON.N28S.register_scripts({ Script() })

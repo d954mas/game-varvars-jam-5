@@ -2,6 +2,7 @@ local COMMON = require "libs.common"
 local GUI = require "libs_project.gui.gui"
 local WORLD = require "world.world"
 local POINTER = require "libs.pointer_lock"
+local DEFS = require "world.balance.def.defs"
 local VirtualPad = require "libs_project.gui.virtual_pad"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 local LineMover = require "libs_project.line_mover"
@@ -29,7 +30,6 @@ local POINTER_POSITIONS = {
 	vmath.vector3(-95, -50, 0),
 	vmath.vector3(-120, 0, 0),
 }
-
 
 ---@class GameSceneGuiScript:GuiScriptBase
 local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
@@ -60,7 +60,9 @@ function Script:bind_vh()
 		pointer = gui.get_node("mobile_input/finger"),
 
 		start_message = gui.get_node("start_message"),
-		start_message_p = gui.get_node("start_message_p")
+		start_message_p = gui.get_node("start_message_p"),
+
+		btn_book_attention = gui.get_node("btn_book/icon_attention")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -142,7 +144,6 @@ function Script:init_gui()
 
 	self:update_ghost_mode()
 
-
 	self.pointer_mover = LineMover(Curve({ points = POINTER_POSITIONS, tension = 0.5, segments = 10 }))
 	self.pointer_mover:set_loop(true)
 	self.pointer_mover:speed_a_set(0.4)
@@ -200,13 +201,9 @@ function Script:on_resize()
 	gui.set_adjust_mode(self.vh.top, COMMON.RENDER.gui_scale.mode)
 	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale4x3)
 
-	local album = COMMON.RENDER.screen_size.aspect>=1
+	local album = COMMON.RENDER.screen_size.aspect >= 1
 	self.views.cats_progress:set_enabled(album)
 	self.views.cats_progress_p:set_enabled(not album)
-end
-
-function Script:final()
-	BaseGuiScript.final(self)
 end
 
 function Script:hide_input_tooltip()
@@ -232,6 +229,18 @@ function Script:hide_input_tooltip()
 		gui.set_enabled(self.vh.start_message_p, false)
 		gui.set_enabled(self.vh.start_message, false)
 	end)
+end
+
+function Script:on_storage_changed()
+	local book_notification = false
+	for k, v in ipairs(DEFS.CATS.LIST) do
+		if WORLD.storage.cats:is_collected(v.id) and
+				not WORLD.storage.cats:is_look_at_book(v.id) then
+			book_notification = true
+			break
+		end
+	end
+	gui.set_enabled(self.vh.btn_book_attention, book_notification)
 end
 
 COMMON.N28S.register_scripts({ Script() })
