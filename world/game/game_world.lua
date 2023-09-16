@@ -76,7 +76,7 @@ function GameWorld:on_input(action_id, action)
 	if (action_id == COMMON.HASHES.INPUT.P and action.pressed) then
 		print(self.level_creator.player.position)
 	end
-	if (action_id == COMMON.HASHES.INPUT.N and action.pressed) then
+	if (COMMON.CONSTANTS.TARGET_IS_EDITOR and action_id == COMMON.HASHES.INPUT.N and action.pressed) then
 		self.world.game:load_level(self.world.game.state.level + 1)
 	end
 end
