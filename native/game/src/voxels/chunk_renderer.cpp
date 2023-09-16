@@ -370,7 +370,7 @@ void ChunkRenderer::drawChunk(lua_State *L, GoChunk &goChunk) {
 
    // dmLogInfo("aabb %f/%f", aabb[1],aabb[4]);
 
-    dmLogInfo("planes:%d", planes)
+    //dmLogInfo("planes:%d", planes)
 
    // ChunkCheckResize(chunk);
     if ( planes > 0) {
