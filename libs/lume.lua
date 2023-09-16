@@ -104,9 +104,33 @@ function lume.weightedchoice_nil(t)
 	end
 end
 
+function lume.pcg_weightedchoice(t)
+	local result = lume.pcg_weightedchoice_nil(t)
+	assert(result, "all weights are zero")
+	return result
+end
+
+function lume.pcg_weightedchoice_nil(t)
+	local sum = 0
+	for _, v in pairs(t) do
+		assert(v >= 0, "weight value less than zero")
+		sum = sum + v
+	end
+	if (sum == 0) then return nil end
+
+	local rnd = rnd.double_range(0,sum)
+	for k, v in pairs(t) do
+		if rnd < v then
+			return k
+		end
+		rnd = rnd - v
+	end
+end
+
 function lume.weightedchoice(t)
 	local result = lume.weightedchoice_nil(t)
 	assert(result, "all weights are zero")
+	return result
 end
 
 function lume.removei(t, value)

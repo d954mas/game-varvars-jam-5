@@ -3,6 +3,35 @@ local ACTIONS = require "libs.actions.actions"
 local TWEEN = require "libs.tween"
 local DEFS = require "world.balance.def.defs"
 
+local LEVEL_SIZE = {
+	START_1 = {
+		w = 8, d = 20, min_level = 1, weight = 0, cats_min = 1, cats_max = 1
+	},
+	START_2 = {
+		w = 16, d = 16, min_level = 1, weight = 0, cats_min = 5, cats_max = 5
+	},
+
+
+	SMALL_1 = {
+		w = 16, d = 16, min_level = 1, weight = 6, cats_min = 5, cats_max = 10
+	},
+
+	SMALL_2 = {
+		w = 20, d = 20, min_level = 1, weight = 5, cats_min = 5, cats_max = 10
+	},
+
+	MEDIUM_1 = {
+		w = 31, d = 31, min_level = 5, weight = 4, cats_min = 15, cats_max = 25
+	},
+	MEDIUM_2 = {
+		w = 40, d = 40, min_level = 10, weight = 3, cats_min = 20, cats_max = 35
+	},
+
+	BIG = {
+		w = 45, d = 45, min_level = 10, weight = 0, cats_min = 50, cats_max = 50
+	}
+}
+
 ---@class LevelCreator
 local Creator = COMMON.class("LevelCreator")
 
@@ -18,15 +47,49 @@ function Creator:create_level(level)
 	--generate geometry
 	rnd.seed(COMMON.CONSTANTS.SEEDS.LEVEL_DATA, level)
 
+	local size_list = { }
+	for k, v in pairs(LEVEL_SIZE) do
+		if v.min_level <= level and v.weight > 0 then
+			size_list[v] = v.weight
+		end
+	end
+	if level % 11 == 0 then
+		size_list[LEVEL_SIZE.MEDIUM_2]= nil
+	end
+	local size = assert(COMMON.LUME.pcg_weightedchoice(size_list))
+
+	if level % 9 == 0 then
+		size = LEVEL_SIZE.SMALL_2
+	end
+
+	if level % 10 == 0 then
+		size = LEVEL_SIZE.BIG
+	end
+
+	if level == 1 then
+		size = LEVEL_SIZE.START_1
+	elseif level == 2 then
+		size = LEVEL_SIZE.START_2
+	end
+
 	---@class LevelConfig
 	self.level_config = {
 		level = assert(level),
-		size = { x1 = -31, x2 = 32, z1 = -31, z2 = 32 },
+		size = {
+			x1 = -math.floor(size.w / 2), x2 = math.ceil(size.w / 2),
+			z1 = -math.floor(size.d / 2), z2 = math.ceil(size.d / 2),
+		},
 		spawn_point = vmath.vector3(0, 65, 0),
-		cats = rnd.range(20, 50),
+		cats = rnd.range(size.cats_min, size.cats_max),
 		cells = {},
 		spawn_cells = {},
 	}
+
+	if(level%10==0)then
+		--pass
+	elseif(level%5==0)then
+		--self.level_config.cats = math.floor(size.cats_max*1.5)
+	end
 
 	for z = self.level_config.size.z1 - 1, self.level_config.size.z2 + 1 do
 		self.level_config.cells[z] = {}
@@ -40,6 +103,10 @@ function Creator:create_level(level)
 	self.level_config.spawn_point.x = self.level_config.spawn_point.x + 0.5
 	self.level_config.spawn_point.z = self.level_config.spawn_point.z - 0.5
 
+
+	if level == 1 then
+		self.level_config.spawn_point = vmath.vector3(-3, 65, 4)
+	end
 	self:create_player()
 	self:create_cats()
 
@@ -212,84 +279,46 @@ end
 function Creator:create_cats()
 	local lc = self.level_config
 	local free_cells = COMMON.LUME.clone_shallow(lc.spawn_cells)
-	lc.cats = math.min(lc.cats,math.floor(#free_cells*0.66))
+	if self.level_config.level == 1 then
+		free_cells = {{ z = 2, x = 4, cell = lc.cells[-3][4] }}
+	end
+	lc.cats = math.min(lc.cats, math.ceil(#free_cells * 0.66))
 
 	local cats_created = 0
-	local cats = COMMON.LUME.clone_shallow(DEFS.CATS.LIST)
+	local cats = {  }
+
+	--spawn cat when it first appeared
+	local forced_cats = { }
+	for _,v in ipairs(DEFS.CATS.LIST) do
+		if v.min_level<= lc.level then
+			table.insert(cats,v)
+			if v.min_level == lc.level then
+				table.insert(forced_cats,v)
+			end
+		end
+	end
+
 	for i = 1, lc.cats do
 		local cell
 		--do not spawn near player
-		while(#free_cells>0)do
+		while (#free_cells > 0) do
 			cell = COMMON.LUME.randomchoice_remove(free_cells)
-			local dx = cell.x+0.5-lc.spawn_point.x
-			local dz = cell.z+0.5-lc.spawn_point.z
-			if math.abs(dx)>=2 or math.abs(dz)>=2 then break end
+			local dx = cell.x + 0.5 - lc.spawn_point.x
+			local dz = cell.z + 0.5 - lc.spawn_point.z
+			if math.abs(dx) >= 2 or math.abs(dz) >= 2 then break end
 		end
 
-		local x = cell.x +0.5
+		local x = cell.x + 0.5
 		local y = 65.01
-		local z = cell.z +0.5 + COMMON.LUME.random(-0.1,0.1)
+		local z = cell.z + 0.5 + COMMON.LUME.random(-0.1, 0.1)
 
-		local cat = self.entities:create_cat(vmath.vector3(x, y, z), COMMON.LUME.randomchoice(cats).id)
+		local cat_def = table.remove(forced_cats) or COMMON.LUME.randomchoice(cats)
+		local cat = self.entities:create_cat(vmath.vector3(x, y, z), cat_def.id)
 		self.ecs:add_entity(cat)
 		cats_created = cats_created + 1
 	end
 
 	lc.cats = cats_created
-end
-
----@param config EntityGame
-function Creator:create_portal(config)
-	---@type EntityGame
-	local e = {}
-	e.portal = true
-	e.position = vmath.vector3(config.position) - vmath.vector3(0, -0.05, 0)
-	e.rotation = config.rotation and vmath.quat(config.rotation) or vmath.quat_rotation_y(0)
-	e.portal_config = config
-
-	self.ecs:add_entity(e)
-	self.portal = e
-	return e
-end
-
----@param config EntityGame
-function Creator:create_building(config)
-	local def = assert(DEFS.BUILDINGS[config.building])
-	---@type EntityGame
-	local e = {}
-	e.building = true
-	e.position = vmath.vector3(config.position)
-	e.building_id = def.id
-	e.rotation = config.rotation or vmath.quat_rotation_y(0)
-	e.config = config
-	self.ecs:add_entity(e)
-
-	if (def.id == DEFS.BUILDINGS.HEAL_CIRCLE.id) then
-		e.heal_circle = true
-		e.heal_circle_radius = 7.5
-		e.distance_to_player = math.huge
-		e.distance_to_player_vec = vmath.vector3(0, 0, 1)
-		e.distance_to_player_vec_normalized = vmath.vector3(0, 0, 1)
-		e.distance_to_player_object = game.distance_object_create(e, e.position, e.distance_to_player_vec, e.distance_to_player_vec_normalized)
-	end
-	self.entities:__create_frustum_bbox(e, e.position + def.frustum.position, def.frustum.size)
-
-	return e
-end
-
----@param config EntityGame
-function Creator:create_obstacle(config)
-	local def = assert(DEFS.OBSTACLES[config.obstacle])
-	---@type EntityGame
-	local e = {}
-	e.obstacle = true
-	e.position = vmath.vector3(config.position)
-	e.obstacle_id = def.id
-	e.rotation = config.rotation or vmath.quat_rotation_y(0)
-	e.config = config
-	self.ecs:add_entity(e)
-	self.entities:__create_frustum_bbox(e, e.position + def.frustum.position, def.frustum.size)
-	return e
 end
 
 function Creator:create()
