@@ -275,7 +275,7 @@ function Entities:create_cat(position, id)
 	}
 
 	e.ai = {
-		ai = def.ai or "base",
+		ai = def.ai or ENUMS.CAT_AI_TYPE.NONE,
 		state = ENUMS.CAT_AI_STATE.IDLE,
 		ai_cor = nil,
 		---@type EntityGame

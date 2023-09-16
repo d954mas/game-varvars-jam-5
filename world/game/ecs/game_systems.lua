@@ -40,7 +40,6 @@ M.LevelCompletedSystem = require "world.game.ecs.systems.level_completed_system"
 M.PhysicsUpdateVariablesSystem = require "world.game.ecs.systems.physics_update_variables"
 M.PhysicsUpdateLinearVelocitySystem = require "world.game.ecs.systems.physics_update_linear_velocity"
 
-
 M.PlayerCameraSystem = require "world.game.ecs.systems.player_camera_system"
 M.PlayerMoveSystem = require "world.game.ecs.systems.player_move_system"
 M.PlayerCheckInteractiveAreaSystem = require "world.game.ecs.systems.player_check_interactive_area_system"
@@ -49,10 +48,8 @@ M.PlayerCatCollectSystem = require "world.game.ecs.systems.player_cat_collect_sy
 
 M.UpdateDistanceToPlayerSystem = require "world.game.ecs.systems.update_distance_to_player_system"
 M.UpdateFrustumBoxSystem = require "world.game.ecs.systems.update_frustum_box"
-M.RemoveInvisibleObjectSystem = require "world.game.ecs.systems.remove_invisible_object_system"
 
-
-
+M.CatAiSystem = require "world.game.ecs.systems.cat_ai_system"
 
 M.DrawPlayerSystem = require "world.game.ecs.systems.draw_player_system"
 M.DrawChunksSystem = require "world.game.ecs.systems.draw_chunks_system"
