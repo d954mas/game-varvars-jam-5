@@ -47,6 +47,8 @@ function EcsWorld:add_systems()
 	self.ecs:addSystem(SYSTEMS.PlayerCheckInteractiveAreaSystem())
 	self.ecs:addSystem(SYSTEMS.PlayerStepSoundSystem())
 
+	self.ecs:addSystem(SYSTEMS.ArrowSystem())
+
 	--#IF DEBUG
 	if (COMMON.CONSTANTS.PLATFORM_IS_PC) then
 		self.ecs:addSystem(SYSTEMS.PlayerFlySystem())

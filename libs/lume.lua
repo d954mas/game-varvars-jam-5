@@ -360,6 +360,10 @@ function lume.euler_to_quat(roll, pitch, yaw)
 	return qx, qy, qz, qw
 end
 
+function lume.lerp(a, b, amount)
+	return a + (b - a) * lume.clamp(amount, 0, 1)
+end
+
 
 
 

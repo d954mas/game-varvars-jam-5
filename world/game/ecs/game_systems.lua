@@ -48,6 +48,7 @@ M.PlayerCatCollectSystem = require "world.game.ecs.systems.player_cat_collect_sy
 
 M.UpdateDistanceToPlayerSystem = require "world.game.ecs.systems.update_distance_to_player_system"
 M.UpdateFrustumBoxSystem = require "world.game.ecs.systems.update_frustum_box"
+M.ArrowSystem = require "world.game.ecs.systems.arrow_system"
 
 M.CatAiSystem = require "world.game.ecs.systems.cat_ai_system"
 M.CatPathfindingSystem = require "world.game.ecs.systems.cat_pathfinding_system"

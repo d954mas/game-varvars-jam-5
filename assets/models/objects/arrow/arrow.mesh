@@ -1,0 +1,6 @@
+material: "/assets/materials/arrow.material"
+vertices: "/assets/models/objects/arrow/icon_arrow_right_thick.buffer"
+textures: "/assets/images/white.png"
+primitive_type: PRIMITIVE_TRIANGLES
+position_stream: "position"
+normal_stream: "normal"
