@@ -62,7 +62,9 @@ M.COLORS = {
 	EMPTY = vmath.vector4(1,1,1,0),
 	WHITE = vmath.vector4(1,1,1,1),
 	NOT_ENOUGH = lume.color_parse_hexRGBA("#ff0000"),
-	ENOUGH = lume.color_parse_hexRGBA("#ffffff")
+	ENOUGH = lume.color_parse_hexRGBA("#ffffff"),
+	CAT_HIDDEN = lume.color_parse_hexRGBA("#333333"),
+	CAT_SHOW = lume.color_parse_hexRGBA("#ffffff")
 }
 
 M.LOCALIZATION = {

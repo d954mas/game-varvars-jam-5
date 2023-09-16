@@ -5,6 +5,7 @@ local DEFS = require "world.balance.def.defs"
 local OptionsStoragePart = require "world.storage.options_storage_part"
 local DebugStoragePart = require "world.storage.debug_storage_part"
 local GameStoragePart = require "world.storage.game_storage_part"
+local CatsStoragePart = require "world.storage.cats_storage_part"
 
 local TAG = "Storage"
 
@@ -40,6 +41,7 @@ function Storage:update_data()
 	self.options = OptionsStoragePart(self)
 	self.debug = DebugStoragePart(self)
 	self.game = GameStoragePart(self)
+	self.cats = CatsStoragePart(self)
 
 end
 
@@ -175,7 +177,10 @@ function Storage:_init_storage()
 			draw_shadows = not html5 or not COMMON.is_mobile()
 		},
 		game = {
-			level = 1
+			level = 1,
+		},
+		cats = {
+
 		},
 		version = Storage.VERSION
 	}
@@ -185,7 +190,11 @@ function Storage:_init_storage()
 end
 
 function Storage:init_defs_data()
-
+	for k, v in pairs(DEFS.CATS.CATS) do
+		if not self.data.cats[k] then
+			self.data.cats[k] = { collected = false, look_at_book = false }
+		end
+	end
 end
 
 function Storage:reset()
@@ -203,7 +212,6 @@ function Storage:_migration()
 		if (self.data.version < 31) then
 			self:_init_storage()
 		end
-
 
 		self.data.version = Storage.VERSION
 	end

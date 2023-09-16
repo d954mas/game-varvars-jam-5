@@ -25,12 +25,20 @@ function CatItem:set_cat(id)
 	self.id = assert(id)
 	self.def = assert(DEFS.CATS.CATS[id])
 	self:update_view()
+
 end
 
 function CatItem:update_view()
 	gui.play_flipbook(self.vh.icon,self.def.sprite)
 	gui.set_text(self.vh.lbl_title,COMMON.LOCALIZATION["cat_" .. self.def.id .. "_name"]())
 	gui.set_text(self.vh.lbl_description,COMMON.LOCALIZATION["cat_" .. self.def.id .. "_description"]())
+	if(WORLD.storage.cats:is_collected(self.def.id))then
+		gui.reset_material(self.vh.icon)
+		gui.set_color(self.vh.icon,COLORS.CAT_SHOW)
+	else
+		gui.set_material(self.vh.icon,"gui_grayscale")
+		gui.set_color(self.vh.icon,COLORS.CAT_HIDDEN)
+	end
 end
 
 local View = COMMON.class("UpgradeItemView")
