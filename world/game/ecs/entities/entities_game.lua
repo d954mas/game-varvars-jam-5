@@ -282,6 +282,12 @@ function Entities:create_cat(position, id)
 		target = nil,
 	}
 
+	e.raycast_idx = 1
+	e.raycast_results = {}
+	for i = 1, 9 do
+		e.raycast_results[i] = { cell_idx = i, raycast = false, x = 0, y = 0, z = 0 }
+	end
+
 	return e
 end
 

@@ -13,8 +13,11 @@ System.name = "CatAISystem"
 
 ---@param e EntityGame
 function System:ai_run_away(e)
+	e.run_away = true
+	self.world:addEntity(e)
 	while (true) do
 		local dt = COROUTINE_YIELD()
+
 	end
 end
 
