@@ -7,9 +7,34 @@ local LOCALES = { "en" }
 local DEFAULT = CONSTANTS.LOCALIZATION.DEFAULT
 local FALLBACK = DEFAULT
 
+local ct
+
 ---@class Localization
 local M = {
 	CATS_BOOK_title = { en = "CATS BOOK" },
+
+	--region cats
+	cat_CAT_1_name = { en = "Whiskers" },
+	cat_CAT_1_description = { en = "Curious and playful, Whiskers loves to explore" },
+	cat_CAT_2_name = { en = "Luna" },
+	cat_CAT_2_description = { en = "Mysterious and elegant cat." },
+	cat_CAT_3_name = { en = "Bella" },
+	cat_CAT_3_description = { en = "Graceful and affectionate cat who loves cuddling." },
+	cat_CAT_4_name = { en = "Simba" },
+	cat_CAT_4_description = { en = "Brave and adventurous, Simba is a wild at heart." },
+	cat_CAT_5_name = { en = "Oliver" },
+	cat_CAT_5_description = { en = "Mischievous cat who can find his way into all sorts of trouble." },
+	cat_CAT_6_name = { en = "Cleo" },
+	cat_CAT_6_description = { en = "Regal and dignified cat who carries herself with a queenly air." },
+	cat_CAT_7_name = { en = "Jasper" },
+	cat_CAT_7_description = { en = "Laid-back and easygoing cat who enjoys lounging in the sun." },
+	cat_CAT_8_name = { en = "Nala" },
+	cat_CAT_8_description = { en = "Sweet and gentle cat who is everyone's favorite lap warmer." },
+	cat_CAT_9_name = { en = "Felix" },
+	cat_CAT_9_description = { en = "Independent and self-reliant cat who enjoys exploring on his own." },
+	cat_CAT_10_name = { en = "Gizmo" },
+	cat_CAT_10_description = { en = "Playful and inquisitive cat who can't resist investigating every nook and cranny." },
+	--endregion
 }
 
 function M:locale_exist(key)
