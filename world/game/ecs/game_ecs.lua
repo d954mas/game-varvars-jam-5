@@ -38,6 +38,7 @@ function EcsWorld:add_systems()
 	self.ecs:addSystem(SYSTEMS.CatPathfindingSystem())
 	self.ecs:addSystem(SYSTEMS.CatMoveSystem())
 	self.ecs:addSystem(SYSTEMS.CatRunAwayRaycastSystem())
+	self.ecs:addSystem(SYSTEMS.CatRunAwaySystem())
 
 	--self.ecs:addSystem(SYSTEMS.GroundCheckSystem())
 	self.ecs:addSystem(SYSTEMS.PlayerMoveSystem())

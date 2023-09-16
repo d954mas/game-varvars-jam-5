@@ -60,8 +60,11 @@ end
 ---@param e EntityGame
 function System:process(e, dt)
 	--normalize keyboard input
-	e.movement.direction.x = 0
-	e.movement.direction.y = 0
+	if not e.run_away then
+		e.movement.direction.x = 0
+		e.movement.direction.y = 0
+	end
+	pprint(e.movement.direction)
 	local max_distance_move
 
 	if (e.ai.target) then

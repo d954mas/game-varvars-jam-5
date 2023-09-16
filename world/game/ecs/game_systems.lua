@@ -53,6 +53,7 @@ M.CatAiSystem = require "world.game.ecs.systems.cat_ai_system"
 M.CatPathfindingSystem = require "world.game.ecs.systems.cat_pathfinding_system"
 M.CatMoveSystem = require "world.game.ecs.systems.cat_move_system"
 M.CatRunAwayRaycastSystem = require "world.game.ecs.systems.cat_run_away_raycast_system"
+M.CatRunAwaySystem = require "world.game.ecs.systems.cat_run_away_system"
 
 M.DrawPlayerSystem = require "world.game.ecs.systems.draw_player_system"
 M.DrawChunksSystem = require "world.game.ecs.systems.draw_chunks_system"

@@ -215,6 +215,7 @@ function Creator:create_cats()
 	lc.cats = math.min(lc.cats,math.floor(#free_cells*0.66))
 
 	local cats_created = 0
+	local cats = COMMON.LUME.clone_shallow(DEFS.CATS.LIST)
 	for i = 1, lc.cats do
 		local cell
 		--do not spawn near player
@@ -228,7 +229,7 @@ function Creator:create_cats()
 		local x = cell.x +0.5
 		local y = 65.1
 		local z = cell.z +0.5 + COMMON.LUME.random(-0.1,0.1)
-		local cats = COMMON.LUME.clone_shallow(DEFS.CATS.LIST)
+
 		local cat = self.entities:create_cat(vmath.vector3(x, y, z), COMMON.LUME.randomchoice(cats).id)
 		self.ecs:add_entity(cat)
 		cats_created = cats_created + 1

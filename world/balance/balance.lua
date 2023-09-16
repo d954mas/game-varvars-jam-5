@@ -11,6 +11,7 @@ function Balance:initialize(world)
 
 		far_z_base = 150,
 		far_z_small = 50,
+		lerp_direction_a = 0.2
 	}
 end
 

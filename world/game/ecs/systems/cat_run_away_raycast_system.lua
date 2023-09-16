@@ -27,9 +27,9 @@ local near_cells = {
 }
 
 for _, dir in ipairs(near_cells) do
-	dir.x = dir.x * 20
-	dir.y = dir.y * 20
-	dir.z = dir.z * 20
+	dir.x = dir.x * 8
+	dir.y = dir.y * 8
+	dir.z = dir.z * 8
 end
 
 function System:init()
