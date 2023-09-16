@@ -51,10 +51,6 @@ images {
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/assets/images/gui/base/craft_slot.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
   image: "/assets/images/gui/base/btn_ads.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
@@ -88,6 +84,18 @@ images {
 }
 images {
   image: "/assets/images/gui/icons/icon_book.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/gui/base/kb_arrow_down.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/gui/base/icon_infinity.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
+images {
+  image: "/assets/images/gui/base/pointer.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0

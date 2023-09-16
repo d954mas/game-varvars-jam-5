@@ -4,6 +4,32 @@ local WORLD = require "world.world"
 local POINTER = require "libs.pointer_lock"
 local VirtualPad = require "libs_project.gui.virtual_pad"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
+local LineMover = require "libs_project.line_mover"
+local Curve = require "libs.curve"
+
+local POINTER_POSITIONS = {
+	vmath.vector3(-120, 0, 0),
+	vmath.vector3(-95, 50, 0),
+	vmath.vector3(-65, 60, 0),
+	vmath.vector3(-35, 50, 0),
+	vmath.vector3(0, 0, 0),
+
+	vmath.vector3(35, -50, 0),
+	vmath.vector3(65, -60, 0),
+	vmath.vector3(95, -50, 0),
+	vmath.vector3(120, 0, 0),
+
+	vmath.vector3(95, 50, 0),
+	vmath.vector3(65, 60, 0),
+	vmath.vector3(35, 50, 0),
+	vmath.vector3(0, 0, 0),
+
+	vmath.vector3(-35, -50, 0),
+	vmath.vector3(-65, -60, 0),
+	vmath.vector3(-95, -50, 0),
+	vmath.vector3(-120, 0, 0),
+}
+
 
 ---@class GameSceneGuiScript:GuiScriptBase
 local Script = COMMON.class("GameSceneGuiScript", BaseGuiScript)
@@ -26,6 +52,13 @@ function Script:bind_vh()
 		left = gui.get_node("left"),
 		bottom = gui.get_node("bottom"),
 		lbl_level = gui.get_node("lbl_level"),
+
+		arrows = gui.get_node("arrows"),
+		pc_input = gui.get_node("pc_input"),
+		mobile_input = gui.get_node("mobile_input"),
+		pointer = gui.get_node("mobile_input/finger"),
+
+		start_message = gui.get_node("start_message")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -96,6 +129,19 @@ function Script:init_gui()
 	end)
 
 	self:update_ghost_mode()
+
+
+	self.pointer_mover = LineMover(Curve({ points = POINTER_POSITIONS, tension = 0.5, segments = 10 }))
+	self.pointer_mover:set_loop(true)
+	self.pointer_mover:speed_a_set(0.4)
+
+	local is_mobile = COMMON.is_mobile()
+	gui.set_enabled(self.vh.pc_input, not is_mobile)
+	gui.set_enabled(self.vh.mobile_input, is_mobile)
+	gui.animate(self.vh.arrows, "scale", 0.75, gui.EASING_OUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+	gui.animate(self.vh.start_message, "scale", 1.2, gui.EASING_OUTQUAD, 2.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+
+	self.show_input_tooltip = true
 end
 
 function Script:level_loaded()
@@ -113,7 +159,7 @@ function Script:update(dt)
 	BaseGuiScript.update(self, dt)
 	self.views.virtual_pad:update(dt)
 	self.views.cats_progress:update(dt)
-	gui.set_text(self.vh.lbl_level, "LEVEL:" .. WORLD.game.state.level)
+	gui.set_text(self.vh.lbl_level, "Lv." .. WORLD.game.state.level)
 end
 
 function Script:on_input(action_id, action)
@@ -134,11 +180,31 @@ function Script:on_resize()
 	gui.set_scale(self.vh.left, COMMON.RENDER.gui_scale.scale)
 	gui.set_adjust_mode(self.vh.bottom, COMMON.RENDER.gui_scale.mode)
 	gui.set_scale(self.vh.bottom, COMMON.RENDER.gui_scale.scale)
-	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale)
+	gui.set_adjust_mode(self.vh.top, COMMON.RENDER.gui_scale.mode)
+	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale4x3)
 end
 
 function Script:final()
 	BaseGuiScript.final(self)
+end
+
+function Script:hide_input_tooltip()
+	if not self.show_input_tooltip then return end
+	self.show_input_tooltip = false
+
+	if gui.is_enabled(self.vh.pc_input) then
+		gui.animate(self.vh.pc_input, "color", vmath.vector4(1, 1, 1, 0), gui.EASING_OUTQUAD, 1, 0, function()
+			gui.set_enabled(self.vh.pc_input, false)
+		end)
+	end
+	if gui.is_enabled(self.vh.mobile_input) then
+		gui.animate(self.vh.mobile_input, "color", vmath.vector4(1, 1, 1, 0), gui.EASING_OUTQUAD, 1, 0, function()
+			gui.set_enabled(self.vh.mobile_input, false)
+		end)
+	end
+	gui.animate(self.vh.start_message, "color", vmath.vector4(1, 1, 1, 0), gui.EASING_OUTQUAD, 1, 0, function()
+		gui.set_enabled(self.vh.start_message, false)
+	end)
 end
 
 COMMON.N28S.register_scripts({ Script() })

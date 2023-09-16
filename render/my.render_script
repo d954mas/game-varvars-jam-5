@@ -18,7 +18,8 @@ function Render:init()
 	self.gui_scale = {
 		mode = gui.ADJUST_FIT,
 		scale = vmath.vector3(1),
-		scale2 = vmath.vector3(1)
+		scale2 = vmath.vector3(1),
+		scale4x3 = vmath.vector3(1)
 	}
 	if (self.screen_size.w == 0) then self.screen_size.w = 1 end
 	if (self.screen_size.h == 0) then self.screen_size.h = 1 end
@@ -110,6 +111,7 @@ function Render:window_size_changed()
 
 	local gui_scale = 1
 	local gui_scale_2 = 1
+	local gui_scale_4x3 = 1
 
 	if COMMON.RENDER.screen_size.aspect < 0.65625  then
 		local scale_target = (16 / 9) / (0.65625)
@@ -121,10 +123,16 @@ function Render:window_size_changed()
 		local scale_current = (16 / 9) / (COMMON.RENDER.screen_size.aspect)
 		gui_scale_2 = scale_target / scale_current
 	end
+	if COMMON.RENDER.screen_size.aspect < 4/3  then
+		local scale_target = (16 / 9) / (4/3)
+		local scale_current = (16 / 9) / (COMMON.RENDER.screen_size.aspect)
+		gui_scale_4x3 = scale_target / scale_current
+	end
 
 	self.gui_scale.mode = COMMON.RENDER.screen_size.aspect>=16/9 and gui.ADJUST_FIT or gui.ADJUST_ZOOM
 	self.gui_scale.scale.x, self.gui_scale.scale.y, self.gui_scale.scale.z = gui_scale, gui_scale, gui_scale
 	self.gui_scale.scale2.x, self.gui_scale.scale2.y, self.gui_scale.scale2.z = gui_scale_2, gui_scale_2, gui_scale_2
+	self.gui_scale.scale4x3.x, self.gui_scale.scale4x3.y, self.gui_scale.scale4x3.z = gui_scale_4x3, gui_scale_4x3, gui_scale_4x3
 end
 
 function Render:update(dt)

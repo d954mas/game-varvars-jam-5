@@ -78,12 +78,20 @@ function System:update_player_direction()
 		player.movement.input.z = 0
 	end
 
+	if (player.movement.input.x ~= 0 or player.movement.input.z ~= 0) then
+		self.world.game_world.game.state.first_move = true
+		local ctx = COMMON.CONTEXT:set_context_top_game_gui()
+		ctx.data:hide_input_tooltip()
+		ctx:remove()
+	end
+
 	--end
 	--ctx:remove()
 end
 
 function System:update()
 	self:update_player_direction()
+
 end
 
 return System
