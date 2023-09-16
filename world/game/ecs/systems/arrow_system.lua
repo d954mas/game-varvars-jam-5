@@ -90,7 +90,7 @@ function Arrow:update(dt)
 end
 
 function Arrow:dispose()
-	go.delete(self.go.root)
+	go.delete(self.go.root, true)
 	self.go = nil
 end
 

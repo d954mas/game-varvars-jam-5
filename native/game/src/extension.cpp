@@ -513,6 +513,17 @@ static int PathfindingFindPath(lua_State *L) {
 	VoxelGameUtils::check_arg_count(L, 4);
     dmArray<PathCell> cells;
     cells.SetCapacity(16);
+    int x1 = lua_tonumber(L,1);
+    int x2 = lua_tonumber(L,2);
+    int z1 = lua_tonumber(L,3);
+    int z2 = lua_tonumber(L,4);
+    if(x1<world.chunks->xMinVoxels || x2<world.chunks->xMinVoxels
+        || x1>world.chunks->xMaxVoxels || x2>world.chunks->xMaxVoxels
+        || z1<world.chunks->zMinVoxels || z2<world.chunks->zMinVoxels
+        || z1>world.chunks->zMaxVoxels || z2>world.chunks->zMaxVoxels){
+        dmLogError("bad path coords");
+        lua_pushnil(L);
+    }
     int result = world.map.findPath(lua_tonumber(L,1),lua_tonumber(L,2),lua_tonumber(L,3),lua_tonumber(L,4),&cells);
     if(result == MicroPather::MicroPather::SOLVED){
         lua_newtable(L);
