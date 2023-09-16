@@ -247,24 +247,25 @@ function Entities:create_cat(position, id)
 		config = {
 			scale = vmath.vector3(1),
 			visible = true,
-			origin_position = nil
+			origin_position = nil,
+			animation_time = math.random()
 		}
 	}
 	e.cat_go.collision = COMMON.LUME.url_component_from_url(e.cat_go.root, "collision")
 	e.cat_go.sprite.sprite = COMMON.LUME.url_component_from_url(e.cat_go.sprite.origin, "sprite")
 
-	sprite.play_flipbook(e.cat_go.sprite.sprite,def.sprite)
+	sprite.play_flipbook(e.cat_go.sprite.sprite, def.sprite)
 
 	local origin_pos = def.origin
 
 	if not origin_pos then
 		local size = go.get(e.cat_go.sprite.sprite, "size")
-		origin_pos = vmath.vector3(0, size.y / 2 , 0)
+		origin_pos = vmath.vector3(0, size.y / 2, 0)
 	end
 	e.cat_go.config.origin_position = vmath.vector3(origin_pos)
 
 	local scale = go.get(e.cat_go.sprite.sprite, "scale")
-	go.set_position(vmath.mul_per_elem(e.cat_go.config.origin_position , scale),e.cat_go.sprite.origin)
+	go.set_position(vmath.mul_per_elem(e.cat_go.config.origin_position, scale), e.cat_go.sprite.origin)
 
 	e.physics_linear_velocity = vmath.vector3()
 	e.physics_object = game.physics_object_create(e.cat_go.root, e.cat_go.collision, e.position, e.physics_linear_velocity)
