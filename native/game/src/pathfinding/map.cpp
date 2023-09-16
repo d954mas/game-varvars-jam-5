@@ -70,6 +70,7 @@ int Map::findPath(int x, int y, int x2, int y2,  dmArray<PathCell>* resultPath){
 }
 
 void Map::setChunks(Chunks* chunks){
+	pather->Reset();
     if(this->cells!=NULL){
         delete[] this->cells;
     }
