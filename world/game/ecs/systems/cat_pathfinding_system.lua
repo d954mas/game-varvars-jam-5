@@ -20,6 +20,7 @@ end
 ---@param e EntityGame
 function System:process(e, dt)
 	if (not e.ai.target) then
+		if not e.path_to_target.cells then e.path_to_target.cells = {} end
 		local cells = e.path_to_target.cells
 		for i = 1, #cells do cells[i] = nil end
 		return
@@ -51,6 +52,7 @@ function System:process(e, dt)
 	else
 		--print(("find path:(%d %d)->(%d %d)"):format(self.e_cell.x, self.e_cell.z, self.target_cell.x, self.target_cell.z))
 		e.path_to_target.cells = game.pathfinding_find_path(self.e_cell.x, self.e_cell.z, self.target_cell.x, self.target_cell.z)
+		if not e.path_to_target.cells then e.path_to_target.cells = {} end
 		--pprint(e.path_to_target.cells)
 	end
 
