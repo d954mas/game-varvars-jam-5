@@ -73,7 +73,6 @@ function System:update(dt)
 	game.camera_set_fov(fov)
 	game.camera_set_view_position(player.camera.position)
 	game.camera_set_view_rotation(player.camera.rotation)
-	self.world.game_world.game.curveWorld:set_origin(player.camera.position)
 
 	player.camera.rotation_euler.x, player.camera.rotation_euler.y, player.camera.rotation_euler.z = COMMON.LUME.quat_to_euler_degrees(player.camera.rotation)
 end
