@@ -134,3 +134,6 @@ max_count = 16
 [sound]
 max_sound_instances = 128
 
+[liveupdate_reszip]
+preload_file = liveupdate_resources.zip
+filename = liveupdate_resources.zip

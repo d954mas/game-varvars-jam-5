@@ -5,6 +5,7 @@ local DEBUG_INFO = require "debug.debug_info"
 local SCENE_LOADER = require "libs.sm.scene_loader"
 local POINTER_LOCK = require "libs.pointer_lock"
 local BUFFER = require "libs_project.buffer"
+local LIVEUPDATE = require "libs_project.liveupdate"
 
 --register global functions for c++
 local LUA_TO_NATIVE = require "libs_project.lua_to_native"
@@ -21,6 +22,8 @@ local SCENES = {
 	require "scenes.settings.settings_scene",
 	require "scenes.book.book_scene",
 }
+
+local MUSIC_PROXY_URL = msg.url("main:/liveupdate#proxy")
 
 ---@class ScriptMain
 local Script = COMMON.new_n28s()
@@ -120,6 +123,21 @@ function Script:init()
 		COMMON.EVENT_BUS:event(COMMON.EVENTS.WINDOW_EVENT, { event = event, data = data })
 	end)
 
+	--load music
+	local cb
+	cb = function(success)
+		print("load proxy success:" .. tostring(success))
+		if (success) then
+			--load liveupdate collection
+			msg.post(MUSIC_PROXY_URL, COMMON.HASHES.MSG.LOADING.ASYNC_LOAD)
+		else
+			timer.delay(0.2, false, function()
+				LIVEUPDATE.load_proxy(MUSIC_PROXY_URL, cb)
+			end)
+		end
+	end
+	LIVEUPDATE.load_proxy(MUSIC_PROXY_URL, cb)
+
 end
 
 function Script:update(dt)
@@ -153,7 +171,13 @@ end
 
 function Script:on_message(message_id, message, sender)
 	if (message_id == COMMON.HASHES.MSG.LOADING.PROXY_LOADED) then
-		SCENE_LOADER.load_done(sender)
+		if (sender.path == MUSIC_PROXY_URL.path) then
+			msg.post(sender, COMMON.HASHES.MSG.ENABLE)
+			WORLD.sounds:liveupdate_ready()
+			WORLD.sounds:play_music(WORLD.sounds.music.main)
+		else
+			SCENE_LOADER.load_done(sender)
+		end
 	end
 end
 

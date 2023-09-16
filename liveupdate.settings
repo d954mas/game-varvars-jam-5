@@ -1,3 +1,6 @@
 [liveupdate]
 mode = Zip
+publickey = C:\Users\user\defold\game-varvars-jam-5\bob\liveupdate\public.der
+privatekey = C:\Users\user\defold\game-varvars-jam-5\bob\liveupdate\private.der
+zip-filepath = C:\Users\user\defold\game-varvars-jam-5\bob\liveupdate\content
 

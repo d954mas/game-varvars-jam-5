@@ -156,4 +156,14 @@ function Sounds:toggle()
 	end
 end
 
+function Sounds:liveupdate_ready()
+	local sounds = {
+		self.sounds.slider,
+	}
+	local socket = hash("liveupdate_proxy")
+	for _, s in ipairs(sounds) do
+		s.url = msg.url(socket, s.url.path, s.url.fragment)
+	end
+end
+
 return Sounds
