@@ -52,13 +52,15 @@ function Script:bind_vh()
 		left = gui.get_node("left"),
 		bottom = gui.get_node("bottom"),
 		lbl_level = gui.get_node("lbl_level"),
+		lbl_level_p = gui.get_node("lbl_level_p"),
 
 		arrows = gui.get_node("arrows"),
 		pc_input = gui.get_node("pc_input"),
 		mobile_input = gui.get_node("mobile_input"),
 		pointer = gui.get_node("mobile_input/finger"),
 
-		start_message = gui.get_node("start_message")
+		start_message = gui.get_node("start_message"),
+		start_message_p = gui.get_node("start_message_p")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -70,7 +72,9 @@ function Script:bind_vh()
 		btn_settings = GUI.ButtonScale("btn_settings"),
 		btn_book = GUI.ButtonScale("btn_book"),
 		---@type ProgressBar
-		cats_progress = nil
+		cats_progress = nil,
+		---@type ProgressBar
+		cats_progress_p = nil
 	}
 
 	local progress_vh = {
@@ -80,6 +84,14 @@ function Script:bind_vh()
 		lbl = gui.get_node("level_bar/lbl"),
 	}
 	self.views.cats_progress = GUI.ProgressBar(progress_vh)
+
+	progress_vh = {
+		root = gui.get_node("level_bar_p/root"),
+		bg = gui.get_node("level_bar_p/bg"),
+		progress = gui.get_node("level_bar_p/progress"),
+		lbl = gui.get_node("level_bar_p/lbl"),
+	}
+	self.views.cats_progress_p = GUI.ProgressBar(progress_vh)
 end
 
 function Script:init_gui()
@@ -140,6 +152,7 @@ function Script:init_gui()
 	gui.set_enabled(self.vh.mobile_input, is_mobile)
 	gui.animate(self.vh.arrows, "scale", 0.75, gui.EASING_OUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 	gui.animate(self.vh.start_message, "scale", 1.2, gui.EASING_OUTQUAD, 2.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+	gui.animate(self.vh.start_message_p, "scale", 0.5, gui.EASING_OUTQUAD, 2.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 
 	self.show_input_tooltip = true
 end
@@ -147,6 +160,8 @@ end
 function Script:level_loaded()
 	self.views.cats_progress:set_value_max(WORLD.game.level_creator.level_config.cats)
 	self.views.cats_progress:set_value(0, true)
+	self.views.cats_progress_p:set_value_max(WORLD.game.level_creator.level_config.cats)
+	self.views.cats_progress_p:set_value(0, true)
 end
 
 function Script:update_ghost_mode()
@@ -159,7 +174,9 @@ function Script:update(dt)
 	BaseGuiScript.update(self, dt)
 	self.views.virtual_pad:update(dt)
 	self.views.cats_progress:update(dt)
+	self.views.cats_progress_p:update(dt)
 	gui.set_text(self.vh.lbl_level, "Lv." .. WORLD.game.state.level)
+	gui.set_text(self.vh.lbl_level_p, "Lv." .. WORLD.game.state.level)
 end
 
 function Script:on_input(action_id, action)
@@ -182,6 +199,10 @@ function Script:on_resize()
 	gui.set_scale(self.vh.bottom, COMMON.RENDER.gui_scale.scale)
 	gui.set_adjust_mode(self.vh.top, COMMON.RENDER.gui_scale.mode)
 	gui.set_scale(self.vh.top, COMMON.RENDER.gui_scale.scale4x3)
+
+	local album = COMMON.RENDER.screen_size.aspect>=1
+	self.views.cats_progress:set_enabled(album)
+	self.views.cats_progress_p:set_enabled(not album)
 end
 
 function Script:final()
@@ -203,6 +224,12 @@ function Script:hide_input_tooltip()
 		end)
 	end
 	gui.animate(self.vh.start_message, "color", vmath.vector4(1, 1, 1, 0), gui.EASING_OUTQUAD, 1, 0, function()
+		gui.set_enabled(self.vh.start_message, false)
+		gui.set_enabled(self.vh.start_message_p, false)
+	end)
+
+	gui.animate(self.vh.start_message_p, "color", vmath.vector4(1, 1, 1, 0), gui.EASING_OUTQUAD, 1, 0, function()
+		gui.set_enabled(self.vh.start_message_p, false)
 		gui.set_enabled(self.vh.start_message, false)
 	end)
 end

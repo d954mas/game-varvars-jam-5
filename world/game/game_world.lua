@@ -177,6 +177,7 @@ function GameWorld:cat_collected(cat)
 	local ctx = COMMON.CONTEXT:set_context_top_game_gui()
 	self.state.cats_collected = self.state.cats_collected + 1
 	ctx.data.views.cats_progress:set_value(self.state.cats_collected)
+	ctx.data.views.cats_progress_p:set_value(self.state.cats_collected)
 	ctx:remove()
 
 end

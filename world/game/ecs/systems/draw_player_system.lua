@@ -24,9 +24,6 @@ local BASE_BLEND_SPEED = { blend_duration = 0.1, playback_rate = 1 }
 local ANIMATIONS = {
 	IDLE = hash("Standing Idle 02 Looking"),
 	RUN = hash("Standing Run Forward"),
-	DRAW_ARROW = hash("Standing Draw Arrow"),
-	DIE = hash("Falling Back Death"),
-	GATHERING = hash("Standing Melee Attack Horizontal"),
 }
 
 ---@class DrawPlayerSystem:ECSSystem
@@ -36,17 +33,8 @@ System.name = "PlayerDrawSystem"
 
 ---@param e EntityGame
 function System:get_animation(e)
-	if (e.die) then
-		return ENUMS.ANIMATIONS.DIE
-	end
 	if (e.moving) then
 		return ENUMS.ANIMATIONS.RUN
-	end
-	if (e.target) then
-		return ENUMS.ANIMATIONS.ATTACK
-	end
-	if (e.target_gathering) then
-		return ENUMS.ANIMATIONS.GATHERING
 	end
 	return ENUMS.ANIMATIONS.IDLE
 end
@@ -100,38 +88,11 @@ function System:process(e, dt)
 		local prev = e.player_go.config.animation
 		e.player_go.config.animation = anim
 		if (anim == ENUMS.ANIMATIONS.IDLE) then
-			if (prev == ENUMS.ANIMATIONS.DIE) then
-				model.play_anim(e.player_go.model.model, ANIMATIONS.IDLE, go.PLAYBACK_ONCE_FORWARD)
-			else
-				model.play_anim(e.player_go.model.model, ANIMATIONS.IDLE, go.PLAYBACK_ONCE_FORWARD, BASE_BLEND)
-			end
-
+			model.play_anim(e.player_go.model.model, ANIMATIONS.IDLE, go.PLAYBACK_LOOP_FORWARD, BASE_BLEND)
 		elseif (anim == ENUMS.ANIMATIONS.RUN) then
 			model.play_anim(e.player_go.model.model, ANIMATIONS.RUN, go.PLAYBACK_LOOP_FORWARD, BASE_BLEND)
-		elseif (anim == ENUMS.ANIMATIONS.ATTACK) then
-			BASE_BLEND_SPEED.playback_rate = e.parameters.weapon.animation_speed
-			model.play_anim(e.player_go.model.model, ANIMATIONS.DRAW_ARROW, go.PLAYBACK_ONCE_FORWARD, BASE_BLEND_SPEED)
-		elseif (anim == ENUMS.ANIMATIONS.DIE) then
-			model.play_anim(e.player_go.model.model, ANIMATIONS.DIE, go.PLAYBACK_ONCE_FORWARD,
-					{ blend_duration = 0.1 })
-		elseif (anim == ENUMS.ANIMATIONS.GATHERING) then
-			if (e.target_gathering.gathering_hp > 0) then
-				local item_def = e.target_gathering.tree and e.parameters.axe
-				BASE_BLEND_SPEED.playback_rate = item_def.animation_speed
-				model.play_anim(e.player_go.model.model, ANIMATIONS.GATHERING, go.PLAYBACK_ONCE_FORWARD, BASE_BLEND_SPEED)
-			else
-				model.play_anim(e.player_go.model.model, ANIMATIONS.IDLE, go.PLAYBACK_ONCE_FORWARD, BASE_BLEND)
-			end
 		end
 	end
-
-	--[[if (e.player_go.weapon.arrow.visible and not e.target) then
-		msg.post(e.player_go.weapon.arrow.root,DISABLE)
-		e.player_go.weapon.arrow.visible = false
-	elseif (not e.player_go.weapon.arrow.visible and e.target) then
-		msg.post(e.player_go.weapon.arrow.root, ENABLE)
-		e.player_go.weapon.arrow.visible = true
-	end--]]
 
 	go.set_position(e.position, e.player_go.root)
 
