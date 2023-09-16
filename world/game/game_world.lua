@@ -6,6 +6,7 @@ local ACTIONS = require "libs.actions.actions"
 local DEFS = require "world.balance.def.defs"
 local LevelCreator = require "world.game.levels.level_creator"
 local Lights = require "world.game.lights"
+local CurveWorld = require "libs_project.curveworld"
 
 local IS_DEV = COMMON.CONSTANTS.VERSION_IS_DEV
 
@@ -19,6 +20,7 @@ function GameWorld:initialize(world)
 	self.world = assert(world)
 	self.ecs_game = EcsGame(self.world)
 	self.lights = Lights(world)
+	self.curveWorld = CurveWorld(world)
 	self:reset_state()
 end
 

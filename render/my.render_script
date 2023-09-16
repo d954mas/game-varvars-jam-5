@@ -59,7 +59,11 @@ function Render:init_draw_opts()
 
 	WORLD.game.lights:add_constants(self.chunk_opts.constants)
 	WORLD.game.lights:add_constants(self.draw_opts.constants)
+	WORLD.game.curveWorld:add_constants(self.chunk_opts.constants)
+	WORLD.game.curveWorld:add_constants(self.draw_opts.constants)
 	WORLD.game.lights:set_render(self)
+
+	WORLD.game.curveWorld:set_curve(0.005,0.005,0)
 end
 
 function Render:init_predicates()

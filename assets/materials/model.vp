@@ -14,6 +14,7 @@ varying highp vec3 var_view_position;
 varying mediump vec3 var_world_normal;
 
 #include "/assets/materials/shadow/shadow_vp.glsl"
+#include "/assets/materials/curve_vp.glsl"
 
 
 
@@ -104,6 +105,7 @@ void main() {
     var_camera_position = (mtx_inv_view * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 
     vec4 world_position = mtx_world * vec4(position.xyz, 1.0);
+    world_position = countCurve(world_position);
     var_world_position = world_position.xyz;
 
     vec4 view_position = mtx_view * world_position;

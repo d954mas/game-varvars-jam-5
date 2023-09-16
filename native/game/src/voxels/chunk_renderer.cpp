@@ -382,7 +382,7 @@ void ChunkRenderer::drawChunk(lua_State *L, GoChunk &goChunk) {
             ChunkVertexPlane plane = renderPlanes[i];
             sidePlanes[plane.side].push_back(plane);
         }
-        for(int i=0;i<6;i++){
+        /*for(int i=0;i<6;i++){
             std::vector<ChunkVertexPlane> *planes =  &sidePlanes[i];
             sort(planes->begin(), planes->end(), sortPlanes);
             //if(true) break;
@@ -461,7 +461,7 @@ void ChunkRenderer::drawChunk(lua_State *L, GoChunk &goChunk) {
                 }
             //}
         }
-
+        */
         planes = 0;
         for(int i=0;i<6;i++){
             std::vector<ChunkVertexPlane> *greedyPlanes =  &sidePlanes[i];
