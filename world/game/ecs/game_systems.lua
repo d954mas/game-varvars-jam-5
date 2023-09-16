@@ -50,6 +50,8 @@ M.UpdateDistanceToPlayerSystem = require "world.game.ecs.systems.update_distance
 M.UpdateFrustumBoxSystem = require "world.game.ecs.systems.update_frustum_box"
 
 M.CatAiSystem = require "world.game.ecs.systems.cat_ai_system"
+M.CatPathfindingSystem = require "world.game.ecs.systems.cat_pathfinding_system"
+M.CatMoveSystem = require "world.game.ecs.systems.cat_move_system"
 
 M.DrawPlayerSystem = require "world.game.ecs.systems.draw_player_system"
 M.DrawChunksSystem = require "world.game.ecs.systems.draw_chunks_system"

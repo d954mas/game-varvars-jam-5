@@ -6,7 +6,6 @@ local ENUMS = require "world.enums.enums"
 local COROUTINE_YIELD = coroutine.yield
 local COROUTINE_RESUME = COMMON.coroutine_resume
 
-
 ---@class EnemyAISystem:ECSSystemProcessing
 local System = ECS.system()
 System.filter = ECS.filter("cat")
@@ -22,7 +21,18 @@ end
 ---@param e EntityGame
 function System:ai_random_run(e)
 	while (true) do
-		local dt = COROUTINE_YIELD()
+		local target = COMMON.LUME.randomchoice(self.world.game_world.game.level_creator.level_config.spawn_cells)
+
+		local time = 0--
+		local max_time = 6 + COMMON.LUME.random(0,4)
+		e.ai.target = { position = vmath.vector3(target.x, 65, target.z) }
+		while(e.ai.target and time<max_time) do
+			time = time + coroutine.yield()
+		end
+		e.ai.target = nil
+		COMMON.coroutine_wait(COMMON.LUME.random(0.1,2.5))
+
+
 	end
 end
 

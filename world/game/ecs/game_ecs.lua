@@ -35,6 +35,8 @@ function EcsWorld:add_systems()
 	self.ecs:addSystem(SYSTEMS.ActionsUpdateSystem())
 	self.ecs:addSystem(self.lock_mouse_system)
 	self.ecs:addSystem(SYSTEMS.CatAiSystem())
+	self.ecs:addSystem(SYSTEMS.CatPathfindingSystem())
+	self.ecs:addSystem(SYSTEMS.CatMoveSystem())
 
 	--self.ecs:addSystem(SYSTEMS.GroundCheckSystem())
 	self.ecs:addSystem(SYSTEMS.PlayerMoveSystem())
