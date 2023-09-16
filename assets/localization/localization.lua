@@ -25,15 +25,15 @@ local M = {
 	cat_CAT_5_name = { en = "Oliver" },
 	cat_CAT_5_description = { en = "Mischievous cat who can find his way into all sorts of trouble." },
 	cat_CAT_6_name = { en = "Cleo" },
-	cat_CAT_6_description = { en = "Regal and dignified cat who carries herself with a queenly air." },
+	cat_CAT_6_description = { en = "Regal and dignified, carries herself with poise." },
 	cat_CAT_7_name = { en = "Jasper" },
-	cat_CAT_7_description = { en = "Laid-back and easygoing cat who enjoys lounging in the sun." },
+	cat_CAT_7_description = { en = "Easygoing cat who enjoys lounging in the sun." },
 	cat_CAT_8_name = { en = "Nala" },
 	cat_CAT_8_description = { en = "Sweet and gentle cat who is everyone's favorite lap warmer." },
 	cat_CAT_9_name = { en = "Felix" },
-	cat_CAT_9_description = { en = "Independent and self-reliant cat who enjoys exploring on his own." },
+	cat_CAT_9_description = { en = "Calm and sleepy, ready to rest.A picture of relaxation." },
 	cat_CAT_10_name = { en = "Gizmo" },
-	cat_CAT_10_description = { en = "Playful and inquisitive cat who can't resist investigating every nook and cranny." },
+	cat_CAT_10_description = { en = "Playful and inquisitive, loves to investigate." },
 	--endregion
 }
 
