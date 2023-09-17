@@ -12,6 +12,8 @@ function System:init()
 			coroutine.yield()
 		end
 		COMMON.coroutine_wait(0.5)
+		local win_fx = self.world.game_world.game.level_creator.player.player_go.particles.win_fx
+		particlefx.play(win_fx)
 		self.world.game_world.game.state.completed = true
 		COMMON.coroutine_wait(3)
 		--change level

@@ -28,6 +28,7 @@ local FACTORY_URL_PLAYER = msg.url("game_scene:/factory#player")
 local FACTORY_URL_CAT = msg.url("game_scene:/factory#cat")
 local PARTS = {
 	ROOT = COMMON.HASHES.hash("/root"),
+	PARTICLES = COMMON.HASHES.hash("/particles"),
 	SPRITE = COMMON.HASHES.hash("/sprite"),
 	SPRITE_ORIGIN = COMMON.HASHES.hash("/sprite_origin"),
 }
@@ -173,6 +174,10 @@ function Entities:create_player(position)
 			root = nil,
 			model = nil,
 		},
+		particles = {
+			root = msg.url(assert(urls[PARTS.PARTICLES])),
+			win_fx = nil
+		},
 		config = {
 			scale = vmath.vector3(1),
 			skin = nil,
@@ -181,6 +186,7 @@ function Entities:create_player(position)
 			look_dir = vmath.vector3(0, 0, -1),
 		},
 	}
+	e.player_go.particles.win_fx = COMMON.LUME.url_component_from_url(e.player_go.particles.root, "win")
 	e.player_go.collision = COMMON.LUME.url_component_from_url(e.player_go.root, "collision")
 	e.mass = go.get(e.player_go.collision, COMMON.HASHES.MASS)
 

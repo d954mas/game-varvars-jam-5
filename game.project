@@ -121,9 +121,9 @@ max_count = 16
 max_count = 256
 
 [particle_fx]
-max_count = 0
-max_emitter_count = 0
-max_particle_count = 0
+max_count = 4
+max_emitter_count = 8
+max_particle_count = 512
 
 [collectionfactory]
 max_count = 32
@@ -137,3 +137,4 @@ max_sound_instances = 128
 [liveupdate_reszip]
 preload_file = liveupdate_resources.zip
 filename = liveupdate_resources.zip
+

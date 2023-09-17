@@ -77,6 +77,7 @@ function Render:init_predicates()
 		selection_cube = render.predicate({ "selection_cube" }),
 		portal = render.predicate({ "portal" }),
 		vfx_sprite = render.predicate({ "vfx_sprite" }),
+		vfx_particles = render.predicate({ "vfx_particles" }),
 		debug_physics = render.predicate({ "debug_physics" }),
 	}
 
@@ -238,6 +239,7 @@ function Render:update(dt)
 
 	render.set_depth_mask(false)
 	render.draw(self.predicates.vfx_sprite, self.draw_opts)
+	render.draw(self.predicates.vfx_particles, self.draw_opts)
 	render.draw(self.predicates.label_game, self.draw_opts)
 	render.draw(self.predicates.gui_world, self.draw_opts)
 --	render.set_depth_mask(true)
