@@ -31,9 +31,19 @@ local M = {
 	cat_CAT_8_name = { en = "Nala" },
 	cat_CAT_8_description = { en = "Sweet and gentle cat who is everyone's favorite lap warmer." },
 	cat_CAT_9_name = { en = "Felix" },
-	cat_CAT_9_description = { en = "Calm and sleepy, ready to rest.A picture of relaxation." },
+	cat_CAT_9_description = { en = "Calm and sleepy, picture of relaxation." },
 	cat_CAT_10_name = { en = "Gizmo" },
 	cat_CAT_10_description = { en = "Playful and inquisitive, loves to investigate." },
+	cat_CAT_11_name = { en = "Shadow" },
+	cat_CAT_11_description = { en = "Mysterious cat who disappears into the night." },
+	cat_CAT_12_name = { en = "Sophie" },
+	cat_CAT_12_description = { en = "Friendly and sociable cat, charms everyone." },
+	cat_CAT_13_name = { en = "Leo" },
+	cat_CAT_13_description = { en = "Proud and fearless cat who rules over his domain." },
+	cat_CAT_14_name = { en = "Mocha" },
+	cat_CAT_14_description = { en = "Warm and affectionate cat who loves to snuggle up." },
+	cat_CAT_15_name = { en = "Max" },
+	cat_CAT_15_description = { en = "Energetic and outgoing cat who is always ready to play." },
 	--endregion
 }
 
