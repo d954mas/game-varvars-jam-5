@@ -281,7 +281,7 @@
 		if(currentPercentage>percentage){
 			percentage = currentPercentage
 		}
-		currentPercentage = percentage
+		currentPercentage = Math.min(percentage,100)
 		var progress_bar_text = document.getElementById('progress-bar-text');
 		progress_bar_text.innerHTML  = "<b>" +  Math.ceil(percentage) + "%</b>";
 
