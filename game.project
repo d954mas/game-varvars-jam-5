@@ -131,12 +131,10 @@ max_count = 32
 [factory]
 max_count = 16
 
+[sound]
+max_sound_instances = 128
+
 [liveupdate_reszip]
 preload_file = liveupdate_resources.zip
 filename = liveupdate_resources.zip
-
-[sound]
-max_sound_sources = 64
-max_sound_buffers = 64
-max_component_count = 64
 
