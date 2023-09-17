@@ -3,7 +3,7 @@ local ENUMS = {}
 ENUMS.ANIMATIONS = {
 	IDLE = "IDLE",
 	RUN = "RUN",
-	DIE = "DIE",
+	WIN = "WIN",
 }
 
 ENUMS.RESOURCE_ADD_PLACEMENT = {

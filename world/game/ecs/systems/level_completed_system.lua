@@ -11,8 +11,9 @@ function System:init()
 		while(self.world.game_world.game.state.cats_collected<self.world.game_world.game.level_creator.level_config.cats)do
 			coroutine.yield()
 		end
-		--HOORAY
-		COMMON.coroutine_wait(1)
+		COMMON.coroutine_wait(0.5)
+		self.world.game_world.game.state.completed = true
+		COMMON.coroutine_wait(3)
 		--change level
 		self.world.game_world.storage.game:level_completed()
 		self.world.game_world.game:load_level(self.world.game_world.storage.game:get_level())

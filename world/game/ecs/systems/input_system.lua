@@ -72,7 +72,7 @@ function System:update_player_direction()
 		ctx:remove()
 	end
 
-	if (player.disabled or self.world.game_world.game.state.block_input) then
+	if (self.world.game_world.game.state.completed or player.disabled or self.world.game_world.game.state.block_input) then
 		player.movement.input.x = 0
 		player.movement.input.y = 0
 		player.movement.input.z = 0

@@ -24,6 +24,12 @@ local BASE_BLEND_SPEED = { blend_duration = 0.1, playback_rate = 1 }
 local ANIMATIONS = {
 	IDLE = hash("Standing Idle 02 Looking"),
 	RUN = hash("Standing Run Forward"),
+	WIN = {
+		hash("Dancing Maraschino Step"),
+		hash("Hip Hop Dancing"),
+		hash("Silly Dancing"),
+		hash("Victory Idle"),
+	}
 }
 
 ---@class DrawPlayerSystem:ECSSystem
@@ -33,6 +39,9 @@ System.name = "PlayerDrawSystem"
 
 ---@param e EntityGame
 function System:get_animation(e)
+	if self.world.game_world.game.state.completed then
+		return ENUMS.ANIMATIONS.WIN
+	end
 	if (e.moving) then
 		return ENUMS.ANIMATIONS.RUN
 	end
@@ -91,6 +100,8 @@ function System:process(e, dt)
 			model.play_anim(e.player_go.model.model, ANIMATIONS.IDLE, go.PLAYBACK_LOOP_FORWARD, BASE_BLEND)
 		elseif (anim == ENUMS.ANIMATIONS.RUN) then
 			model.play_anim(e.player_go.model.model, ANIMATIONS.RUN, go.PLAYBACK_LOOP_FORWARD, BASE_BLEND)
+		elseif (anim == ENUMS.ANIMATIONS.WIN) then
+			model.play_anim(e.player_go.model.model, COMMON.LUME.randomchoice(ANIMATIONS.WIN), go.PLAYBACK_LOOP_FORWARD, BASE_BLEND)
 		end
 	end
 

@@ -37,6 +37,7 @@ function GameWorld:reset_state()
 		voxels_collisions = nil,
 		location_id = nil,
 		cats_collected = 0,
+		completed = false
 	}
 
 	self.lights:reset()
@@ -141,6 +142,7 @@ function GameWorld:load_level(level)
 
 	self.state.level = level
 	self.state.cats_collected = 0
+	self.state.completed = false
 
 	DEBUG_INFO.game_reset()
 	self.ecs_game:add_systems()
