@@ -182,6 +182,7 @@ function GameWorld:cat_collected(cat)
 	ctx.data.views.cats_progress:set_value(self.state.cats_collected)
 	ctx.data.views.cats_progress_p:set_value(self.state.cats_collected)
 	ctx:remove()
+	self.world.sounds:play_sound(self.world.sounds.sounds[DEFS.CATS.CATS[cat.cat_data.id].sound])
 
 
 end
