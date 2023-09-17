@@ -15,6 +15,7 @@ function Sounds:initialize(world)
 	self.sounds = {
 		btn_1 = { name = "btn_1", url = msg.url("main:/sounds#btn_1") },
 		slider = { name = "slider", url = msg.url("main:/sounds#slider") },
+		win = { name = "win", url = msg.url("main:/sounds#win") },
 		steps = {
 			{ name = "step_1", url = msg.url("game_scene:/sounds#step_1") },
 			{ name = "step_2", url = msg.url("game_scene:/sounds#step_2") },
