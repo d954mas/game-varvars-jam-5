@@ -21,14 +21,14 @@ local LEVEL_SIZE = {
 	},
 
 	MEDIUM_1 = {
-		w = 31, d = 31, min_level = 5, weight = 4, cats_min = 15, cats_max = 25
+		w = 31, d = 31, min_level = 5, weight = 4, cats_min = 15, cats_max = 20
 	},
 	MEDIUM_2 = {
-		w = 40, d = 40, min_level = 10, weight = 3, cats_min = 20, cats_max = 35
+		w = 35, d = 35, min_level = 10, weight = 3, cats_min = 20, cats_max = 25
 	},
 
 	BIG = {
-		w = 45, d = 45, min_level = 10, weight = 0, cats_min = 50, cats_max = 50
+		w = 40, d = 40, min_level = 10, weight = 0, cats_min = 30, cats_max = 30
 	}
 }
 
@@ -53,12 +53,12 @@ function Creator:create_level(level)
 			size_list[v] = v.weight
 		end
 	end
-	if level % 11 == 0 then
+	if level % 10 == 1 then
 		size_list[LEVEL_SIZE.MEDIUM_2]= nil
 	end
 	local size = assert(COMMON.LUME.pcg_weightedchoice(size_list))
 
-	if level % 9 == 0 then
+	if level % 10 == 9 then
 		size = LEVEL_SIZE.SMALL_2
 	end
 
