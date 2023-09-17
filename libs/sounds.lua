@@ -28,8 +28,6 @@ function Sounds:initialize(world)
 		self.sounds[name] = { name = name, url = msg.url("main:/sounds#" .. name) }
 	end
 
-
-
 	self.music = {
 		main = { name = "main", url = msg.url("liveupdate_proxy:/music#main"), fade_in = 3, fade_out = 3 },
 	}
@@ -41,11 +39,11 @@ function Sounds:initialize(world)
 	self.subscription = COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.WINDOW_EVENT):subscribe(function(event)
 		if event.event == window.WINDOW_EVENT_FOCUS_LOST then
 			self.focus = false
-			sound.set_group_gain(COMMON.HASHES.hash("master "), 0)
+			sound.set_group_gain(COMMON.HASHES.hash("master"), 0)
 		elseif event.event == window.WINDOW_EVENT_FOCUS_GAINED then
 			self.focus = true
 			if (not self.paused) then
-				sound.set_group_gain(COMMON.HASHES.hash("master "), 1)
+				sound.set_group_gain(COMMON.HASHES.hash("master"), 1)
 			end
 		end
 	end)
@@ -56,21 +54,21 @@ function Sounds:initialize(world)
 end
 
 function Sounds:on_storage_changed()
-	sound.set_group_gain(COMMON.HASHES.hash("sound "), self.world.storage.options:sound_get() and 1 or 0)
-	sound.set_group_gain(COMMON.HASHES.hash("music "), self.world.storage.options:music_get() and 1 or 0)
+	sound.set_group_gain(COMMON.HASHES.hash("sound"), self.world.storage.options:sound_get() and 1 or 0)
+	sound.set_group_gain(COMMON.HASHES.hash("music"), self.world.storage.options:music_get() and 1 or 0)
 end
 
 function Sounds:pause()
 	COMMON.i("pause ", TAG)
 	self.paused = true
-	sound.set_group_gain(COMMON.HASHES.hash("master "), 0)
+	sound.set_group_gain(COMMON.HASHES.hash("master"), 0)
 end
 
 function Sounds:resume()
 	COMMON.i("resume ", TAG)
 	self.paused = false
 	if (self.focus) then
-		sound.set_group_gain(COMMON.HASHES.hash("master "), self.master_gain)
+		sound.set_group_gain(COMMON.HASHES.hash("master"), self.master_gain)
 	end
 end
 
