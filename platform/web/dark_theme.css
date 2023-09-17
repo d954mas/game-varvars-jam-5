@@ -95,7 +95,7 @@ body {
 }
 
 .no-webp .canvas-app-canvas {
-	background-image: url("loading.png");
+	background-image: url("loading.jpg");
 }
 
 .webp .canvas-app-canvas{
@@ -103,7 +103,7 @@ body {
 }
 
 .no-webp .canvas-app-bg {
-	background-image: url("loading.png");
+	background-image: url("loading.jpg");
 }
 
 .webp .canvas-app-bg{
