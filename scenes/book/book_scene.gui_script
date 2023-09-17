@@ -7,6 +7,8 @@ local DEFS = require "world.balance.def.defs"
 local CatsList = require "libs_project.gui.cats_list"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 
+if not COMMON.GLOBAL.BOOK_SCROLL then COMMON.GLOBAL.BOOK_SCROLL = vmath.vector3() end
+
 ---@class BookSceneGuiScript:GuiScriptBase
 local Script = COMMON.class("UpgradesSceneGuiScript", BaseGuiScript)
 
@@ -16,6 +18,7 @@ function Script:init()
 		self:on_resize()
 	end))
 	self:on_resize()
+
 end
 
 function Script:bind_vh()
@@ -53,6 +56,9 @@ function Script:init_gui()
 		self:close()
 	end)
 	GUI.autosize_text(self.vh.title_lbl, 1.5, COMMON.LOCALIZATION.CATS_BOOK_title())
+
+	pprint(COMMON.GLOBAL.BOOK_SCROLL)
+	self.views.list.cats_list.scroll_to(COMMON.GLOBAL.BOOK_SCROLL.x, COMMON.GLOBAL.BOOK_SCROLL.y)
 
 end
 
@@ -106,6 +112,8 @@ function Script:final()
 			WORLD.storage.cats:look_at_book(v.id)
 		end
 	end
+	COMMON.GLOBAL.BOOK_SCROLL.x = self.views.list.cats_list.scroll.x
+	COMMON.GLOBAL.BOOK_SCROLL.y = self.views.list.cats_list.scroll.y
 end
 
 COMMON.N28S.register_scripts({ Script() })
