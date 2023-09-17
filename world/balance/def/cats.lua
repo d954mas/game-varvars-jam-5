@@ -20,6 +20,12 @@ local M = {
 		CAT_13 = { sprite = "cat_13", origin = vmath.vector3(0, 80, 0), ai = ENUMS.CAT_AI_TYPE.RUN_AWAY, min_level = 30  },
 		CAT_14 = { sprite = "cat_14", min_level = 32  },
 		CAT_15 = { sprite = "cat_15",  ai = ENUMS.CAT_AI_TYPE.RANDOM_RUN, min_level = 35  },
+
+		CAT_16 = { sprite = "cat_16",origin = vmath.vector3(0, 40, 0), min_level = 37  },
+		CAT_17 = { sprite = "cat_17",origin = vmath.vector3(0, 45, 0), min_level = 40   },
+		CAT_18 = { sprite = "cat_18",  ai = ENUMS.CAT_AI_TYPE.RANDOM_RUN, min_level = 42  },
+		CAT_19 = { sprite = "cat_19",origin = vmath.vector3(0, 80, 0),  ai = ENUMS.CAT_AI_TYPE.RUN_AWAY, min_level = 45  },
+		CAT_20 = { sprite = "cat_20",origin = vmath.vector3(0, 78, 0),  ai = ENUMS.CAT_AI_TYPE.RANDOM_RUN, min_level = 50  },
 	}
 }
 
@@ -27,7 +33,7 @@ M.LIST = {
 
 }
 
-for i = 1, 15 do
+for i = 1, 20 do
 	table.insert(M.LIST, assert(M.CATS["CAT_" .. i]))
 end
 

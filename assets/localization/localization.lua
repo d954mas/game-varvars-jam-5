@@ -44,6 +44,17 @@ local M = {
 	cat_CAT_14_description = { en = "Warm and affectionate cat who loves to snuggle up." },
 	cat_CAT_15_name = { en = "Max" },
 	cat_CAT_15_description = { en = "Energetic and outgoing cat who is always ready to play." },
+
+	cat_CAT_16_name = { en = "Barsik" },
+	cat_CAT_16_description = { en = "Energetic cat, known for his whirlwind antics. " },
+	cat_CAT_17_name = { en = "Willow" },
+	cat_CAT_17_description = { en = "Gentle cat who brings a sense of calm to any room" },
+	cat_CAT_18_name = { en = "Bubbles" },
+	cat_CAT_18_description = { en = "Deep, soulful eyes, quiet and gentle." },
+	cat_CAT_19_name = { en = "Peach" },
+	cat_CAT_19_description = { en = "Fiery and spirited cat. Independent and self-reliant." },
+	cat_CAT_20_name = { en = "Daizy" },
+	cat_CAT_20_description = { en = "Fun and fizzy as a bottle of champagne." },
 	--endregion
 }
 
