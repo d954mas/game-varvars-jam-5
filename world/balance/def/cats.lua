@@ -33,7 +33,9 @@ M.LIST = {
 
 }
 
-for i = 1, 20 do
+table.insert(M.LIST, assert(M.CATS["CAT_" .. 2]))
+table.insert(M.LIST, assert(M.CATS["CAT_" .. 1]))
+for i = 3, 20 do
 	table.insert(M.LIST, assert(M.CATS["CAT_" .. i]))
 end
 

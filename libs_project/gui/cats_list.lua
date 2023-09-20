@@ -62,31 +62,40 @@ function View:initialize(list_data, name)
 end
 
 function View:list_update_item(list, item)
-	if (item.data and item.data ~= "") then
-		if not item.my_views then
-			local cats = {}
-			for i = 1, 2 do
-				local id = list.id .. "/item/item_" .. i
-				local vh = {
-					root = assert(item.nodes[hash(id .. "/root")]),
-					icon = assert(item.nodes[hash(id .. "/icon")]),
-					lbl_title = assert(item.nodes[hash(id .. "/lbl_title")]),
-					lbl_description = assert(item.nodes[hash(id .. "/lbl_description")]),
-					notification = assert(item.nodes[hash(id .. "/icon_attention")]),
-				}
-				table.insert(cats, CatItem(vh))
-			end
-
-			item.my_views = {
-				cats = cats
+	if not item.my_views then
+		local cats = {}
+		for i = 1, 2 do
+			local id = list.id .. "/item/item_" .. i
+			local vh = {
+				root = assert(item.nodes[hash(id .. "/root")]),
+				icon = assert(item.nodes[hash(id .. "/icon")]),
+				lbl_title = assert(item.nodes[hash(id .. "/lbl_title")]),
+				lbl_description = assert(item.nodes[hash(id .. "/lbl_description")]),
+				notification = assert(item.nodes[hash(id .. "/icon_attention")]),
 			}
+			table.insert(cats, CatItem(vh))
 		end
+
+		item.my_views = {
+			cats = cats
+		}
+	end
+	if (item.data and item.data ~= "") then
 		local cat_1 = item.data.cat_1.def
 		local cat_2 = item.data.cat_2.def
 		item.my_views.cats[1]:set_enabled(cat_1)
 		item.my_views.cats[2]:set_enabled(cat_2)
 		if (cat_1) then item.my_views.cats[1]:set_cat(cat_1.id) end
 		if (cat_2) then item.my_views.cats[2]:set_cat(cat_2.id) end
+
+		--fixed notification on top of cell is visible
+		if cat_1.id == "CAT_2" and list.scroll.y > 0.9 then
+			item.my_views.cats[1]:set_enabled(false)
+			item.my_views.cats[2]:set_enabled(false)
+		end
+	else
+		item.my_views.cats[1]:set_enabled(false)
+		item.my_views.cats[2]:set_enabled(false)
 	end
 end
 
