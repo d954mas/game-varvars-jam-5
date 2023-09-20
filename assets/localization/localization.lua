@@ -3,7 +3,7 @@ local LOG = require "libs.log"
 local CONSTANTS = require "libs.constants"
 local TAG = "LOCALIZATION"
 local LUME = require "libs.lume"
-local LOCALES = { "en" }
+local LOCALES = { "en", "ru" }
 local DEFAULT = CONSTANTS.LOCALIZATION.DEFAULT
 local FALLBACK = DEFAULT
 
@@ -12,6 +12,9 @@ local ct
 ---@class Localization
 local M = {
 	CATS_BOOK_title = { en = "CATS BOOK" },
+
+	onboarding_arrows = { en = "USE ARROWS TO MOVE", ru = "ИСПОЛЬЗУЙТЕ СТРЕЛКИ" },
+	onboarding_touch = { en = "DRAG TO MOVE" },
 
 	--region cats
 	cat_CAT_1_name = { en = "Whiskers" },

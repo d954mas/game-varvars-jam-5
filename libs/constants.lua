@@ -73,7 +73,6 @@ M.LOCALIZATION = {
 	FORCE_LOCALE = sys.get_config("localization.force_locale")
 }
 
-M.LOCALIZATION.FORCE_LOCALE = "en"
 
 
 return M

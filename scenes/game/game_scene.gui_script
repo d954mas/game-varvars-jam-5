@@ -62,7 +62,10 @@ function Script:bind_vh()
 		start_message = gui.get_node("start_message"),
 		start_message_p = gui.get_node("start_message_p"),
 
-		btn_book_attention = gui.get_node("btn_book/icon_attention")
+		btn_book_attention = gui.get_node("btn_book/icon_attention"),
+
+		mobile_input_title = gui.get_node("mobile_input/title"),
+		pc_input_title = gui.get_node("pc_input/title")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -156,6 +159,11 @@ function Script:init_gui()
 	gui.animate(self.vh.start_message_p, "scale", 0.5, gui.EASING_OUTQUAD, 2.5, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 
 	self.show_input_tooltip = true
+
+	print(COMMON.LOCALIZATION:locale_get())
+	pprint(COMMON.LOCALIZATION.onboarding_arrows)
+	gui.set_text(self.vh.mobile_input_title,COMMON.LOCALIZATION.onboarding_touch())
+	gui.set_text(self.vh.pc_input_title,COMMON.LOCALIZATION.onboarding_arrows())
 end
 
 function Script:level_loaded()

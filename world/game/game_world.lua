@@ -148,7 +148,6 @@ function GameWorld:load_level(level)
 	self.ecs_game:add_systems()
 	self.level_creator = LevelCreator(self.world)
 	self.level_creator:create_level(level)
-	print(self.level_creator.level_config.cats)
 
 	--fixed gui was not already created
 	timer.delay(0, false, function()
