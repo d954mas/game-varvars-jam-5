@@ -174,15 +174,26 @@ function Creator:create_level_geometry()
 	self:_level_cellular()
 	self:_level_cellular()
 
-	game.generate_new_level_data(size.x1, size.z1, size.z2, size.x2)
+
+	--
+	game.generate_new_level_data(size.x1, size.z1, size.x2, size.z2)
 	--game.chunks_fill_zone(-1000, 64 - 30, -1000, 1000, 64, 1000, 2)
 	--game.chunks_fill_zone(-1000, 65, -1000, 1000, 255, 1000, 0)
 
 	--fill ground
+	--was bag when level created in bad size
+	--	game.generate_new_level_data(size.x1, size.z1, size.z2, size.x2)
+	--z2 and x2 should be in another position. x2,z2
+	--but i like how looks that level
+	--so fixed generate_new_level_data but keep in chunks_fill_zone prev borders
 	for z = lc.size.z1, lc.size.z2 do
 		for x = lc.size.x1, lc.size.x2 do
 			local cell = lc.cells[z][x]
-			game.chunks_fill_zone(x, 64 - 30, z, x, 64, z, cell.tile)
+			if x>lc.size.z2 or z>lc.size.x2 then
+				cell.tile = 0
+			else
+				game.chunks_fill_zone(x, 64 - 30, z, x, 64, z, cell.tile)
+			end
 		end
 	end
 
@@ -228,9 +239,9 @@ function Creator:create_level_geometry()
 						if neighbour.tile ~= 0 then filled_near = filled_near + 1 end
 					end
 				end
-				if filled_near > 0 then
+				--if filled_near > 0 then
 					areas[z][x] = true
-				end
+			--	end
 			end
 
 		end
