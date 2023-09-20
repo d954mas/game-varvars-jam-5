@@ -66,7 +66,9 @@ function Script:bind_vh()
 		btn_book_attention = gui.get_node("btn_book/icon_attention"),
 
 		mobile_input_title = gui.get_node("mobile_input/title"),
-		pc_input_title = gui.get_node("pc_input/title")
+		pc_input_title = gui.get_node("pc_input/title"),
+		start_message_lbl = gui.get_node("start_message/lbl"),
+		start_message_p_lbl = gui.get_node("start_message_p/lbl")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -152,7 +154,7 @@ function Script:init_gui()
 	self.pointer_mover:set_loop(true)
 	self.pointer_mover:speed_a_set(0.4)
 
-	local is_mobile = COMMON.is_mobile() or true
+	local is_mobile = COMMON.is_mobile()
 	gui.set_enabled(self.vh.pc_input, not is_mobile)
 	gui.set_enabled(self.vh.mobile_input, is_mobile)
 	gui.animate(self.vh.arrows, "scale", 0.75, gui.EASING_OUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
@@ -161,8 +163,10 @@ function Script:init_gui()
 
 	self.show_input_tooltip = true
 
-	gui.set_text(self.vh.mobile_input_title,COMMON.LOCALIZATION.onboarding_touch())
-	gui.set_text(self.vh.pc_input_title,COMMON.LOCALIZATION.onboarding_arrows())
+	gui.set_text(self.vh.mobile_input_title, COMMON.LOCALIZATION.onboarding_touch())
+	gui.set_text(self.vh.pc_input_title, COMMON.LOCALIZATION.onboarding_arrows())
+	gui.set_text(self.vh.start_message_lbl, COMMON.LOCALIZATION.onboarding_catch_them_all())
+	gui.set_text(self.vh.start_message_p_lbl, COMMON.LOCALIZATION.onboarding_catch_them_all())
 end
 
 function Script:level_loaded()
@@ -170,6 +174,9 @@ function Script:level_loaded()
 	self.views.cats_progress:set_value(0, true)
 	self.views.cats_progress_p:set_value_max(WORLD.game.level_creator.level_config.cats)
 	self.views.cats_progress_p:set_value(0, true)
+
+	GUI.autosize_text(self.vh.lbl_level, 2, COMMON.LOCALIZATION.level_title({ level = WORLD.game.state.level }))
+	GUI.autosize_text(self.vh.lbl_level_p, 2, COMMON.LOCALIZATION.level_title({ level = WORLD.game.state.level }))
 end
 
 function Script:update_ghost_mode()
@@ -189,8 +196,6 @@ function Script:update(dt)
 		TEMP_V.y = self.pointer_mover.position.y
 		gui.set_position(self.vh.pointer, TEMP_V)
 	end
-	gui.set_text(self.vh.lbl_level, "Lv." .. WORLD.game.state.level)
-	gui.set_text(self.vh.lbl_level_p, "Lv." .. WORLD.game.state.level)
 end
 
 function Script:on_input(action_id, action)

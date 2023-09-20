@@ -15,6 +15,9 @@ local M = {
 
 	onboarding_arrows = { en = "USE ARROWS TO MOVE", ru = "ИСПОЛЬЗУЙТЕ СТРЕЛКИ" },
 	onboarding_touch = { en = "DRAG TO MOVE", ru = "ИСПОЛЬЗУЙТЕ ПАЛЕЦ" },
+	onboarding_catch_them_all = { en = "CATCH THEM ALL", ru = "ЛОВИТЕ КОТОВ" },
+
+	level_title = { en = "LV.%{level}", ru = "УР.%{level}" },
 
 	--region cats
 	cat_CAT_1_name = { en = "Whiskers" },
