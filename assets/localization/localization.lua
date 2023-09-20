@@ -14,7 +14,7 @@ local M = {
 	CATS_BOOK_title = { en = "CATS BOOK" },
 
 	onboarding_arrows = { en = "USE ARROWS TO MOVE", ru = "ИСПОЛЬЗУЙТЕ СТРЕЛКИ" },
-	onboarding_touch = { en = "DRAG TO MOVE" },
+	onboarding_touch = { en = "DRAG TO MOVE", ru = "ИСПОЛЬЗУЙТЕ ПАЛЕЦ" },
 
 	--region cats
 	cat_CAT_1_name = { en = "Whiskers" },

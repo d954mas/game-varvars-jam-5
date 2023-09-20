@@ -7,6 +7,7 @@ local VirtualPad = require "libs_project.gui.virtual_pad"
 local BaseGuiScript = require "libs_project.scripts.base_gui_script"
 local LineMover = require "libs_project.line_mover"
 local Curve = require "libs.curve"
+local TEMP_V = vmath.vector3()
 
 local POINTER_POSITIONS = {
 	vmath.vector3(-120, 0, 0),
@@ -151,7 +152,7 @@ function Script:init_gui()
 	self.pointer_mover:set_loop(true)
 	self.pointer_mover:speed_a_set(0.4)
 
-	local is_mobile = COMMON.is_mobile()
+	local is_mobile = COMMON.is_mobile() or true
 	gui.set_enabled(self.vh.pc_input, not is_mobile)
 	gui.set_enabled(self.vh.mobile_input, is_mobile)
 	gui.animate(self.vh.arrows, "scale", 0.75, gui.EASING_OUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
@@ -160,8 +161,6 @@ function Script:init_gui()
 
 	self.show_input_tooltip = true
 
-	print(COMMON.LOCALIZATION:locale_get())
-	pprint(COMMON.LOCALIZATION.onboarding_arrows)
 	gui.set_text(self.vh.mobile_input_title,COMMON.LOCALIZATION.onboarding_touch())
 	gui.set_text(self.vh.pc_input_title,COMMON.LOCALIZATION.onboarding_arrows())
 end
@@ -184,6 +183,12 @@ function Script:update(dt)
 	self.views.virtual_pad:update(dt)
 	self.views.cats_progress:update(dt)
 	self.views.cats_progress_p:update(dt)
+	if gui.is_enabled(self.vh.mobile_input) then
+		self.pointer_mover:move(dt)
+		TEMP_V.x = self.pointer_mover.position.x
+		TEMP_V.y = self.pointer_mover.position.y
+		gui.set_position(self.vh.pointer, TEMP_V)
+	end
 	gui.set_text(self.vh.lbl_level, "Lv." .. WORLD.game.state.level)
 	gui.set_text(self.vh.lbl_level_p, "Lv." .. WORLD.game.state.level)
 end

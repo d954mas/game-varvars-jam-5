@@ -99,7 +99,7 @@ target = editor
 [localization]
 default = en
 use_system = true
-force_locale = en
+force_locale = ru
 
 [shader]
 output_spirv = 1
