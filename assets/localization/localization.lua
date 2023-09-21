@@ -11,8 +11,6 @@ local ct
 
 ---@class Localization
 local M = {
-	CATS_BOOK_title = { en = "CATS BOOK" },
-
 	onboarding_arrows = { en = "USE ARROWS TO MOVE", ru = "ИСПОЛЬЗУЙТЕ СТРЕЛКИ" },
 	onboarding_touch = { en = "DRAG TO MOVE", ru = "ИСПОЛЬЗУЙТЕ ПАЛЕЦ" },
 	onboarding_catch_them_all = { en = "CATCH THEM ALL", ru = "ЛОВИТЕ КОТОВ" },
@@ -22,6 +20,7 @@ local M = {
 	setting_sound = { en = "Sound", ru = "Звуки" },
 	setting_music = { en = "Music", ru = "Музыка" },
 	setting_shadows = { en = "Shadow", ru = "Тени" },
+	cats_book_title = { en = "CATS BOOK", ru = "КНИГА КОТОВ" },
 
 	--region cats
 	cat_CAT_1_name = { en = "Whiskers", ru = "Усатик" },

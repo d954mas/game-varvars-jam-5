@@ -55,7 +55,7 @@ function Script:init_gui()
 		WORLD.sounds:play_sound(WORLD.sounds.sounds.btn_1)
 		self:close()
 	end)
-	GUI.autosize_text(self.vh.title_lbl, 1.5, COMMON.LOCALIZATION.CATS_BOOK_title())
+	GUI.autosize_text(self.vh.title_lbl, 1.5, COMMON.LOCALIZATION.cats_book_title())
 
 	pprint(COMMON.GLOBAL.BOOK_SCROLL)
 	self.views.list.cats_list.scroll_to(COMMON.GLOBAL.BOOK_SCROLL.x, COMMON.GLOBAL.BOOK_SCROLL.y)
