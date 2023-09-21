@@ -22,7 +22,11 @@ function Script:bind_vh()
 		root = gui.get_node("root"),
 		root_adjust = gui.get_node("root/adjust"),
 		fader = gui.get_node("fader"),
-		click_zone = gui.get_node("click_zone")
+		click_zone = gui.get_node("click_zone"),
+		title_lbl = gui.get_node("modal/title/lbl"),
+		sound_lbl = gui.get_node("checkbox_sound/label"),
+		music_lbl = gui.get_node("checkbox_music/label"),
+		shadows_lbl = gui.get_node("checkbox_draw_shadows/label")
 	}
 	self.views = {
 		btn_close = GUI.ButtonScale("btn_close"),
@@ -52,6 +56,11 @@ function Script:init_gui()
 	end)
 
 	chb_draw_shadows:on_input()
+
+	gui.set_text(self.vh.shadows_lbl,COMMON.LOCALIZATION.setting_shadows())
+	gui.set_text(self.vh.sound_lbl,COMMON.LOCALIZATION.setting_sound())
+	gui.set_text(self.vh.music_lbl,COMMON.LOCALIZATION.setting_music())
+	GUI.autosize_text(self.vh.title_lbl,1.5,COMMON.LOCALIZATION.setting_title())
 
 end
 

@@ -18,6 +18,10 @@ local M = {
 	onboarding_catch_them_all = { en = "CATCH THEM ALL", ru = "ЛОВИТЕ КОТОВ" },
 
 	level_title = { en = "LV.%{level}", ru = "УР.%{level}" },
+	setting_title = { en = "SETTINGS", ru = "НАСТРОЙКИ" },
+	setting_sound = { en = "Sound", ru = "Звуки" },
+	setting_music = { en = "Music", ru = "Музыка" },
+	setting_shadows = { en = "Shadow", ru = "Тени" },
 
 	--region cats
 	cat_CAT_1_name = { en = "Whiskers" },
