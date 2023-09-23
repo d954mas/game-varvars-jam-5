@@ -80,14 +80,10 @@ function Script:show_start_scene()
 						--WORLD.game:leaderboard_send_data_all_pages()
 						SM:show(SM.SCENES.GAME)
 						WORLD.sdk.yagames_sdk:leaderboard_init_send()
-						WORLD.sdk.yagames_sdk.ya.loading_api_ready(function(_, result)
-						end)
 					end)
 				else
 					print("player not ready")
 					SM:show(SM.SCENES.GAME)
-					WORLD.sdk.yagames_sdk.ya.loading_api_ready(function(_, result)
-					end)
 				end
 			end)
 		else

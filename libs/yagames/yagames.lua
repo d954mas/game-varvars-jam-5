@@ -191,6 +191,13 @@ function M.device_info_is_tv()
     return yagames_private.device_info_is_tv()
 end
 
+--- Informs the SDK that the game has loaded and is ready to play
+function M.features_loadingapi_ready()
+    assert(M.ysdk_ready, "YaGames is not initialized.")
+
+    yagames_private.features_loadingapi_ready()
+end
+
 --- Return a table with game environment variables.
 -- @treturn table
 function M.environment()
@@ -730,15 +737,6 @@ function M.banner_set(rtb_id, property, value)
     assert(type(value) == "string")
 
     yagames_private.banner_set(rtb_id, property, value)
-end
-
--- @tparam function callback
-function M.loading_api_ready(callback)
-    assert(type(callback) == "function")
-
-    yagames_private.loading_api_ready(helper.wrap_for_promise(function(self, err)
-        callback(self, err)
-    end))
 end
 
 return M

@@ -36,6 +36,15 @@ function Sdk:initialize(world, sdks)
 				self:leaderboard_send_world_highscore(event.world_id)
 			end
 	))
+
+	self.is_loading_api_ready = false
+end
+
+function Sdk:loading_api_ready()
+	if not self.is_loading_api_ready then
+		self.is_loading_api_ready = true
+		self.ya.features_loadingapi_ready()
+	end
 end
 
 function Sdk:update(dt)

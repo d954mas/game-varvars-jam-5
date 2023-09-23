@@ -22,6 +22,9 @@ function Script:init()
 			html_utils.hide_bg()
 		end)
 	end
+	if WORLD.sdk.is_yandex then
+		WORLD.sdk.yagames_sdk:loading_api_ready()
+	end
 end
 
 function Script:fixed_update(dt)
