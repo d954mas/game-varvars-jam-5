@@ -65,8 +65,8 @@ local M = {
 	cat_CAT_20_description = { en = "Fun and fizzy as a bottle of champagne.", ru = "Веселая и игривая, как шампанское." },
 	--endregion
 
-	login_auth = { en = "LOGIN TO SAVE DATA", ru = "АВТОРИЗУЙТЕСЬ, ЧТОБЫ СОХРАНИТЬ ИГРУ" },
-	login_name = { en = "LOGIN TO USE NAME", ru = "АВТОРИЗУЙТЕСЬ, ЧТОБЫ ИСПОЛЬЗОВАТЬ ИМЯ" },
+	login_auth = { en = "CLICK TO LOGIN", ru = "НАЖМИ ДЛЯ АВТОРИЗАЦИИ" },
+	login_name = { en = "CLICK TO LOGIN", ru = "НАЖМИ ДЛЯ АВТОРИЗАЦИИ" },
 }
 
 function M:locale_exist(key)

@@ -211,6 +211,7 @@ function Sdk:ya_load_storage(cb)
 			if (ya_level > level) then
 				print("rewrite storage.More level.Use ya.")
 				self.world.storage.data = ya_storage_data
+				self.world.storage:update_data()
 				self.world.storage:save()
 			end
 
