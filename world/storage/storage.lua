@@ -17,7 +17,7 @@ Storage.FILE_PATH = "d954mas_varvar5"
 Storage.VERSION = 32
 Storage.AUTOSAVE = 90 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod
-Storage.LOCAL = CONSTANTS.VERSION_IS_RELEASE and CONSTANTS.PLATFORM_IS_PC
+Storage.LOCAL = CONSTANTS.VERSION_IS_DEV and CONSTANTS.PLATFORM_IS_PC
 		and CONSTANTS.TARGET_IS_EDITOR  --BE CAREFUL. Do not use in prod
 
 ---@param world World
