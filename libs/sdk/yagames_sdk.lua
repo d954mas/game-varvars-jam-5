@@ -23,18 +23,6 @@ function Sdk:initialize(world, sdks)
 	self.subscription = COMMON.RX.SubscriptionsStorage()
 	self.scheduler = COMMON.RX.CooperativeScheduler.create()
 
-	self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.STAR_ADD)
-								:go_distinct(self.scheduler):subscribe(
-			function()
-				self:leaderboard_send_stars()
-			end))
-	self.subscription:add(COMMON.EVENT_BUS:subscribe(COMMON.EVENTS.NEW_HIGHSCORE)
-								:go(self.scheduler):subscribe(
-			function(event)
-				self:leaderboard_send_world_highscore(event.world_id)
-			end
-	))
-
 	self.is_loading_api_ready = false
 end
 

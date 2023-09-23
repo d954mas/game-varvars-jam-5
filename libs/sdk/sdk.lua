@@ -56,7 +56,7 @@ function Sdk:update(dt)
 end
 
 function Sdk:gameplay_start()
-	print("gameplay_start")
+	--print("gameplay_start")
 	if (COMMON.CONSTANTS.TARGET_IS_POKI) then
 		if (not self.poki.gameplay_start) then
 			poki_sdk.gameplay_start()
@@ -82,8 +82,7 @@ end
 function Sdk:__ads_start()
 	self.world.sounds:pause()
 	INPUT.IGNORE = true
-	local SM = reqf "libs_project.sm"
-	local scene = SM:get_top()
+	local scene = self.world.sm:get_top()
 	if (scene and scene._state == SCENE_ENUMS.STATES.RUNNING) then
 		scene:pause()
 	end
@@ -92,8 +91,7 @@ end
 function Sdk:__ads_stop()
 	self.world.sounds:resume()
 	INPUT.IGNORE = false
-	local SM = reqf "libs_project.sm"
-	local scene = SM:get_top()
+	local scene = self.world.sm:get_top()
 	if (scene and scene._state == SCENE_ENUMS.STATES.PAUSED) then
 		scene:resume()
 	end

@@ -1,5 +1,5 @@
 [project]
-dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/refs/tags/0.6.4.zip
+dependencies#0 = https://github.com/indiesoftby/defold-yagames/archive/refs/tags/0.9.1.zip
 [game]
 target = yandex_games
 

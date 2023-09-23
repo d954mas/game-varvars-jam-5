@@ -22,13 +22,15 @@ M.VERSION_IS_DEV = M.GAME_VERSION == "dev"
 M.VERSION_IS_RELEASE = M.GAME_VERSION == "release"
 
 M.GAME_TARGET = sys.get_config("game.target")
-
 M.TARGETS = {
 	EDITOR = "editor",
 	OTHER = "other",
 	PLAY_MARKET = "play_market",
 	POKI = "poki",
 	ITCH_IO = "itch_io",
+	GAME_DISTRIBUTION = "game_distribution",
+	YANDEX_GAMES = "yandex_games",
+	CRAZY_GAMES = "crazy_games"
 }
 
 M.SEEDS = {
