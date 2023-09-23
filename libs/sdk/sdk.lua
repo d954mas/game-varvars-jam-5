@@ -4,7 +4,6 @@ local AdmobSdk = require "libs.sdk.admob_sdk"
 local CrazyGamesSdk = require "libs.sdk.crazygames_sdk"
 local YaGamesSdk = require "libs.sdk.yagames_sdk"
 local GameDistirbutionSdk = require "libs.sdk.gamedistribution_sdk"
-local VKSdk = require "libs.sdk.vk_sdk"
 local SCENE_ENUMS = require "libs.sm.enums"
 local TAG = "SDK"
 
@@ -20,7 +19,6 @@ function Sdk:initialize(world)
 	self.is_crazygames = COMMON.CONSTANTS.TARGET_IS_CRAZY_GAMES or crazygames_sdk
 	self.is_playmarket = COMMON.CONSTANTS.TARGET_IS_PLAY_MARKET or admob
 	self.is_game_distribution = COMMON.CONSTANTS.TARGET_IS_GAME_DISTRIBUTION or gdsdk
-	self.is_vk = COMMON.CONSTANTS.TARGET_IS_VK_GAMES
 	self.poki = {
 		gameplay_start = false
 	}
@@ -46,10 +44,6 @@ function Sdk:init(cb)
 		self.gamedistribution_sdk:init()
 		self.current_sdk = self.gamedistribution_sdk
 		cb()
-	elseif (self.is_vk) then
-		self.vk_sdk = VKSdk(self.world, self)
-		self.vk_sdk:init(cb)
-		self.current_sdk = self.vk_sdk
 	else
 		cb()
 	end

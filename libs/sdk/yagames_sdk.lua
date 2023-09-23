@@ -1,7 +1,5 @@
 local COMMON = require "libs.common"
 local YA = require "libs.yagames.yagames"
-local CRYPTO = require "libs.crypto"
-local BASE64 = require "libs.base64"
 local ACTIONS = require "libs.actions.actions"
 local DEFS = require "world.balance.def.defs"
 
@@ -187,7 +185,7 @@ function Sdk:ya_load_storage(cb)
 		print("GET STORAGE")
 		pprint(result)
 		if (not err) then
-			local stars = self.world.storage.game:stars_get()
+			local level = self.world.storage.game.game.level
 			if (not result.storage) then
 				cb()
 				return
@@ -199,8 +197,8 @@ function Sdk:ya_load_storage(cb)
 
 			if (ya_storage_data.data) then
 				if (ya_storage_data.encrypted) then
-					ya_storage_data = BASE64.decode(ya_storage_data.data)
-					ya_storage_data = CRYPTO.crypt(ya_storage_data, COMMON.CONSTANTS.CRYPTO_KEY)
+					ya_storage_data = crypt.decode_base64(ya_storage_data.data)
+					ya_storage_data = crypt.decrypt(ya_storage_data, COMMON.CONSTANTS.CRYPTO_KEY)
 				else
 					ya_storage_data = ya_storage_data.data
 				end
@@ -217,27 +215,14 @@ function Sdk:ya_load_storage(cb)
 				return
 			end
 
-			local ya_stars = ya_storage_data.game.stars
-			local ya_time = ya_storage_data.time or 0
+			local ya_level = ya_storage_data.game.level
 
-			print(string.format("local stars:%d ", stars))
-			print(string.format("ya.stars:%d ", ya_stars))
+			print(string.format("local level:%d ", level))
+			print(string.format("ya.level:%d ", ya_level))
 
-			if (ya_stars > stars) then
-				print("rewrite storage.More stars.Use ya.")
-				--keep current world id(fixed error when world_id is different)
-				local current_world = self.world.storage.data.game.world_id
+			if (ya_level > level) then
+				print("rewrite storage.More level.Use ya.")
 				self.world.storage.data = ya_storage_data
-				self.world.storage.data.game.world_id = current_world
-				self.world.storage:update_data()
-				self.world.storage:save()
-			elseif(ya_stars == stars and ya_time > self.world.storage.data.time)then
-				print("rewrite storage.Time bigger. Use ya.")
-				--keep current world id(fixed error when world_id is different)
-				local current_world = self.world.storage.data.game.world_id
-				self.world.storage.data = ya_storage_data
-				self.world.storage.data.game.world_id = current_world
-				self.world.storage:update_data()
 				self.world.storage:save()
 			end
 

@@ -58,12 +58,12 @@ end
 function Script:show_start_scene()
 	if (WORLD.sdk.is_crazygames) then
 		if (SITELOCK.verify_domains_crazy()) then
-			SM:show(SM.SCENES.GAME)
+			WORLD.sm:show(WORLD.sm.SCENES.GAME)
 		else
 			print("bad site")
 		end
 	elseif (WORLD.sdk.is_playmarket) then
-		SM:show(SM.SCENES.GAME)
+		WORLD.sm:show(WORLD.sm.SCENES.GAME)
 	elseif (WORLD.sdk.is_yandex) then
 		if (SITELOCK.verify_domains_yandex()) then
 			YA.player_init({ scopes = false }, function(_, err)
@@ -78,25 +78,25 @@ function Script:show_start_scene()
 					--load storage
 					WORLD.sdk.yagames_sdk:ya_load_storage(function()
 						--WORLD.game:leaderboard_send_data_all_pages()
-						SM:show(SM.SCENES.GAME)
+						WORLD.sm:show(WORLD.sm.SCENES.GAME)
 						WORLD.sdk.yagames_sdk:leaderboard_init_send()
 					end)
 				else
 					print("player not ready")
-					SM:show(SM.SCENES.GAME)
+					WORLD.sm:show(WORLD.sm.SCENES.GAME)
 				end
 			end)
 		else
 			print("bad site")
 		end
 	elseif (WORLD.sdk.is_game_distribution) then
-		SM:show(SM.SCENES.GAME)
+		WORLD.sm:show(WORLD.sm.SCENES.GAME)
 	elseif (WORLD.sdk.is_vk) then
-		SM:show(SM.SCENES.GAME)
+		WORLD.sm:show(WORLD.sm.SCENES.GAME)
 	else
 		--disable site lock for open source
 		--if (SITELOCK.verify_domain({ "your site" })) then
-		SM:show(SM.SCENES.GAME)
+		WORLD.sm:show(WORLD.sm.SCENES.GAME)
 		--else
 		--	print("bad site")
 		--end
