@@ -81,8 +81,10 @@ function Sdk:gameplay_stop()
 	end
 end
 
-function Sdk:happy_time()
-	crazy_games.happy_time()
+function Sdk:happy_time(value)
+	if(value == 1)then
+		crazy_games.happy_time()
+	end
 end
 
 function Sdk:show_interstitial_ad(cb)

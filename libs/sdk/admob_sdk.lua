@@ -237,7 +237,7 @@ function Sdk:show_interstitial_ad(cb)
 				cb(true)
 			end
 		else
-			print("skip interstitial:" .. (self.world.time - self.config.interstitial_prev))
+			print("skip interstitial:" .. (socket.gettime() - self.config.interstitial_prev))
 			cb(true)
 		end
 
