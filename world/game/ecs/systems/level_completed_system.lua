@@ -19,7 +19,10 @@ function System:init()
 		COMMON.coroutine_wait(3)
 		--change level
 		self.world.game_world.storage.game:level_completed()
-		self.world.game_world.game:load_level(self.world.game_world.storage.game:get_level())
+		self.world.game_world.sdk:ads_commercial(function()
+			self.world.game_world.game:load_level(self.world.game_world.storage.game:get_level())
+		end)
+
 	end)
 end
 
