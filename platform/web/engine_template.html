@@ -94,7 +94,7 @@
 </div>
 
 <!-- -->
-<script id='engine-loader' type='text/javascript' src="dmloader_fixed.js"></script>
+<script id='engine-loader' type='text/javascript' src="dmloader.js"></script>
 <script id='modernizr' type='text/javascript' src="modernizr-custom.js"></script>
 <!-- -->
 
@@ -283,7 +283,7 @@
 		}
 		currentPercentage = Math.min(percentage,100)
 		var progress_bar_text = document.getElementById('progress-bar-text');
-		progress_bar_text.innerHTML  = "<b>" +  Math.ceil(percentage) + "%</b>";
+		progress_bar_text.innerHTML  = "<b>" +  Math.ceil(currentPercentage) + "%</b>";
 
 		var fg = document.getElementById('progress-bar-fg');
 

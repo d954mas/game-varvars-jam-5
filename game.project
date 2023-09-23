@@ -80,7 +80,7 @@ scale_mode = no_scale
 cssfile = /platform/web/dark_theme.css
 heap_size = 64
 splash_image = 
-wasm_streaming = 1
+wasm_streaming = 0
 
 [label]
 max_count = 32
