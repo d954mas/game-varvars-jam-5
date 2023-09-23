@@ -26,11 +26,13 @@ function Script:bind_vh()
 		title_lbl = gui.get_node("modal/title/lbl"),
 		sound_lbl = gui.get_node("checkbox_sound/label"),
 		music_lbl = gui.get_node("checkbox_music/label"),
-		shadows_lbl = gui.get_node("checkbox_draw_shadows/label")
+		shadows_lbl = gui.get_node("checkbox_draw_shadows/label"),
+		login_title = gui.get_node("btn_login/text")
 	}
 	self.views = {
 		btn_close = GUI.ButtonScale("btn_close"),
 		checkbox_draw_shadows = GUI.Tumbler("checkbox_draw_shadows"),
+		btn_login = GUI.ButtonScale("btn_login"),
 	}
 end
 
@@ -54,20 +56,62 @@ function Script:init_gui()
 		WORLD.sounds:play_sound(WORLD.sounds.sounds.slider)
 		WORLD.storage.options:draw_shadows_set(chb_draw_shadows.checked)
 	end)
-
 	chb_draw_shadows:on_input()
 
-	gui.set_text(self.vh.shadows_lbl,COMMON.LOCALIZATION.setting_shadows())
-	gui.set_text(self.vh.sound_lbl,COMMON.LOCALIZATION.setting_sound())
-	gui.set_text(self.vh.music_lbl,COMMON.LOCALIZATION.setting_music())
-	GUI.autosize_text(self.vh.title_lbl,1.5,COMMON.LOCALIZATION.setting_title())
+	self.views.btn_login:set_input_listener(function()
+		if (WORLD.sdk.is_yandex) then
+			WORLD.sdk.yagames_sdk:login_player()
+		end
+	end)
 
+	gui.set_text(self.vh.shadows_lbl, COMMON.LOCALIZATION.setting_shadows())
+	gui.set_text(self.vh.sound_lbl, COMMON.LOCALIZATION.setting_sound())
+	gui.set_text(self.vh.music_lbl, COMMON.LOCALIZATION.setting_music())
+	GUI.autosize_text(self.vh.title_lbl, 1.5, COMMON.LOCALIZATION.setting_title())
+
+	if WORLD.sdk.is_yandex then
+		gui.set_position(self.views.checkbox_draw_shadows.vh.root, vmath.vector3(75, 70+10, 0))
+		gui.set_position(gui.get_node("checkbox_music/root"), vmath.vector3(75, 0+15, 0))
+		gui.set_position(gui.get_node("checkbox_sound/root"), vmath.vector3(75, -70+20, 0))
+		self.views.btn_login:set_enabled(true)
+	else
+		self.views.btn_login:set_enabled(false)
+	end
 end
+
+function Script:update_login_title()
+	print("update login title")
+	local text = COMMON.LOCALIZATION.login_name()
+	self.views.btn_login:set_ignore_input(false)
+	if (WORLD.sdk.is_yandex) then
+		local YA = WORLD.sdk.yagames_sdk.ya
+		if (YA.player_ready) then
+			local name = YA.player_get_name()
+			if (YA.player_get_name() == "") then
+				text = COMMON.LOCALIZATION.login_name()
+			else
+				text = name
+				self.views.btn_login:set_ignore_input(true)
+			end
+		else
+			text = COMMON.LOCALIZATION.login_auth()
+		end
+		gui.set_text(self.vh.login_title, text)
+	else
+		gui.set_text(self.vh.login_title, COMMON.LOCALIZATION.login_auth())
+	end
+end
+
 
 function Script:close()
 	WORLD.sdk:ads_commercial(function()
 		WORLD.sm:back()
 	end)
+end
+
+function Script:on_storage_changed()
+	BaseGuiScript.on_storage_changed()
+	self:update_login_title()
 end
 
 function Script:animate_hide()
@@ -113,6 +157,7 @@ function Script:on_input(action_id, action)
 	end
 	if (self.views.btn_close:on_input(action_id, action)) then return true end
 	if (self.views.checkbox_draw_shadows:on_input(action_id, action)) then return true end
+	if (self.views.btn_login:on_input(action_id, action)) then return true end
 	if (action_id == COMMON.HASHES.INPUT.TOUCH and action.pressed and not gui.pick_node(self.vh.click_zone, action.x, action.y)) then
 		self:close()
 		return
