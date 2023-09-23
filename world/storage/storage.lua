@@ -17,8 +17,7 @@ Storage.FILE_PATH = "d954mas_varvar5"
 Storage.VERSION = 32
 Storage.AUTOSAVE = 90 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod
-Storage.LOCAL = CONSTANTS.VERSION_IS_DEV and CONSTANTS.PLATFORM_IS_PC
-		and CONSTANTS.TARGET_IS_EDITOR  --BE CAREFUL. Do not use in prod
+Storage.LOCAL = true
 
 ---@param world World
 function Storage:initialize(world)
@@ -214,7 +213,7 @@ function Storage:_migration()
 	if (self.data.version < Storage.VERSION) then
 		COMMON.i(string.format("migrate from:%s to %s", self.data.version, Storage.VERSION), TAG)
 
-		if (self.data.version < 31) then
+		if (self.data.version < 32) then
 			self:_init_storage()
 		end
 

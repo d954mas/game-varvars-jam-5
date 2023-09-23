@@ -202,6 +202,7 @@ function Script:update(dt)
 	if IS_DEV then DEBUG_INFO.update(dt) end
 	WORLD:update(dt)
 	self.scheduler:update(dt)
+	WORLD.sdk:update(dt)
 end
 
 function Script:fixed_update(dt)

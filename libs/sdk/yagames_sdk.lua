@@ -21,7 +21,6 @@ function Sdk:initialize(world, sdks)
 	self.leaderboard_send_queue = ACTIONS.Sequence()
 	self.leaderboard_send_queue.drop_empty = false
 	self.subscription = COMMON.RX.SubscriptionsStorage()
-	self.scheduler = COMMON.RX.CooperativeScheduler.create()
 
 	self.is_loading_api_ready = false
 end
@@ -34,8 +33,9 @@ function Sdk:loading_api_ready()
 end
 
 function Sdk:update(dt)
-	self.leaderboard_send_queue:update(dt)
-	self.scheduler:update(dt)
+	if self.is_initialized then
+		self.leaderboard_send_queue:update(dt)
+	end
 end
 
 function Sdk:callback_save(cb)
@@ -211,6 +211,7 @@ function Sdk:ya_load_storage(cb)
 			if (ya_level > level) then
 				print("rewrite storage.More level.Use ya.")
 				self.world.storage.data = ya_storage_data
+				self.world.storage:_migration()
 				self.world.storage:update_data()
 				self.world.storage:save()
 			end
@@ -275,6 +276,7 @@ function Sdk:leaderboard_send_data(leaderboard_name, score, extra_data, cb)
 end
 
 function Sdk:leaderboard_send_cats()
+	print("leaderboard send cats add to queue")
 	self.leaderboard_send_queue:add_action(function()
 		local cats = self.world.storage.stats.stats.cats
 		local delay = 5
