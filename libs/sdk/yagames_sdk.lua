@@ -217,6 +217,13 @@ function Sdk:ya_load_storage(cb)
 			self.ya_storage_data = json.encode(self.world.storage.data)
 		end
 		COMMON.EVENT_BUS:event(COMMON.EVENTS.STORAGE_CHANGED)
+		if COMMON.CONTEXT:exist(COMMON.CONTEXT.NAMES.GAME)then
+			local level = self.world.game.state.level
+			if level ~= self.world.storage.game:get_level() then
+				print("level changed after load level")
+				self.world.game:load_level(self.world.storage.game:get_level())
+			end
+		end
 		cb()
 	end)
 end
