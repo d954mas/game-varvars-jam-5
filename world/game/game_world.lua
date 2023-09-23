@@ -133,6 +133,9 @@ function GameWorld:player_teleport_cor(position, angle)
 end
 
 function GameWorld:load_level(level)
+	if self.world.sdk.is_yandex then
+		self.world.sdk.yagames_sdk:leaderboard_send_cats()
+	end
 	self.ecs_game.ecs:clear()
 
 	if (self.level_creator) then
@@ -182,7 +185,7 @@ function GameWorld:cat_collected(cat)
 	ctx.data.views.cats_progress_p:set_value(self.state.cats_collected)
 	ctx:remove()
 	self.world.sounds:play_sound(self.world.sounds.sounds[DEFS.CATS.CATS[cat.cat_data.id].sound])
-
+	self.world.storage.stats:cat_collected()
 
 end
 

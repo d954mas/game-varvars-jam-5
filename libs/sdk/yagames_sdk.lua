@@ -274,12 +274,12 @@ function Sdk:leaderboard_send_data(leaderboard_name, score, extra_data, cb)
 	end
 end
 
-function Sdk:leaderboard_send_stars()
+function Sdk:leaderboard_send_cats()
 	self.leaderboard_send_queue:add_action(function()
-		print("leaderboard send stars")
-		local stars = self.world.storage.game:stars_get()
+		local cats = self.world.storage.stats.stats.cats
 		local delay = 5
-		self:leaderboard_send_data("stars", stars, nil,
+		print("leaderboard send cats:" .. cats)
+		self:leaderboard_send_data("cats", cats, nil,
 				function()
 					delay = 1
 				end)
@@ -288,7 +288,9 @@ function Sdk:leaderboard_send_stars()
 end
 
 function Sdk:leaderboard_init_send()
-	self:leaderboard_send_stars()
+	--will be send when level loaded. Or on next level after login
+	--self:leaderboard_send_cats()
+
 end
 
 

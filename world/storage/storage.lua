@@ -6,6 +6,7 @@ local OptionsStoragePart = require "world.storage.options_storage_part"
 local DebugStoragePart = require "world.storage.debug_storage_part"
 local GameStoragePart = require "world.storage.game_storage_part"
 local CatsStoragePart = require "world.storage.cats_storage_part"
+local StatsStoragePart = require "world.storage.stats_storage_part"
 
 local TAG = "Storage"
 
@@ -13,7 +14,7 @@ local TAG = "Storage"
 local Storage = COMMON.class("Storage")
 
 Storage.FILE_PATH = "d954mas_varvar5"
-Storage.VERSION = 31
+Storage.VERSION = 32
 Storage.AUTOSAVE = 90 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod
 Storage.LOCAL = CONSTANTS.VERSION_IS_DEV and CONSTANTS.PLATFORM_IS_PC
@@ -42,6 +43,7 @@ function Storage:update_data()
 	self.debug = DebugStoragePart(self)
 	self.game = GameStoragePart(self)
 	self.cats = CatsStoragePart(self)
+	self.stats = StatsStoragePart(self)
 
 end
 
@@ -181,6 +183,9 @@ function Storage:_init_storage()
 		},
 		cats = {
 
+		},
+		stats = {
+			cats = 0
 		},
 		version = Storage.VERSION
 	}
