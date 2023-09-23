@@ -222,7 +222,9 @@ function Sdk:ya_load_storage(cb)
 			local level = self.world.game.state.level
 			if level ~= self.world.storage.game:get_level() then
 				print("level changed after load level")
+				local ctx = COMMON.CONTEXT:set_context_top_game()
 				self.world.game:load_level(self.world.storage.game:get_level())
+				ctx:remove()
 			end
 		end
 		cb()
