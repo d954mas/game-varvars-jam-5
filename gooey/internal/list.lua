@@ -141,9 +141,9 @@ local function handle_input(list, action_id, action, click_fn)
 		list.scroll_speed = math.min(list.scroll_speed + 0.25, 30)
 		list.scroll_time = time
 		if list.horizontal then
-			list.scroll_pos.x = list.scroll_pos.x + ((scroll_up and 1 or -1) * list.scroll_speed)
+			list.scroll_pos.x = list.scroll_pos.x + ((scroll_up and -1 or 1) * list.scroll_speed)
 		else
-			list.scroll_pos.y = list.scroll_pos.y + ((scroll_up and 1 or -1) * list.scroll_speed)
+			list.scroll_pos.y = list.scroll_pos.y + ((scroll_up and -1 or 1) * list.scroll_speed)
 		end
 		list.have_scrolled = true
 		if action.released then
