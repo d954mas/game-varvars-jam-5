@@ -70,9 +70,9 @@ function Script:init_gui()
 	GUI.autosize_text(self.vh.title_lbl, 1.5, COMMON.LOCALIZATION.setting_title())
 
 	if WORLD.sdk.is_yandex then
-		gui.set_position(self.views.checkbox_draw_shadows.vh.root, vmath.vector3(75, 70+10, 0))
-		gui.set_position(gui.get_node("checkbox_music/root"), vmath.vector3(75, 0+15, 0))
-		gui.set_position(gui.get_node("checkbox_sound/root"), vmath.vector3(75, -70+20, 0))
+		gui.set_position(self.views.checkbox_draw_shadows.vh.root, vmath.vector3(75, 70 + 10, 0))
+		gui.set_position(gui.get_node("checkbox_music/root"), vmath.vector3(75, 0 + 15, 0))
+		gui.set_position(gui.get_node("checkbox_sound/root"), vmath.vector3(75, -70 + 20, 0))
 		self.views.btn_login:set_enabled(true)
 	else
 		self.views.btn_login:set_enabled(false)
@@ -81,17 +81,22 @@ end
 
 function Script:update_login_title()
 	print("update login title")
-	local text = COMMON.LOCALIZATION.login_name()
 	self.views.btn_login:set_ignore_input(false)
 	if (WORLD.sdk.is_yandex) then
 		local YA = WORLD.sdk.yagames_sdk.ya
+		local text = COMMON.LOCALIZATION.login_name()
 		if (YA.player_ready) then
-			local name = YA.player_get_name()
-			if (YA.player_get_name() == "") then
-				text = COMMON.LOCALIZATION.login_name()
+			if YA.player_get_mode() == "lite" then
+				text = COMMON.LOCALIZATION.login_auth()
 			else
-				text = name
-				self.views.btn_login:set_ignore_input(true)
+				local name = YA.player_get_name()
+				if (name == "") then
+					text = COMMON.LOCALIZATION.login_name()
+					self.views.btn_login:set_ignore_input(true)
+				else
+					text = name
+					self.views.btn_login:set_ignore_input(true)
+				end
 			end
 		else
 			text = COMMON.LOCALIZATION.login_auth()
@@ -101,7 +106,6 @@ function Script:update_login_title()
 		gui.set_text(self.vh.login_title, COMMON.LOCALIZATION.login_auth())
 	end
 end
-
 
 function Script:close()
 	WORLD.sdk:ads_commercial(function()

@@ -66,7 +66,7 @@ local M = {
 	--endregion
 
 	login_auth = { en = "CLICK TO LOGIN", ru = "НАЖМИ ДЛЯ АВТОРИЗАЦИИ" },
-	login_name = { en = "CLICK TO LOGIN", ru = "НАЖМИ ДЛЯ АВТОРИЗАЦИИ" },
+	login_name = { en = "Unknown", ru = "Неизвестный" },
 }
 
 function M:locale_exist(key)
