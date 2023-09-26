@@ -27,7 +27,8 @@ function Script:bind_vh()
 		sound_lbl = gui.get_node("checkbox_sound/label"),
 		music_lbl = gui.get_node("checkbox_music/label"),
 		shadows_lbl = gui.get_node("checkbox_draw_shadows/label"),
-		login_title = gui.get_node("btn_login/text")
+		login_title = gui.get_node("btn_login/text"),
+		login_bg = gui.get_node("btn_login/bg")
 	}
 	self.views = {
 		btn_close = GUI.ButtonScale("btn_close"),
@@ -82,6 +83,7 @@ end
 function Script:update_login_title()
 	print("update login title")
 	self.views.btn_login:set_ignore_input(false)
+	gui.set_enabled(self.vh.login_bg, true)
 	if (WORLD.sdk.is_yandex) then
 		local YA = WORLD.sdk.yagames_sdk.ya
 		local text = COMMON.LOCALIZATION.login_name()
@@ -93,9 +95,11 @@ function Script:update_login_title()
 				if (name == "") then
 					text = COMMON.LOCALIZATION.login_name()
 					self.views.btn_login:set_ignore_input(true)
+					gui.set_enabled(self.vh.login_bg, false)
 				else
 					text = name
 					self.views.btn_login:set_ignore_input(true)
+					gui.set_enabled(self.vh.login_bg, false)
 				end
 			end
 		else

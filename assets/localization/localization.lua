@@ -65,7 +65,7 @@ local M = {
 	cat_CAT_20_description = { en = "Fun and fizzy as a bottle of champagne.", ru = "Веселая и игривая, как шампанское." },
 	--endregion
 
-	login_auth = { en = "CLICK TO LOGIN", ru = "НАЖМИ ДЛЯ АВТОРИЗАЦИИ" },
+	login_auth = { en = "AUTHORIZE TO SAVE GAME DATA IN YOUR ACCOUNT", ru = "АВТОРИЗУЙТЕСЬ, ДЛЯ СОХРАНЕНИЯ ДАННЫХ ИГРЫ В ВАШЕМ АККАУНТЕ" },
 	login_name = { en = "Unknown", ru = "Неизвестный" },
 }
 
