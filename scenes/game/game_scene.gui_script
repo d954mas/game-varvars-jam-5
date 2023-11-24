@@ -69,7 +69,8 @@ function Script:bind_vh()
 		pc_input_title = gui.get_node("pc_input/title"),
 		start_message_lbl = gui.get_node("start_message/lbl"),
 		start_message_p_lbl = gui.get_node("start_message_p/lbl"),
-		lbl_development = gui.get_node("lbl_development")
+		lbl_development = gui.get_node("lbl_development"),
+		lbl_backpack_coming_soon = gui.get_node("btn_backpack/coming_soon")
 	}
 	self.views = {
 		checkbox_mouse_lock = GUI.CheckboxWithLabel("checkbox_mouse_lock"),
@@ -169,6 +170,7 @@ function Script:init_gui()
 	gui.set_text(self.vh.start_message_lbl, COMMON.LOCALIZATION.onboarding_catch_them_all())
 	gui.set_text(self.vh.start_message_p_lbl, COMMON.LOCALIZATION.onboarding_catch_them_all())
 	gui.set_text(self.vh.lbl_development, COMMON.LOCALIZATION.game_in_development())
+	gui.set_text(self.vh.lbl_backpack_coming_soon, COMMON.LOCALIZATION.backpack_coming_soon())
 end
 
 function Script:level_loaded()

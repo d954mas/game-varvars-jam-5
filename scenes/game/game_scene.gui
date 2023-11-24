@@ -135,7 +135,7 @@ nodes {
 }
 nodes {
   position {
-    x: -35.0
+    x: -40.0
     y: -28.0
     z: 0.0
     w: 1.0
@@ -253,7 +253,7 @@ nodes {
 }
 nodes {
   position {
-    x: -35.0
+    x: -40.0
     y: -111.0
     z: 0.0
     w: 1.0
@@ -430,7 +430,7 @@ nodes {
 }
 nodes {
   position {
-    x: -35.0
+    x: -40.0
     y: -191.0
     z: 0.0
     w: 1.0
@@ -548,8 +548,8 @@ nodes {
 }
 nodes {
   position {
-    x: 0.0
-    y: 0.0
+    x: -10.0
+    y: -60.0
     z: 0.0
     w: 1.0
   }
@@ -560,13 +560,13 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 1.0
-    y: 1.0
+    x: 0.72
+    y: 0.72
     z: 1.0
     w: 1.0
   }
   size {
-    x: 200.0
+    x: 120.0
     y: 100.0
     z: 0.0
     w: 1.0
@@ -579,8 +579,7 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Coming\n"
-  "Soon"
+  text: "In development"
   font: "game_font"
   id: "btn_backpack/coming_soon"
   xanchor: XANCHOR_NONE
@@ -3339,7 +3338,7 @@ nodes {
   text: "Game in development\n"
   "Please, do not delete"
   font: "game_font"
-  id: "start_message_p/lbl1"
+  id: "lbl_development"
   xanchor: XANCHOR_RIGHT
   yanchor: YANCHOR_BOTTOM
   pivot: PIVOT_SE
