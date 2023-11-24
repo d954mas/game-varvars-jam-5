@@ -1,8 +1,8 @@
 [project]
-title = Varvar5 Dev
+title = Backpack Cats Rpg Dev
 
 [android]
-package = com.d954mas.game.varvar5.dev
+package = com.d954mas.backpack.cats.zombie.rpg.puzzle.dev
 
 
 [game]

@@ -13,7 +13,7 @@ local TAG = "Storage"
 ---@class Storage
 local Storage = COMMON.class("Storage")
 
-Storage.FILE_PATH = "d954mas_varvar5"
+Storage.FILE_PATH = "d954mas_backpack_cats"
 Storage.VERSION = 32
 Storage.AUTOSAVE = 90 --seconds
 Storage.CLEAR = CONSTANTS.VERSION_IS_DEV and false --BE CAREFUL. Do not use in prod

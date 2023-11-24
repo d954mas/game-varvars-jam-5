@@ -67,6 +67,7 @@ local M = {
 
 	login_auth = { en = "AUTHORIZE TO SAVE GAME DATA IN YOUR ACCOUNT", ru = "АВТОРИЗУЙТЕСЬ, ДЛЯ СОХРАНЕНИЯ ДАННЫХ ИГРЫ В ВАШЕМ АККАУНТЕ" },
 	login_name = { en = "Unknown", ru = "Неизвестный" },
+	game_in_development = { en = "Game in development\nPlease, do not delete", ru = "Игра в разработке\nПожалуйста, не удаляйте" },
 }
 
 function M:locale_exist(key)
